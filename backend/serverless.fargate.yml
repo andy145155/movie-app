@@ -1,9 +1,9 @@
 service: ${self:custom.app_name}
 
-frameworkVersion: "3"
+frameworkVersion: '3'
 
 custom:
-  app_name: "movie-app-fargate"
+  app_name: 'movie-app-fargate'
   tf: ${file(../infrastructure/config.json)}
 
   FARGATE_SG_ID: ${self:custom.tf.fargate_security_group_id}
@@ -25,7 +25,7 @@ provider:
   tags:
     name: movie-app-data-processing
 fargate:
-  memory: "4GB"
+  memory: '4GB'
   cpu: 512
   vpc:
     securityGroupIds:
@@ -39,7 +39,7 @@ fargate:
         - s3:*
         - ecr:*
         - dynamodb:*
-      Resource: "*"
+      Resource: '*'
   logGroupName: /aws/fargate/movie-app-dataProcessing
   tasks:
     dataProcessing:

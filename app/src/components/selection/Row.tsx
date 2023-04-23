@@ -1,21 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { AiOutlineLike } from "react-icons/ai";
-import "../../assets/css/selection/Row.css";
-import { MovieAPI } from "../../helper/apis/movieApi";
-import { ISelectedMovies } from "../../helper/interfaces";
+import React, { useState, useEffect } from 'react';
+import { AiOutlineLike } from 'react-icons/ai';
+import '../../assets/css/selection/Row.css';
+import { MovieAPI } from '../../helper/apis/movieApi';
+import { ISelectedMovies } from '../../helper/interfaces';
 
 type Movie = { movieId: string; poster: string; similarity: number[] };
 
 const Poster = ({ movie, isClicked }: { movie: Movie; isClicked: boolean }) => {
   return (
-    <div
-      className={`${
-        isClicked ? "selected-box" : "not-selected-box"
-      } selection-poster`}
-    >
+    <div className={`${isClicked ? 'selected-box' : 'not-selected-box'} selection-poster`}>
       <img className="poster" src={movie.poster} alt={movie.poster} />
       {
-        <div className={`${isClicked && "oca"} overlay-thumb`}>
+        <div className={`${isClicked && 'oca'} overlay-thumb`}>
           <AiOutlineLike className="thumb-up" />
         </div>
       }
@@ -38,7 +34,7 @@ function Row({
         random: true,
         number: 50,
       });
-      console.log("This is movies", movies);
+      console.log('This is movies', movies);
 
       setMovies(movies);
     }
@@ -47,17 +43,12 @@ function Row({
 
   const handleClick = (movie: Movie) => {
     if (selectedMovies.find((item) => movie.movieId === item.movieId)) {
-      setSelectedMovies(
-        selectedMovies.filter((item) => movie.movieId !== item.movieId)
-      );
+      setSelectedMovies(selectedMovies.filter((item) => movie.movieId !== item.movieId));
     } else {
       if (selectedMovies.length >= 3) {
         return;
       }
-      setSelectedMovies([
-        ...selectedMovies,
-        { movieId: movie.movieId, similarity: movie.similarity },
-      ]);
+      setSelectedMovies([...selectedMovies, { movieId: movie.movieId, similarity: movie.similarity }]);
     }
   };
 
@@ -67,10 +58,7 @@ function Row({
         <div key={movie.movieId} onClick={() => handleClick(movie)}>
           <Poster
             movie={movie}
-            isClicked={
-              selectedMovies.filter((item) => movie.movieId === item.movieId)
-                .length > 0
-            }
+            isClicked={selectedMovies.filter((item) => movie.movieId === item.movieId).length > 0}
           />
         </div>
       ))}

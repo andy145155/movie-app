@@ -1,8 +1,8 @@
-import "../../assets/css/selection/Banner.css";
-import { MovieAPI } from "../../helper/apis/movieApi";
-import { ISelectedMovies } from "../../helper/interfaces";
-import { useUser } from "../../store/user";
-import { useNavigate } from "react-router-dom";
+import '../../assets/css/selection/Banner.css';
+import { MovieAPI } from '../../helper/apis/movieApi';
+import { ISelectedMovies } from '../../helper/interfaces';
+import { useUser } from '../../store/user';
+import { useNavigate } from 'react-router-dom';
 
 function Banner({ selectedMovies }: { selectedMovies: ISelectedMovies[] }) {
   const user = useUser();
@@ -17,16 +17,14 @@ function Banner({ selectedMovies }: { selectedMovies: ISelectedMovies[] }) {
         email,
       });
 
-      console.log("Adfasdf", test);
+      console.log('Adfasdf', test);
 
       const userMovies = await MovieAPI.getUserSelectedMovies({
         email,
       });
-      userMovies.selectedMovies.length === 0
-        ? user.setSelectedMovies(null)
-        : user.setSelectedMovies(userMovies);
+      userMovies.selectedMovies.length === 0 ? user.setSelectedMovies(null) : user.setSelectedMovies(userMovies);
 
-      navigateTo("/home");
+      navigateTo('/home');
     } catch (error) {
       console.log(error);
     }
@@ -34,7 +32,7 @@ function Banner({ selectedMovies }: { selectedMovies: ISelectedMovies[] }) {
 
   const getUserEmail = (): string => {
     let userData: any = {};
-    const localStorageEstData = localStorage.getItem("userData");
+    const localStorageEstData = localStorage.getItem('userData');
     if (localStorageEstData !== null) {
       userData = JSON.parse(localStorageEstData);
     }
@@ -49,14 +47,10 @@ function Banner({ selectedMovies }: { selectedMovies: ISelectedMovies[] }) {
         </h1>
       </div>
       <div className="subtitle">
-        It will help us find TV shows & movies you'll love!{" "}
-        <b>You have choose {selectedMovies.length}</b>
+        It will help us find TV shows & movies you'll love! <b>You have choose {selectedMovies.length}</b>
       </div>
       <div className="continue">
-        <button
-          className="button"
-          onClick={sendSelectedMoviesAndUpdateUserMovies}
-        >
+        <button className="button" onClick={sendSelectedMoviesAndUpdateUserMovies}>
           Continue
         </button>
       </div>

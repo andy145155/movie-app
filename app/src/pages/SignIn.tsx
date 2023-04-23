@@ -1,28 +1,20 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../store/auth";
-import "../assets/css/Signin.css";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../store/auth';
+import '../assets/css/Signin.css';
 
-function SignIn({
-  email,
-  setEmail,
-}: {
-  email: string;
-  setEmail: React.Dispatch<React.SetStateAction<string>>;
-}) {
+function SignIn({ email, setEmail }: { email: string; setEmail: React.Dispatch<React.SetStateAction<string>> }) {
   const auth = useAuth();
   const navigate = useNavigate();
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
 
   const executeSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await auth.signIn(email, password);
-    console.log("signIn: ", result);
+    console.log('signIn: ', result);
 
     if (result.success) {
-      result.directToMovieSelection
-        ? navigate({ pathname: "/selectMovies" })
-        : navigate({ pathname: "/home" });
+      result.directToMovieSelection ? navigate({ pathname: '/selectMovies' }) : navigate({ pathname: '/home' });
     } else {
       alert(result.message);
     }
@@ -32,12 +24,7 @@ function SignIn({
     <div className="signupScreen">
       <form action="" onSubmit={executeSignIn}>
         <h1>Sign In</h1>
-        <input
-          type="email"
-          placeholder="Email"
-          onChange={(event) => setEmail(event.target.value)}
-          value={email}
-        />
+        <input type="email" placeholder="Email" onChange={(event) => setEmail(event.target.value)} value={email} />
         <input
           type="password"
           placeholder="Password"
@@ -47,10 +34,7 @@ function SignIn({
         <button type="submit">Sign In</button>
         <h4>
           <span className="signupSreen_gray">New to Netflix? </span>
-          <span
-            className="signupSreen_link"
-            onClick={() => navigate("/register")}
-          >
+          <span className="signupSreen_link" onClick={() => navigate('/register')}>
             Sign up now.
           </span>
         </h4>

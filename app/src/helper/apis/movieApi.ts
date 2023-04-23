@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const movieAPI = axios.create({
-  baseURL: "https://api.movieapp.paohenghsu.com",
+  baseURL: 'https://api.movieapp.paohenghsu.com',
 });
 
 movieAPI.interceptors.response.use(undefined, (error) => {
@@ -19,7 +19,7 @@ movieAPI.interceptors.request.use(function (config) {
 const errorHandler = (error: any) => {
   const statusCode = error.response?.status;
 
-  if (error.code === "ERR_CANCELED") {
+  if (error.code === 'ERR_CANCELED') {
     return Promise.resolve();
   }
 
@@ -33,7 +33,7 @@ const errorHandler = (error: any) => {
 
 const getAuthToken = () => {
   let userData: any = {};
-  const localStorageEstData = localStorage.getItem("userData");
+  const localStorageEstData = localStorage.getItem('userData');
   if (localStorageEstData !== null) {
     userData = JSON.parse(localStorageEstData);
   }
@@ -44,10 +44,10 @@ export const MovieAPI = {
   getMovies: async (params: any) => {
     try {
       const request = await movieAPI.request({
-        url: "/movies",
-        method: "GET",
+        url: '/movies',
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           // Authorization: getAuthToken(),
         },
         params,
@@ -60,10 +60,10 @@ export const MovieAPI = {
   setUserSelectedMovies: async (params: any) => {
     try {
       const request = await movieAPI.request({
-        url: "/user/selectedMovies",
-        method: "POST",
+        url: '/user/selectedMovies',
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           // Authorization: getAuthToken(),
         },
         params,
@@ -76,10 +76,10 @@ export const MovieAPI = {
   getUserSelectedMovies: async (params: any) => {
     try {
       const request = await movieAPI.request({
-        url: "/user/selectedMovies",
-        method: "GET",
+        url: '/user/selectedMovies',
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           // Authorization: getAuthToken(),
         },
         params,
@@ -88,8 +88,8 @@ export const MovieAPI = {
 
       return request.data.message;
     } catch (error) {
-      console.log("error", error);
-      console.log("error", JSON.stringify(error));
+      console.log('error', error);
+      console.log('error', JSON.stringify(error));
 
       throw Error(`getUserSelectedMovies Error: ${error}`);
     }

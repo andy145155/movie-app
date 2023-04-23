@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../store/auth";
-import "../assets/css/PhoneVerifyForm.css";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../store/auth';
+import '../assets/css/PhoneVerifyForm.css';
 function PhoneVerifyForm({
   email,
   setRegister,
@@ -11,7 +11,7 @@ function PhoneVerifyForm({
 }) {
   const auth = useAuth();
   const navigate = useNavigate();
-  const [verifyCode, setVerifyCode] = useState("");
+  const [verifyCode, setVerifyCode] = useState('');
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
@@ -36,13 +36,11 @@ function PhoneVerifyForm({
     };
   });
 
-  const executeEmailVerification = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
+  const executeEmailVerification = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await auth.confirmSignUp(email, verifyCode);
     if (result.success) {
-      navigate({ pathname: "/home" });
+      navigate({ pathname: '/home' });
     } else {
       alert(result.message);
     }
@@ -57,9 +55,7 @@ function PhoneVerifyForm({
   };
 
   const formatTime = (minutes: number, seconds: number) => {
-    return (
-      String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0")
-    );
+    return String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
   };
 
   return (
@@ -68,15 +64,10 @@ function PhoneVerifyForm({
         <h1>Sign up for Movie Recommender System</h1>
 
         <h4>
-          <div className="signupSreen_gray">
-            We sent an email with a verification code to
-          </div>
+          <div className="signupSreen_gray">We sent an email with a verification code to</div>
           <div className="signupSreen_email">
             <span> {email}. </span>
-            <span
-              className="signupSreen_link"
-              onClick={() => setRegister(false)}
-            >
+            <span className="signupSreen_link" onClick={() => setRegister(false)}>
               not you?
             </span>
           </div>
@@ -94,12 +85,11 @@ function PhoneVerifyForm({
         onClick={() => executeResendEmailVerificationCode()}
         disabled={seconds > 0 || minutes > 0}
         style={{
-          background: seconds > 0 || minutes > 0 ? "#DFE3E8" : "#FF5630",
-          cursor: seconds > 0 || minutes > 0 ? "default" : "pointer",
+          background: seconds > 0 || minutes > 0 ? '#DFE3E8' : '#FF5630',
+          cursor: seconds > 0 || minutes > 0 ? 'default' : 'pointer',
         }}
       >
-        Resend code{" "}
-        {seconds > 0 || minutes > 0 ? formatTime(minutes, seconds) : null}
+        Resend code {seconds > 0 || minutes > 0 ? formatTime(minutes, seconds) : null}
       </button>
     </>
   );

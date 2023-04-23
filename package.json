@@ -10,6 +10,17 @@
     "removeLambda": "cd backend && yarn removeLambda",
     "removeFargate": "cd backend && yarn removeFargate",
     "deployMovieApp": "cd app && yarn deploy",
-    "deployInfra": "cd infrastructure && bash refreshAndUpdateResources.sh"
+    "deployInfra": "cd infrastructure && bash refreshAndUpdateResources.sh",
+    "format": "npx prettier --write ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "prettier": "^2.8.8",
+    "pretty-quick": "^3.1.3"
   }
 }

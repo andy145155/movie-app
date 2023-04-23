@@ -31,12 +31,7 @@
 .banner--fadeBottom {
   height: 7.4rem;
   margin-top: 212px;
-  background-image: linear-gradient(
-    180deg,
-    transparent,
-    rgba(37, 37, 37, 0.61),
-    #111
-  );
+  background-image: linear-gradient(180deg, transparent, rgba(37, 37, 37, 0.61), #111);
 }
 
 .banner_button {

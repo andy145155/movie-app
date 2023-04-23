@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../store/auth";
-import PhoneVerifyForm from "./PhoneVerifyForm";
-import "../assets/css/Register.css";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../store/auth';
+import PhoneVerifyForm from './PhoneVerifyForm';
+import '../assets/css/Register.css';
 function Register() {
   const auth = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [register, setRegister] = useState(false);
 
   const executeSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -28,7 +28,7 @@ function Register() {
           src="https://www.edigitalagency.com.au/wp-content/uploads/netflix-logo-png-large.png"
           alt=""
         />
-        <button onClick={() => navigate("/")} className="registerScreen_button">
+        <button onClick={() => navigate('/')} className="registerScreen_button">
           Sign In
         </button>
         <div className="registerScreen_gradient" />

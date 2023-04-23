@@ -1,10 +1,10 @@
-import "./assets/css/App.css";
-import Home from "./pages/Home";
-import GetStarted from "./pages/GetStarted";
-import Profile from "./pages/Profile";
-import Register from "./pages/Register";
-import SelectMovies from "./pages/SelectMovies";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import './assets/css/App.css';
+import Home from './pages/Home';
+import GetStarted from './pages/GetStarted';
+import Profile from './pages/Profile';
+import Register from './pages/Register';
+import SelectMovies from './pages/SelectMovies';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (

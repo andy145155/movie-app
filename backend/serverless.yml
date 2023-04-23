@@ -1,6 +1,6 @@
 service: ${self:custom.app_name}
 
-frameworkVersion: "3"
+frameworkVersion: '3'
 
 plugins:
   - serverless-python-requirements
@@ -19,8 +19,8 @@ custom:
     zip: true
 
   # Environment variables
-  app_name: "movie-app"
-  stage: "dev"
+  app_name: 'movie-app'
+  stage: 'dev'
   tf: ${file(../infrastructure/config.json)}
   LAMBDA_SG_ID: ${self:custom.tf.lambda_security_group_id}
   FARGATE_SG_ID: ${self:custom.tf.fargate_security_group_id}
@@ -37,7 +37,7 @@ provider:
   region: ap-southeast-1
   runtime: python3.7
   timeout: 300
-  stage: "dev"
+  stage: 'dev'
   iam:
     role: ${self:custom.DEFAULT_LAMBDA_ROLE_ARN}
   iamRoleStatements:
@@ -46,10 +46,10 @@ provider:
         - iam:PassRole
       Resource:
         Fn::Join:
-          - ""
-          - - "arn:aws:iam::"
-            - Ref: "AWS::AccountId"
-            - ":role/ecsTaskExecutionRole"
+          - ''
+          - - 'arn:aws:iam::'
+            - Ref: 'AWS::AccountId'
+            - ':role/ecsTaskExecutionRole'
   # If use VPC then both securityGroupIds and subnetIds are required
   vpc:
     securityGroupIds:
@@ -60,8 +60,8 @@ provider:
 
 package:
   patterns:
-    - "!node_modules/**"
-    - "!venv/**"
+    - '!node_modules/**'
+    - '!venv/**'
 
 functions:
   triggerFargate:

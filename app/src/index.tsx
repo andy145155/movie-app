@@ -1,14 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./assets/css/index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import { ProvideAuth } from "./store/auth";
-import { ProvideUserData } from "./store/user";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './assets/css/index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import { ProvideAuth } from './store/auth';
+import { ProvideUserData } from './store/user';
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <ProvideUserData>
     <ProvideAuth>

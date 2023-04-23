@@ -1,8 +1,8 @@
-export const APIKEY = "0e770cd6eb622a65729afb287f266062";
+export const APIKEY = '0e770cd6eb622a65729afb287f266062';
 
 export const TMDB_BASE_URL = {
-  IMAGE: "https://image.tmdb.org/t/p/original/",
-  API: "https://api.themoviedb.org/3",
+  IMAGE: 'https://image.tmdb.org/t/p/original/',
+  API: 'https://api.themoviedb.org/3',
 };
 
 export const TMDB_REQUESTS = {
@@ -18,36 +18,36 @@ export const TMDB_REQUESTS = {
 };
 
 export const ROW_TITLE = {
-  TRENDING: "Trending Now",
-  NETFLIX_ORIGINALS: "Netflix Originals",
-  TOP_RATED: "Top Rated",
-  ACTION_MOVIES: "Action Movies",
-  COMEDY_MOVIES: "Comedy Movies",
-  HORROR_MOVIES: "Horror Movies",
-  ROMANCE_MOVIES: "Romance Movies",
-  DOCUMENTARIES: "Documentaries",
-  RECOMMEND_MOVIES: "ONLY FOR YOU",
+  TRENDING: 'Trending Now',
+  NETFLIX_ORIGINALS: 'Netflix Originals',
+  TOP_RATED: 'Top Rated',
+  ACTION_MOVIES: 'Action Movies',
+  COMEDY_MOVIES: 'Comedy Movies',
+  HORROR_MOVIES: 'Horror Movies',
+  ROMANCE_MOVIES: 'Romance Movies',
+  DOCUMENTARIES: 'Documentaries',
+  RECOMMEND_MOVIES: 'ONLY FOR YOU',
 };
 
 export const TMDB_VIDEO_TYPE = {
-  TRAILER: "Trailer",
-  FEATURETTE: "Featurette",
-  TEASER: "Teaser",
-  BEHIND_THE_SCENES: "Behind the Scenes",
-  CLIP: "Clip",
+  TRAILER: 'Trailer',
+  FEATURETTE: 'Featurette',
+  TEASER: 'Teaser',
+  BEHIND_THE_SCENES: 'Behind the Scenes',
+  CLIP: 'Clip',
 };
 
 export const YOUTUBE_FRAME_SETTINGS = {
-  height: "390",
-  width: "100%",
+  height: '390',
+  width: '100%',
   playerVars: {
     autoplay: 1,
   },
 };
 
 export const TRAILER_TYPE = {
-  VIDEO: "video",
-  POSTER: "poster",
+  VIDEO: 'video',
+  POSTER: 'poster',
 };
 
 export const ROW_ELEMETS = [

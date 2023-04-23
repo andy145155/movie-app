@@ -31,9 +31,7 @@ export interface ITmdbRowMovieDetails {
   title: string;
 }
 
-export type IRowMovieDetails =
-  | ITmdbRowMovieDetails
-  | IRecommenedRowMovieDetails;
+export type IRowMovieDetails = ITmdbRowMovieDetails | IRecommenedRowMovieDetails;
 
 export interface IRecommenedRowMovieDetails {
   movieId: string;
@@ -79,9 +77,7 @@ export interface IUser {
   setIdToken: React.Dispatch<React.SetStateAction<string>>;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedMovies: React.Dispatch<
-    React.SetStateAction<IUserSelectedMovies | null>
-  >;
+  setSelectedMovies: React.Dispatch<React.SetStateAction<IUserSelectedMovies | null>>;
   setRefreshToken: React.Dispatch<React.SetStateAction<string>>;
   setAccessToken: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -95,9 +91,7 @@ export interface IResult {
 export type IRowMovieContextType = {
   clickedMovie: IRowMovieDetails | null;
   rowIndex: number | null;
-  setClickedMovie: React.Dispatch<
-    React.SetStateAction<IRowMovieDetails | null>
-  >;
+  setClickedMovie: React.Dispatch<React.SetStateAction<IRowMovieDetails | null>>;
   setRowIndex: React.Dispatch<React.SetStateAction<number | null>>;
 };
 

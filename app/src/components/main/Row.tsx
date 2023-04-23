@@ -1,22 +1,18 @@
-import { useEffect, useState, useContext } from "react";
-import { IRowInputProps } from "../../helper/interfaces";
-import "../../assets/css/Row.css";
-import { truncate, ClickedMovieContext } from "../../helper/utils";
-import {
-  ITmdbRowMovieDetails,
-  IRowMovieContextType,
-  IRecommenedRowMovieDetails,
-} from "../../helper/interfaces";
+import { useEffect, useState, useContext } from 'react';
+import { IRowInputProps } from '../../helper/interfaces';
+import '../../assets/css/Row.css';
+import { truncate, ClickedMovieContext } from '../../helper/utils';
+import { ITmdbRowMovieDetails, IRowMovieContextType, IRecommenedRowMovieDetails } from '../../helper/interfaces';
 import {
   TMDB_BASE_URL,
   TMDB_VIDEO_TYPE,
   YOUTUBE_FRAME_SETTINGS,
   TRAILER_TYPE,
   ROW_TITLE,
-} from "../../helper/constants";
-import { TmdbAPI } from "../../helper/apis/tmdbApi";
-import Youtube from "react-youtube";
-import { MovieAPI } from "../../helper/apis/movieApi";
+} from '../../helper/constants';
+import { TmdbAPI } from '../../helper/apis/tmdbApi';
+import Youtube from 'react-youtube';
+import { MovieAPI } from '../../helper/apis/movieApi';
 
 function TmdbMoviesRow({
   title,
@@ -36,14 +32,10 @@ function TmdbMoviesRow({
     }>
   >;
 }) {
-  const { clickedMovie, rowIndex, setClickedMovie, setRowIndex } = useContext(
-    ClickedMovieContext
-  ) as {
+  const { clickedMovie, rowIndex, setClickedMovie, setRowIndex } = useContext(ClickedMovieContext) as {
     clickedMovie: ITmdbRowMovieDetails | null;
     rowIndex: number | null;
-    setClickedMovie: React.Dispatch<
-      React.SetStateAction<ITmdbRowMovieDetails | null>
-    >;
+    setClickedMovie: React.Dispatch<React.SetStateAction<ITmdbRowMovieDetails | null>>;
     setRowIndex: React.Dispatch<React.SetStateAction<number | null>>;
   };
 
@@ -57,7 +49,7 @@ function TmdbMoviesRow({
 
   const handleClick = async (movie: ITmdbRowMovieDetails) => {
     if (clickedMovie?.id === movie.id) {
-      setTrailerUrl({ type: TRAILER_TYPE.VIDEO, src: "" });
+      setTrailerUrl({ type: TRAILER_TYPE.VIDEO, src: '' });
       setClickedMovie(null);
       setRowIndex(null);
     } else {
@@ -98,29 +90,17 @@ function TmdbMoviesRow({
       {clickedMovie && rowIndex === index && (
         <div className="open">
           {trailerUrl.type === TRAILER_TYPE.VIDEO && (
-            <Youtube
-              videoId={trailerUrl.src}
-              opts={YOUTUBE_FRAME_SETTINGS}
-              className="youtube"
-            />
+            <Youtube videoId={trailerUrl.src} opts={YOUTUBE_FRAME_SETTINGS} className="youtube" />
           )}
 
           {trailerUrl.type === TRAILER_TYPE.POSTER && (
-            <img
-              className="row_clicked"
-              src={trailerUrl.src}
-              alt={clickedMovie.name}
-            />
+            <img className="row_clicked" src={trailerUrl.src} alt={clickedMovie.name} />
           )}
 
           <div className="text">
-            <h1 className="font">
-              {clickedMovie?.title || clickedMovie?.name || ""}
-            </h1>
+            <h1 className="font">{clickedMovie?.title || clickedMovie?.name || ''}</h1>
             <h2 className="font font2">OVERVIEW</h2>
-            <h2 className="row_description">
-              {truncate(clickedMovie.overview, 400)}
-            </h2>
+            <h2 className="row_description">{truncate(clickedMovie.overview, 400)}</h2>
           </div>
         </div>
       )}
@@ -146,14 +126,10 @@ function RecommendedMoviesRow({
     }>
   >;
 }) {
-  const { clickedMovie, rowIndex, setClickedMovie, setRowIndex } = useContext(
-    ClickedMovieContext
-  ) as {
+  const { clickedMovie, rowIndex, setClickedMovie, setRowIndex } = useContext(ClickedMovieContext) as {
     clickedMovie: IRecommenedRowMovieDetails | null;
     rowIndex: number | null;
-    setClickedMovie: React.Dispatch<
-      React.SetStateAction<IRecommenedRowMovieDetails | null>
-    >;
+    setClickedMovie: React.Dispatch<React.SetStateAction<IRecommenedRowMovieDetails | null>>;
     setRowIndex: React.Dispatch<React.SetStateAction<number | null>>;
   };
 
@@ -166,7 +142,7 @@ function RecommendedMoviesRow({
   };
   const handleClick = async (movie: any) => {
     if (clickedMovie?.movieId === movie.movieId) {
-      setTrailerUrl({ type: TRAILER_TYPE.VIDEO, src: "" });
+      setTrailerUrl({ type: TRAILER_TYPE.VIDEO, src: '' });
       setClickedMovie(null);
       setRowIndex(null);
     } else {
@@ -206,25 +182,15 @@ function RecommendedMoviesRow({
       {clickedMovie && rowIndex === index && (
         <div className="open">
           {trailerUrl.type === TRAILER_TYPE.VIDEO && (
-            <Youtube
-              videoId={trailerUrl.src}
-              opts={YOUTUBE_FRAME_SETTINGS}
-              className="youtube"
-            />
+            <Youtube videoId={trailerUrl.src} opts={YOUTUBE_FRAME_SETTINGS} className="youtube" />
           )}
           {trailerUrl.type === TRAILER_TYPE.POSTER && (
-            <img
-              className="row_clicked"
-              src={trailerUrl.src}
-              alt={clickedMovie.movieId}
-            />
+            <img className="row_clicked" src={trailerUrl.src} alt={clickedMovie.movieId} />
           )}
           <div className="text">
-            <h1 className="font">{clickedMovie.title || ""}</h1>
+            <h1 className="font">{clickedMovie.title || ''}</h1>
             <h2 className="font font2">OVERVIEW</h2>
-            <h2 className="row_description">
-              {truncate(clickedMovie.overview, 400)}
-            </h2>
+            <h2 className="row_description">{truncate(clickedMovie.overview, 400)}</h2>
           </div>
         </div>
       )}
@@ -237,7 +203,7 @@ function Row({ title, fetchUrl, index, recommendId = null }: IRowInputProps) {
 
   const [trailerUrl, setTrailerUrl] = useState({
     type: TRAILER_TYPE.VIDEO,
-    src: "",
+    src: '',
   });
 
   useEffect(() => {
@@ -273,11 +239,7 @@ function Row({ title, fetchUrl, index, recommendId = null }: IRowInputProps) {
     setTrailerUrl,
   };
 
-  return title === ROW_TITLE.RECOMMEND_MOVIES ? (
-    <RecommendedMoviesRow {...props} />
-  ) : (
-    <TmdbMoviesRow {...props} />
-  );
+  return title === ROW_TITLE.RECOMMEND_MOVIES ? <RecommendedMoviesRow {...props} /> : <TmdbMoviesRow {...props} />;
 }
 
 export default Row;

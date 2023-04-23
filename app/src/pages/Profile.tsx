@@ -1,11 +1,11 @@
-import { useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../store/auth";
-import "../assets/css/Profile.css";
-import Nav from "../components/main/Nav";
-import { IUser } from "../helper/interfaces";
-import { MovieAPI } from "../helper/apis/movieApi";
-import { TMDB_BASE_URL } from "../helper/constants";
+import { useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../store/auth';
+import '../assets/css/Profile.css';
+import Nav from '../components/main/Nav';
+import { IUser } from '../helper/interfaces';
+import { MovieAPI } from '../helper/apis/movieApi';
+import { TMDB_BASE_URL } from '../helper/constants';
 
 function Profile() {
   const auth = useAuth();
@@ -16,23 +16,21 @@ function Profile() {
   const logOut = async () => {
     const result = await auth.signOut();
     if (result.success) {
-      navigate({ pathname: "/" });
+      navigate({ pathname: '/' });
     } else {
       alert(result.message);
     }
   };
 
   useMemo(() => {
-    const localStorageEstData = localStorage.getItem("userData");
+    const localStorageEstData = localStorage.getItem('userData');
     if (localStorageEstData !== null) {
       userData.current = JSON.parse(localStorageEstData);
     }
 
     async function fetchMovies() {
       const movies = await MovieAPI.getMovies({
-        movieIdList: JSON.stringify(
-          userData.current.selectedMovies?.selectedMovies
-        ),
+        movieIdList: JSON.stringify(userData.current.selectedMovies?.selectedMovies),
       });
       setMovies(movies);
     }
@@ -46,10 +44,7 @@ function Profile() {
       <div className="profileScreen_body">
         <h1>Edit Profile</h1>
         <div className="profileScreen_info">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
-            alt=""
-          />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" alt="" />
           <div className="profileScreen_details">
             <h2>Email: {userData.current.email}</h2>
             <div className="profileScreen_plans">
@@ -75,16 +70,10 @@ function Profile() {
                   );
                 })}
               </div>
-              <button
-                className="profileScreen_signOut"
-                onClick={() => navigate("/selectMovies")}
-              >
+              <button className="profileScreen_signOut" onClick={() => navigate('/selectMovies')}>
                 Choose your movies
               </button>
-              <button
-                className="profileScreen_signOut"
-                onClick={() => logOut()}
-              >
+              <button className="profileScreen_signOut" onClick={() => logOut()}>
                 Sign Out
               </button>
             </div>

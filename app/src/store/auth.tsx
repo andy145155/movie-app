@@ -1,15 +1,15 @@
-import { Auth } from "@aws-amplify/auth";
-import { IUseAuth, IUserSelectedMovies } from "../helper/interfaces";
-import React, { createContext, useContext, useState, useMemo } from "react";
-import { useUser } from "./user";
-import { MovieAPI } from "../helper/apis/movieApi";
+import { Auth } from '@aws-amplify/auth';
+import { IUseAuth, IUserSelectedMovies } from '../helper/interfaces';
+import React, { createContext, useContext, useState, useMemo } from 'react';
+import { useUser } from './user';
+import { MovieAPI } from '../helper/apis/movieApi';
 
 const AwsConfigAuth = {
-  region: "ap-southeast-1",
+  region: 'ap-southeast-1',
   userPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID,
   userPoolWebClientId: process.env.REACT_APP_COGNITO_CLIENT_ID,
   mandatorySignIn: true,
-  authenticationFlowType: "USER_SRP_AUTH",
+  authenticationFlowType: 'USER_SRP_AUTH',
 };
 
 Auth.configure(AwsConfigAuth);
@@ -42,7 +42,7 @@ const useProvideAuth = (): IUseAuth => {
 
     Auth.currentAuthenticatedUser()
       .then(async (result) => {
-        console.log("Afdsafdasfd: ", result);
+        console.log('Afdsafdasfd: ', result);
         user.setIsAuthenticated(true);
         user.setEmail(result.attributes.email);
         user.setUsername(result.username);
@@ -50,16 +50,14 @@ const useProvideAuth = (): IUseAuth => {
         user.setRefreshToken(result.signInUserSession.idToken);
         user.setAccessToken(result.signInUserSession.accessToken);
         const userMovies = await fetchMovies(result.attributes.email);
-        userMovies.selectedMovies.length === 0
-          ? user.setSelectedMovies(null)
-          : user.setSelectedMovies(userMovies);
+        userMovies.selectedMovies.length === 0 ? user.setSelectedMovies(null) : user.setSelectedMovies(userMovies);
         setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
 
-        user.setEmail("");
-        user.setUsername("");
+        user.setEmail('');
+        user.setUsername('');
         user.setIsAuthenticated(false);
         setIsLoading(false);
       });
@@ -67,7 +65,7 @@ const useProvideAuth = (): IUseAuth => {
 
   useMemo(() => {
     if (user.email) {
-      window.localStorage.setItem("userData", JSON.stringify(user));
+      window.localStorage.setItem('userData', JSON.stringify(user));
     }
   }, [user]);
 
@@ -75,7 +73,7 @@ const useProvideAuth = (): IUseAuth => {
     try {
       const result = await Auth.signIn(username, password);
 
-      console.log("afdasdfafdfffff ", result);
+      console.log('afdasdfafdfffff ', result);
 
       user.setUsername(result.username);
       user.setIsAuthenticated(true);
@@ -88,9 +86,7 @@ const useProvideAuth = (): IUseAuth => {
         email: result.attributes.email,
       });
 
-      userMovies.selectedMovies.length === 0
-        ? user.setSelectedMovies(null)
-        : user.setSelectedMovies(userMovies);
+      userMovies.selectedMovies.length === 0 ? user.setSelectedMovies(null) : user.setSelectedMovies(userMovies);
 
       return {
         success: true,
@@ -108,18 +104,18 @@ const useProvideAuth = (): IUseAuth => {
   const signOut = async () => {
     try {
       await Auth.signOut();
-      user.setUsername("");
+      user.setUsername('');
       user.setIsAuthenticated(false);
-      user.setEmail("");
-      user.setIdToken("");
-      user.setRefreshToken("");
-      user.setAccessToken("");
+      user.setEmail('');
+      user.setIdToken('');
+      user.setRefreshToken('');
+      user.setAccessToken('');
       user.setSelectedMovies(null);
-      return { success: true, message: "" };
+      return { success: true, message: '' };
     } catch (error) {
       return {
         success: false,
-        message: "LOGOUT FAIL",
+        message: 'LOGOUT FAIL',
       };
     }
   };
@@ -132,7 +128,7 @@ const useProvideAuth = (): IUseAuth => {
       });
       return { success: true, message: user };
     } catch (error) {
-      console.log("error signing up:", error);
+      console.log('error signing up:', error);
       return { success: false, message: error };
     }
   };
@@ -143,7 +139,7 @@ const useProvideAuth = (): IUseAuth => {
       console.log(test);
       return { success: true, message: test };
     } catch (error) {
-      console.log("error signing up:", error);
+      console.log('error signing up:', error);
       return { success: false, message: error };
     }
   };
@@ -154,7 +150,7 @@ const useProvideAuth = (): IUseAuth => {
       console.log(resend);
       return { success: true, message: resend };
     } catch (error) {
-      console.log("error resending code: ", error);
+      console.log('error resending code: ', error);
       return { success: false, message: error };
     }
   };

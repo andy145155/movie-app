@@ -1,7 +1,7 @@
 openapi: 3.0.2
 
 servers:
-  - url: "/dashboard"
+  - url: '/dashboard'
 
 info:
   title: movie-app-api
@@ -19,17 +19,17 @@ x-amazon-apigateway-request-validators:
 
 x-amazon-apigateway-cors:
   allowOrigins:
-    - "*"
+    - '*'
   allowMethods:
-    - "GET"
-    - "OPTIONS"
+    - 'GET'
+    - 'OPTIONS'
   allowHeaders:
-    - "x-amzm-header"
-    - "x-apigateway-header"
-    - "x-api-key"
-    - "authorization"
-    - "x-amz-date"
-    - "content-type"
+    - 'x-amzm-header'
+    - 'x-apigateway-header'
+    - 'x-api-key'
+    - 'authorization'
+    - 'x-amz-date'
+    - 'content-type'
 
 paths:
   /movies:
@@ -63,7 +63,7 @@ paths:
             }
         responses:
           default:
-            statusCode: "200"
+            statusCode: '200'
             responseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,Access-Control-Allow-Origin'"
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
@@ -75,9 +75,8 @@ paths:
                 #if($origin.matches(".*")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end
     get:
       security:
-        - UserPoolAuthorizer:
-            ["email", "openid", "aws.cognito.signin.user.admin"]
-      operationId: "getMovies"
+        - UserPoolAuthorizer: ['email', 'openid', 'aws.cognito.signin.user.admin']
+      operationId: 'getMovies'
       summary: Retrieve a list of Movies from TMDB 5000 datasets
       parameters:
         - name: random
@@ -97,10 +96,10 @@ paths:
             items:
               type: string
       responses:
-        "200":
+        '200':
           description: 200 response
           headers:
-            "Access-Control-Allow-Origin":
+            'Access-Control-Allow-Origin':
               schema:
                 type: string
           content:
@@ -109,24 +108,24 @@ paths:
                 type: object
                 properties:
                   customer:
-                    $ref: "#/components/schemas/Movies"
-        "400":
+                    $ref: '#/components/schemas/Movies'
+        '400':
           description: 400 response
       x-amazon-apigateway-integration:
         uri:
           Fn::Join:
-            - ""
-            - - "arn:aws:apigateway:"
+            - ''
+            - - 'arn:aws:apigateway:'
               - Ref: AWS::Region
-              - ":lambda:path/2015-03-31/functions/"
-              - Fn::GetAtt: ["GetMoviesLambdaFunction", "Arn"]
-              - "/invocations"
-        passthroughBehavior: "when_no_match"
-        httpMethod: "POST"
-        type: "aws_proxy"
+              - ':lambda:path/2015-03-31/functions/'
+              - Fn::GetAtt: ['GetMoviesLambdaFunction', 'Arn']
+              - '/invocations'
+        passthroughBehavior: 'when_no_match'
+        httpMethod: 'POST'
+        type: 'aws_proxy'
         responses:
           default:
-            statusCode: "200"
+            statusCode: '200'
 
   /user/selectedMovies:
     options:
@@ -159,7 +158,7 @@ paths:
             }
         responses:
           default:
-            statusCode: "200"
+            statusCode: '200'
             responseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,Access-Control-Allow-Origin'"
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST'"
@@ -171,9 +170,8 @@ paths:
                 #if($origin.matches(".*")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end
     get:
       security:
-        - UserPoolAuthorizer:
-            ["email", "openid", "aws.cognito.signin.user.admin"]
-      operationId: "getUserRecommendMovies"
+        - UserPoolAuthorizer: ['email', 'openid', 'aws.cognito.signin.user.admin']
+      operationId: 'getUserRecommendMovies'
       summary: Retrieve user recommended movies
       parameters:
         - name: email
@@ -182,10 +180,10 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: 200 response
           headers:
-            "Access-Control-Allow-Origin":
+            'Access-Control-Allow-Origin':
               schema:
                 type: string
           content:
@@ -194,29 +192,28 @@ paths:
                 type: object
                 properties:
                   customer:
-                    $ref: "#/components/schemas/UserMovieDetails"
-        "400":
+                    $ref: '#/components/schemas/UserMovieDetails'
+        '400':
           description: 400 response
       x-amazon-apigateway-integration:
         uri:
           Fn::Join:
-            - ""
-            - - "arn:aws:apigateway:"
+            - ''
+            - - 'arn:aws:apigateway:'
               - Ref: AWS::Region
-              - ":lambda:path/2015-03-31/functions/"
-              - Fn::GetAtt: ["GetUserRecommendMoviesLambdaFunction", "Arn"]
-              - "/invocations"
-        passthroughBehavior: "when_no_match"
-        httpMethod: "POST"
-        type: "aws_proxy"
+              - ':lambda:path/2015-03-31/functions/'
+              - Fn::GetAtt: ['GetUserRecommendMoviesLambdaFunction', 'Arn']
+              - '/invocations'
+        passthroughBehavior: 'when_no_match'
+        httpMethod: 'POST'
+        type: 'aws_proxy'
         responses:
           default:
-            statusCode: "200"
+            statusCode: '200'
     post:
       security:
-        - UserPoolAuthorizer:
-            ["email", "openid", "aws.cognito.signin.user.admin"]
-      operationId: "setUserSelectedMovies"
+        - UserPoolAuthorizer: ['email', 'openid', 'aws.cognito.signin.user.admin']
+      operationId: 'setUserSelectedMovies'
       summary: Set user selected movie
       parameters:
         - name: email
@@ -230,10 +227,10 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: 200 response
           headers:
-            "Access-Control-Allow-Origin":
+            'Access-Control-Allow-Origin':
               schema:
                 type: string
           content:
@@ -242,35 +239,35 @@ paths:
                 type: object
                 properties:
                   customer:
-                    $ref: "#/components/schemas/Movies"
-        "400":
+                    $ref: '#/components/schemas/Movies'
+        '400':
           description: 400 response
       x-amazon-apigateway-integration:
         uri:
           Fn::Join:
-            - ""
-            - - "arn:aws:apigateway:"
+            - ''
+            - - 'arn:aws:apigateway:'
               - Ref: AWS::Region
-              - ":lambda:path/2015-03-31/functions/"
-              - Fn::GetAtt: ["SetUserSelectedMoviesLambdaFunction", "Arn"]
-              - "/invocations"
-        passthroughBehavior: "when_no_match"
-        httpMethod: "POST"
-        type: "aws_proxy"
+              - ':lambda:path/2015-03-31/functions/'
+              - Fn::GetAtt: ['SetUserSelectedMoviesLambdaFunction', 'Arn']
+              - '/invocations'
+        passthroughBehavior: 'when_no_match'
+        httpMethod: 'POST'
+        type: 'aws_proxy'
         responses:
           default:
-            statusCode: "200"
+            statusCode: '200'
 
 components:
   securitySchemes:
-    "UserPoolAuthorizer":
+    'UserPoolAuthorizer':
       type: apiKey
       name: Authorization
       in: header
-      x-amazon-apigateway-authtype: "cognito_user_pools"
+      x-amazon-apigateway-authtype: 'cognito_user_pools'
       x-amazon-apigateway-authorizer:
-        type: "cognito_user_pools"
-        providerARNs: ["${self:custom.MOVIE_APP_USERPOOL_ARN}"]
+        type: 'cognito_user_pools'
+        providerARNs: ['${self:custom.MOVIE_APP_USERPOOL_ARN}']
   schemas:
     Body:
       type: object
