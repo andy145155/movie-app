@@ -1,0 +1,20 @@
+.selection-nav {
+  display: flex;
+  height: 100px;
+  border-bottom: 1px solid #e6e6e6;
+  justify-content: space-between;
+}
+
+.selection-logo {
+  padding-top: 20px;
+  padding-bottom: 25px;
+  margin-left: 300px;
+}
+
+.selection-help {
+  color: #333;
+  font-weight: 700;
+  font-size: 19px;
+  padding-top: 35px;
+  margin-right: 350px;
+}

@@ -1,0 +1,30 @@
+form > h4 {
+  text-align: left;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+.signupSreen_gray {
+  color: grey;
+}
+
+.signupSreen_email {
+  margin: 5px 0px;
+}
+
+.signupSreen_link:hover {
+  cursor: pointer;
+  color: gray;
+}
+
+.resend_button {
+  background-color: gray;
+  padding: 16px 20px;
+  font-size: 1rem;
+  color: #fff;
+  border-radius: 5px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 100%;
+}

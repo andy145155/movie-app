@@ -1,0 +1,15 @@
+{
+  "name": "movie-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "uploadCsvToS3": "bash scripts/uploadCsvToS3.sh",
+    "deployLambda": "cd backend && yarn deployLambda",
+    "deployFargate": "cd backend && yarn deployFargate",
+    "removeLambda": "cd backend && yarn removeLambda",
+    "removeFargate": "cd backend && yarn removeFargate",
+    "deployMovieApp": "cd app && yarn deploy",
+    "deployInfra": "cd infrastructure && bash refreshAndUpdateResources.sh"
+  }
+}

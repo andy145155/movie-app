@@ -1,0 +1,180 @@
+{
+    "resource": "/user/selectedMovies",
+    "path": "/user/selectedMovies",
+    "httpMethod": "POST",
+    "headers": {
+        "Accept": "application/json, text/plain, */*",
+        "accept-encoding": "gzip, deflate, br",
+        "Accept-Language": "en-US,en;q=0.9,zh-TW;q=0.8,zh;q=0.7",
+        "Authorization": "eyJraWQiOiJFRnlGSnJRU2dLOTBYS1B1VXg0K1pXTktwaUJuZlZ0cWxxMDJtUjlTTytZPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI3MzQ5YWU1My1mNmIxLTQ4M2MtODdiNC01M2VmMTQyMTdhM2IiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuYXAtc291dGhlYXN0LTEuYW1hem9uYXdzLmNvbVwvYXAtc291dGhlYXN0LTFfTG13V2gxQWp0IiwiY2xpZW50X2lkIjoiMzdodjdyam1jN29kbTBwY2xzNzc1azdnbmoiLCJvcmlnaW5fanRpIjoiZjJlYjRkOGYtYTAyYy00MWFmLWI1ZTMtNGQ0MjlmMmU2ZmMyIiwiZXZlbnRfaWQiOiI4ZDA2ODhkMC1kNmE0LTRmMTAtYWRiNC01M2RiYzY2NGVkZWMiLCJ0b2tlbl91c2UiOiJhY2Nlc3MiLCJzY29wZSI6ImF3cy5jb2duaXRvLnNpZ25pbi51c2VyLmFkbWluIiwiYXV0aF90aW1lIjoxNjgxNjIzNjA4LCJleHAiOjE2ODE5NTM3MDYsImlhdCI6MTY4MTk1MDEwNywianRpIjoiM2JiY2E2Y2EtNzM1Ny00Mzc1LTljNzEtMzBhNmY2ZDJkMjM5IiwidXNlcm5hbWUiOiI3MzQ5YWU1My1mNmIxLTQ4M2MtODdiNC01M2VmMTQyMTdhM2IifQ.QfKELFhnvDSGAsQzH6l2MF_DOxUO0_yxvOQjC0eDiPSDkMS58ROvL5UmhhEazjCtcC0pVTlTsRLPim0eIihp4FWUP2pvP7B_oQjv_FghKmbtnWEnW7-egmvzcE9PJt1ZmEs02Azek3oFOd3L48_SLIe1s7Mn6dQ08GbEYeuRPYkK8w7Q89dD1UTyJB4RmDXbOuPUqeGou-6QxiFZ4O1AMVecG3xYfC9-JfUHFV-U0cj5UNFgxAcJtHLGPHIH76LyHh6Dji0h81N_VQrg3fjZ4ZmbOwUNqa6lXW5P963sBe6-35wMeDiewJ58zFRr690qUEuXQIc231vdntjMjJRU1A",
+        "CloudFront-Forwarded-Proto": "https",
+        "CloudFront-Is-Desktop-Viewer": "true",
+        "CloudFront-Is-Mobile-Viewer": "false",
+        "CloudFront-Is-SmartTV-Viewer": "false",
+        "CloudFront-Is-Tablet-Viewer": "false",
+        "CloudFront-Viewer-ASN": "9269",
+        "CloudFront-Viewer-Country": "HK",
+        "Host": "api.movieapp.paohenghsu.com",
+        "origin": "http://localhost:3000",
+        "Referer": "http://localhost:3000/",
+        "sec-ch-ua": "\"Chromium\";v=\"112\", \"Google Chrome\";v=\"112\", \"Not:A-Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "cross-site",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
+        "Via": "2.0 e74ae1ee8d87215b42aa8a1c59137a48.cloudfront.net (CloudFront)",
+        "X-Amz-Cf-Id": "oHw7-thHOv7VhTer58G08xUrwIEF73R_sIFDJvNLC77DUYgabe49uQ==",
+        "X-Amzn-Trace-Id": "Root=1-64408b48-288464707ebc3be764076a98",
+        "X-Forwarded-For": "59.148.137.194, 64.252.139.85",
+        "X-Forwarded-Port": "443",
+        "X-Forwarded-Proto": "https"
+    },
+    "multiValueHeaders": {
+        "Accept": [
+            "application/json, text/plain, */*"
+        ],
+        "accept-encoding": [
+            "gzip, deflate, br"
+        ],
+        "Accept-Language": [
+            "en-US,en;q=0.9,zh-TW;q=0.8,zh;q=0.7"
+        ],
+        "Authorization": [
+            "eyJraWQiOiJFRnlGSnJRU2dLOTBYS1B1VXg0K1pXTktwaUJuZlZ0cWxxMDJtUjlTTytZPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI3MzQ5YWU1My1mNmIxLTQ4M2MtODdiNC01M2VmMTQyMTdhM2IiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuYXAtc291dGhlYXN0LTEuYW1hem9uYXdzLmNvbVwvYXAtc291dGhlYXN0LTFfTG13V2gxQWp0IiwiY2xpZW50X2lkIjoiMzdodjdyam1jN29kbTBwY2xzNzc1azdnbmoiLCJvcmlnaW5fanRpIjoiZjJlYjRkOGYtYTAyYy00MWFmLWI1ZTMtNGQ0MjlmMmU2ZmMyIiwiZXZlbnRfaWQiOiI4ZDA2ODhkMC1kNmE0LTRmMTAtYWRiNC01M2RiYzY2NGVkZWMiLCJ0b2tlbl91c2UiOiJhY2Nlc3MiLCJzY29wZSI6ImF3cy5jb2duaXRvLnNpZ25pbi51c2VyLmFkbWluIiwiYXV0aF90aW1lIjoxNjgxNjIzNjA4LCJleHAiOjE2ODE5NTM3MDYsImlhdCI6MTY4MTk1MDEwNywianRpIjoiM2JiY2E2Y2EtNzM1Ny00Mzc1LTljNzEtMzBhNmY2ZDJkMjM5IiwidXNlcm5hbWUiOiI3MzQ5YWU1My1mNmIxLTQ4M2MtODdiNC01M2VmMTQyMTdhM2IifQ.QfKELFhnvDSGAsQzH6l2MF_DOxUO0_yxvOQjC0eDiPSDkMS58ROvL5UmhhEazjCtcC0pVTlTsRLPim0eIihp4FWUP2pvP7B_oQjv_FghKmbtnWEnW7-egmvzcE9PJt1ZmEs02Azek3oFOd3L48_SLIe1s7Mn6dQ08GbEYeuRPYkK8w7Q89dD1UTyJB4RmDXbOuPUqeGou-6QxiFZ4O1AMVecG3xYfC9-JfUHFV-U0cj5UNFgxAcJtHLGPHIH76LyHh6Dji0h81N_VQrg3fjZ4ZmbOwUNqa6lXW5P963sBe6-35wMeDiewJ58zFRr690qUEuXQIc231vdntjMjJRU1A"
+        ],
+        "CloudFront-Forwarded-Proto": [
+            "https"
+        ],
+        "CloudFront-Is-Desktop-Viewer": [
+            "true"
+        ],
+        "CloudFront-Is-Mobile-Viewer": [
+            "false"
+        ],
+        "CloudFront-Is-SmartTV-Viewer": [
+            "false"
+        ],
+        "CloudFront-Is-Tablet-Viewer": [
+            "false"
+        ],
+        "CloudFront-Viewer-ASN": [
+            "9269"
+        ],
+        "CloudFront-Viewer-Country": [
+            "HK"
+        ],
+        "Host": [
+            "api.movieapp.paohenghsu.com"
+        ],
+        "origin": [
+            "http://localhost:3000"
+        ],
+        "Referer": [
+            "http://localhost:3000/"
+        ],
+        "sec-ch-ua": [
+            "\"Chromium\";v=\"112\", \"Google Chrome\";v=\"112\", \"Not:A-Brand\";v=\"99\""
+        ],
+        "sec-ch-ua-mobile": [
+            "?0"
+        ],
+        "sec-ch-ua-platform": [
+            "\"macOS\""
+        ],
+        "sec-fetch-dest": [
+            "empty"
+        ],
+        "sec-fetch-mode": [
+            "cors"
+        ],
+        "sec-fetch-site": [
+            "cross-site"
+        ],
+        "User-Agent": [
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
+        ],
+        "Via": [
+            "2.0 e74ae1ee8d87215b42aa8a1c59137a48.cloudfront.net (CloudFront)"
+        ],
+        "X-Amz-Cf-Id": [
+            "oHw7-thHOv7VhTer58G08xUrwIEF73R_sIFDJvNLC77DUYgabe49uQ=="
+        ],
+        "X-Amzn-Trace-Id": [
+            "Root=1-64408b48-288464707ebc3be764076a98"
+        ],
+        "X-Forwarded-For": [
+            "59.148.137.194, 64.252.139.85"
+        ],
+        "X-Forwarded-Port": [
+            "443"
+        ],
+        "X-Forwarded-Proto": [
+            "https"
+        ]
+    },
+    "queryStringParameters": {
+        "email": "andy162739@gmail.com",
+        "selectedMovies": "[{\"movieId\":\"9676\",\"similarity\":[\"17926\",\"282128\",\"29339\",\"31166\",\"17332\",\"4911\",\"263503\"]},{\"movieId\":\"1412\",\"similarity\":[\"47502\",\"347764\",\"10068\",\"14976\",\"89325\",\"109729\",\"118452\"]},{\"movieId\":\"62255\",\"similarity\":[\"10724\",\"31668\",\"72431\",\"563\",\"947\",\"62402\",\"12412\"]}]"
+    },
+    "multiValueQueryStringParameters": {
+        "email": [
+            "andy162739@gmail.com"
+        ],
+        "selectedMovies": [
+            "[{\"movieId\":\"9676\",\"similarity\":[\"17926\",\"282128\",\"29339\",\"31166\",\"17332\",\"4911\",\"263503\"]},{\"movieId\":\"1412\",\"similarity\":[\"47502\",\"347764\",\"10068\",\"14976\",\"89325\",\"109729\",\"118452\"]},{\"movieId\":\"62255\",\"similarity\":[\"10724\",\"31668\",\"72431\",\"563\",\"947\",\"62402\",\"12412\"]}]"
+        ]
+    },
+    "pathParameters": null,
+    "stageVariables": null,
+    "requestContext": {
+        "resourceId": "9v8imt",
+        "authorizer": {
+            "claims": {
+                "origin_jti": "f2eb4d8f-a02c-41af-b5e3-4d429f2e6fc2",
+                "sub": "7349ae53-f6b1-483c-87b4-53ef14217a3b",
+                "event_id": "8d0688d0-d6a4-4f10-adb4-53dbc664edec",
+                "token_use": "access",
+                "scope": "aws.cognito.signin.user.admin",
+                "auth_time": "1681623608",
+                "iss": "https://cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_LmwWh1Ajt",
+                "exp": "Thu Apr 20 01:21:46 UTC 2023",
+                "iat": "Thu Apr 20 00:21:47 UTC 2023",
+                "client_id": "37hv7rjmc7odm0pcls775k7gnj",
+                "jti": "3bbca6ca-7357-4375-9c71-30a6f6d2d239",
+                "username": "7349ae53-f6b1-483c-87b4-53ef14217a3b"
+            }
+        },
+        "resourcePath": "/user/selectedMovies",
+        "operationName": "setUserSelectedMovies",
+        "httpMethod": "POST",
+        "extendedRequestId": "DpqzXGk4yQ0Fvsw=",
+        "requestTime": "20/Apr/2023:00:46:00 +0000",
+        "path": "/user/selectedMovies",
+        "accountId": "410370150231",
+        "protocol": "HTTP/1.1",
+        "stage": "v1",
+        "domainPrefix": "api",
+        "requestTimeEpoch": 1681951560405,
+        "requestId": "993f5221-10ff-4cf1-90b9-170da8ab1771",
+        "identity": {
+            "cognitoIdentityPoolId": null,
+            "accountId": null,
+            "cognitoIdentityId": null,
+            "caller": null,
+            "sourceIp": "59.148.137.194",
+            "principalOrgId": null,
+            "accessKey": null,
+            "cognitoAuthenticationType": null,
+            "cognitoAuthenticationProvider": null,
+            "userArn": null,
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
+            "user": null
+        },
+        "domainName": "api.movieapp.paohenghsu.com",
+        "apiId": "y4vly1ebvk"
+    },
+    "body": null,
+    "isBase64Encoded": false
+}
