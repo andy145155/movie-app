@@ -4,7 +4,7 @@
 <br />
 <div align="center">
 
-  <img src="images/selection_page.png" alt="Logo" width="80" height="80">
+  <img src="images/selection_page.png" alt="Logo" width="500" height="330">
 
   <h3 align="center">Movie Recommender App</h3>
 
