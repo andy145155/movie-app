@@ -1,12 +1,12 @@
 data "aws_availability_zones" "available" {
-  state = var.state
+  state = "available"
 }
 
 # VPC Resources
 resource "aws_vpc" "movie_app" {
   cidr_block           = var.main_vpc_cidr
-  enable_dns_support   = var.dns_support
-  enable_dns_hostnames = var.dns_hostnames
+  enable_dns_support   = true
+  enable_dns_hostnames = true
   tags = {
     Name = "${var.service}-vpc"
   }
@@ -93,20 +93,3 @@ resource "aws_route_table_association" "private_b" {
   subnet_id      = aws_subnet.private_subnet_b.id
   route_table_id = aws_route_table.private.id
 }
-
-resource "aws_db_subnet_group" "public_subnet_group" {
-  name = "${var.service}-public-subnet-group"
-  subnet_ids = [
-    aws_subnet.public_subnet_a.id,
-    aws_subnet.public_subnet_b.id
-  ]
-}
-
-resource "aws_db_subnet_group" "private_subnet_group" {
-  name = "${var.service}-private-subnet-group"
-  subnet_ids = [
-    aws_subnet.private_subnet_a.id,
-    aws_subnet.private_subnet_b.id
-  ]
-}
-

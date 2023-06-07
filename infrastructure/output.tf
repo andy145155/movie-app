@@ -2,18 +2,6 @@
 output "vpc_id" {
   value = module.movie_app_vpc.vpc_id
 }
-output "public_subnet_ids" {
-  value = module.movie_app_vpc.public_subnet_ids
-}
-output "public_subnet_group_name" {
-  value = module.movie_app_vpc.public_subnet_group_name
-}
-output "private_subnet_ids" {
-  value = module.movie_app_vpc.private_subnet_ids
-}
-output "private_subnet_group_name" {
-  value = module.movie_app_vpc.private_subnet_group_name
-}
 output "public_subnet_a_id" {
   value = module.movie_app_vpc.public_subnet_a_id
 }

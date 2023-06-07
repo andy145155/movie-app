@@ -3,20 +3,6 @@ resource "aws_s3_bucket" "movie_app_buckets" {
   bucket = var.s3_bucket_names[count.index]
 }
 
-resource "aws_s3_bucket_acl" "movie_app_buckets" {
-  count  = length(var.s3_bucket_names)
-  bucket = aws_s3_bucket.movie_app_buckets[count.index].id
-  acl    = var.movie_app_bucket_acl
-}
-
-resource "aws_s3_bucket_versioning" "movie_app_buckets" {
-  count  = length(var.s3_bucket_names)
-  bucket = aws_s3_bucket.movie_app_buckets[count.index].id
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
 resource "aws_s3_bucket_public_access_block" "movie_app_buckets" {
   count  = length(var.s3_bucket_names)
   bucket = aws_s3_bucket.movie_app_buckets[count.index].id
@@ -37,7 +23,7 @@ resource "aws_vpc_endpoint" "movie_app_buckets" {
   private_dns_enabled = false
 
   tags = {
-    Name = "Movie app s3 vpc endpoint"
+    Name = "Movie app s3 gateway endpoint"
   }
 }
 

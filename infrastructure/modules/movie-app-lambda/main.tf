@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "lambda_trust_policy" {
   }
 }
 
-resource "aws_iam_role" "lambda" {
+resource "aws_iam_role" "lambda_role" {
   name               = "${var.service}-LambdaExecuteRole"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.lambda_trust_policy.json
@@ -29,18 +29,12 @@ data "aws_iam_policy_document" "lambda_exec_policy" {
       "ec2:DescribeNetworkInterfaces",
       "ec2:DeleteNetworkInterface",
 
-      "secretsmanager:GetSecretValue",
-
       "s3:GetObject",
       "s3:GetBucketPolicy",
       "s3:PutObject",
       "s3:PutObjectAcl",
       "s3:ListBucket",
       "s3:GetBucketLocation",
-
-      "athena:StartQueryExecution",
-      "athena:GetQueryExecution",
-      "athena:GetQueryResults",
 
       "glue:StartCrawler",
       "glue:GetTable",
@@ -77,7 +71,7 @@ resource "aws_iam_policy" "iam_policy_for_lambda" {
 }
 
 resource "aws_iam_role_policy_attachment" "attach_iam_policy_to_iam_role" {
-  role       = aws_iam_role.lambda.name
+  role       = aws_iam_role.lambda_role.name
   policy_arn = aws_iam_policy.iam_policy_for_lambda.arn
 }
 
@@ -89,8 +83,8 @@ resource "aws_security_group" "lambda" {
   }
 }
 
-resource "aws_security_group_rule" "fargate_egress" {
-  description       = "ECS Tasks Egress"
+resource "aws_security_group_rule" "ig_gateway_egress" {
+  description       = "Outbound traffic from Lambda to ECS Tasks"
   type              = "egress"
   from_port         = 443
   to_port           = 443
