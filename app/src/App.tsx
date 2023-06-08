@@ -11,17 +11,17 @@ const SelectMovies = lazy(() => import('./pages/SelectMovies'));
 function App() {
   return (
     <div className="app">
-      <Router>
-        <Routes>
-          <Suspense fallback={<h1>Loading...</h1>}>
+      <Suspense fallback={<h1>Loading...</h1>}>
+        <Router>
+          <Routes>
             <Route path="/" element={<GetStarted />} />
             <Route path="/home" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/register" element={<Register />} />
             <Route path="/selectMovies" element={<SelectMovies />} />
-          </Suspense>
-        </Routes>
-      </Router>
+          </Routes>
+        </Router>
+      </Suspense>
     </div>
   );
 }
