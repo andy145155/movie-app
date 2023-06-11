@@ -78,15 +78,6 @@ def getS3Object(bucket, key):
         print("Error retrieving object from S3 bucker: %s" % (error))
 
 
-def getS3Objects(bucket, prefix=None):
-
-    s3 = boto3.resource('s3')
-    my_bucket = s3.Bucket(bucket)
-    s3_objects = my_bucket.objects.filter(
-        Prefix=prefix)
-    return s3_objects
-
-
 def listS3Objects(bucket, prefix=None):
     # Create S3 bucket client
     s3 = boto3.client('s3', region_name=MOVIE_APP_REGION_NAME)
@@ -116,39 +107,27 @@ def convertToStringColumn(csv_object):
     return csv_object
 
 
-def uploadCsvToDB(pd_object):
+def uploadDataToDynamoDB(pd_object, db_table, partition_key):
     try:
         dynamodb = boto3.resource('dynamodb')
-        table = dynamodb.Table('test')
-        pd_object.rename(columns={'movie_id': 'movieId'},
-                         inplace=True, errors='raise')
-        pd_object = pd_object.drop_duplicates(subset="movieId")
+        table = dynamodb.Table(db_table)
+        pd_object = pd_object.drop_duplicates(subset=partition_key)
         with table.batch_writer() as batch:
             for index, row in pd_object.iterrows():
                 batch.put_item(Item=json.loads(row.to_json()))
     except Exception as e:
         print("Error uploading data to dynamodb: ", e)
+        print("Table: ", db_table)
         return e
 
 
-def uploadCsvToS3d(file_path, bucket, pd_object):
-    try:
-        # Upload the file
-        s3_client = boto3.client('s3')
-        with StringIO() as csv_buffer:
-            pd_object.to_csv(csv_buffer, index=False)
-
-            response = s3_client.put_object(
-                Bucket=bucket, Key=file_path, Body=csv_buffer.getvalue()
-            )
-
-            status = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
-
-            if status == 200:
-                print(f"Successful S3 put_object response. Status - {status}")
-            else:
-                print(
-                    f"Unsuccessful S3 put_object response. Status - {status}")
-    except Exception as e:
-        print("Error uploading csv to s3: ", e)
-        return e
+def ok(body):
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': "true",
+        },
+        'body': body
+    }

@@ -7,7 +7,6 @@ resource "aws_security_group" "ecs_task" {
   }
 }
 
-
 resource "aws_security_group_rule" "ig_gateway_ingress" {
   description       = "Internet gateway Ingress"
   type              = "ingress"

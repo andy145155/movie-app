@@ -1,11 +1,13 @@
 '''
-This function handles the event trigger and uploads CSV files to AWS S3
+This function handles the topic notification from SNS 
+and transform raw CSV files to destination S3 bucket
 '''
 
 try:
     import unzip_requirements
 except ImportError:
     pass
+
 from utils.apiFunctions import uploadCsvToS3, getInfoFromSNS, convertToStringColumn, getS3Object, checkLambdaWarmUp
 from utils.constants import TMDB_5000_CSV, S3_BUCKETS_NAME, S3_DATABASE_FILE_PATH
 from io import StringIO

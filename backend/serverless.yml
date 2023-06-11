@@ -17,6 +17,7 @@ custom:
   pythonRequirements:
     dockerizePip: true
     zip: true
+    useDownloadCache: false
 
   # Environment variables
   app_name: 'movie-app'

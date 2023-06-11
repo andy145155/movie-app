@@ -30,18 +30,6 @@ variable "private_subnet_b" {
   type        = string
   description = "CIDR value for private subnet b"
 }
-variable "dns_support" {
-  type        = bool
-  description = "Bool value for VPC DNS support"
-}
-variable "dns_hostnames" {
-  type        = bool
-  description = "Bool value for VPC DNS hostnames"
-}
-variable "state" {
-  type        = string
-  description = "State value for availability zone"
-}
 
 # SNS variables
 variable "sns_name" {
@@ -50,7 +38,6 @@ variable "sns_name" {
 }
 
 # S3 buckets variables
-variable "movie_app_bucket_acl" {}
 variable "s3_bucket_names" {
   type        = list(any)
   description = "List of s3 bucket names"
@@ -64,7 +51,7 @@ variable "db_user" {}
 variable "movie_app_www_domain_name" {}
 variable "movie_app_root_domain_name" {}
 variable "root_domain_name" {}
-
+variable "acm_domain_name" {}
 
 # API variables
 variable "movie_app_api_domain_name" {}

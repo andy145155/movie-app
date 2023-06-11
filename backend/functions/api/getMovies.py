@@ -3,8 +3,8 @@ try:
 except ImportError:
     pass
 import boto3
-from utils.apiFunctions import checkLambdaWarmUp
-from utils.constants import DATABASE, DB_TABLE
+from utils.apiFunctions import checkLambdaWarmUp, ok
+from utils.constants import DYNAMO_DB_TABLE_LIST
 from boto3.dynamodb.conditions import Key
 import random
 import json
@@ -24,12 +24,12 @@ def handler(event, context):
     print(ran)
     print(movieIdList)
     dynamodb = boto3.resource("dynamodb")
-    table = dynamodb.Table('test')
+    table = dynamodb.Table(DYNAMO_DB_TABLE_LIST["MOVIES_SIMILARITY"])
     resultList = []
 
     if number is not None:
         if ran is not None and ran == "true":
-            randomList = random.sample(range(1, 4800), int(number))
+            randomList = random.sample(range(4800), int(number))
             for randomNumber in randomList:
                 response = table.query(
                     IndexName='getIndex',
@@ -69,13 +69,5 @@ def handler(event, context):
         'message': resultList
     }
 
-    return {
-        'statusCode': 200,
-        'headers': {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': "true",
-        },
-        'body': json.dumps(message,  default=str
-                           )
-    }
+    return ok(json.dumps(message,  default=str
+                         ))
