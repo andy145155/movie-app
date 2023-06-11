@@ -1,5 +1,5 @@
 import './assets/css/App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 
 const Home = lazy(() => import('./pages/Home'));
@@ -14,7 +14,8 @@ function App() {
       <Suspense fallback={<h1>Loading...</h1>}>
         <Router>
           <Routes>
-            <Route path="/" element={<GetStarted />} />
+            <Route path="/index.html" element={<Navigate to="/" />} />
+          <Route path="/" element={<GetStarted />} />
             <Route path="/home" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/register" element={<Register />} />
