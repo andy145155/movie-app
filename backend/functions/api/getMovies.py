@@ -27,43 +27,47 @@ def handler(event, context):
     table = dynamodb.Table(DYNAMO_DB_TABLE_LIST["MOVIES_SIMILARITY"])
     resultList = []
 
-    if number is not None:
-        if ran is not None and ran == "true":
-            randomList = random.sample(range(4800), int(number))
-            for randomNumber in randomList:
-                response = table.query(
-                    IndexName='getIndex',
-                    KeyConditionExpression=Key('index').eq(randomNumber)
-                )
-                resultList.append(response['Items'][0])
-        else:
-            response = table.scan(Limit=int(number))
-            for movie in response["Items"]:
+    try:
+        if number is not None:
+            numberList = []
+            if ran is not None and ran == "true":
+                numberList = random.sample(range(4800), int(number))
+                for randomNumber in numberList:
+                    response = table.query(
+                        IndexName='getIndex',
+                        KeyConditionExpression=Key('index').eq(randomNumber)
+                    )
+                    resultList.append(response['Items'][0])
+            else:
+                numberList = (list(range(number)))
+                for fixNumber in numberList:
+                    response = table.query(
+                        IndexName='getIndex',
+                        KeyConditionExpression=Key('index').eq(fixNumber)
+                    )
+                    resultList.append(response['Items'][0])
+
+        elif movieIdList is not None:
+            batch_keys = {
+                DYNAMO_DB_TABLE_LIST["MOVIES_SIMILARITY"]: {
+                    'Keys': [{'movieId': int(movie)} for movie in set(json.loads(movieIdList))]
+                }
+            }
+            response = dynamodb.batch_get_item(
+                RequestItems=batch_keys,    ReturnConsumedCapacity='TOTAL')
+            for movie in response["Responses"][DYNAMO_DB_TABLE_LIST["MOVIES_SIMILARITY"]]:
                 resultList.append(
                     {
                         "movieId": movie['movieId'],
                         "poster": movie['poster'],
                         "similarity": movie['similarity'],
-                        "overview": movie['overview']
+                        "overview": movie['overview'],
+                        'title': movie['title']
                     })
 
-    elif movieIdList is not None:
-        batch_keys = {
-            'test': {
-                'Keys': [{'movieId': int(movie)} for movie in set(json.loads(movieIdList))]
-            }
-        }
-        response = dynamodb.batch_get_item(
-            RequestItems=batch_keys,    ReturnConsumedCapacity='TOTAL')
-        for movie in response["Responses"]['test']:
-            resultList.append(
-                {
-                    "movieId": movie['movieId'],
-                    "poster": movie['poster'],
-                    "similarity": movie['similarity'],
-                    "overview": movie['overview'],
-                    'title': movie['title']
-                })
+    except Exception as e:
+        print("Error getting movie data: ", e)
+        return e
 
     message = {
         'message': resultList
