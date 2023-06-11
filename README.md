@@ -9,9 +9,9 @@
   <h3 align="center">Movie Recommender App</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    Personalised Movie Recommendations Just for You
     <br />
-    <a>View Demo</a>
+    <a href="https://www.movieapp.paohenghsu.com/">View Demo</a>
     ·
     <a href="https://github.com/andy145155/movie-app/issues">Report Bug</a>
     ·
