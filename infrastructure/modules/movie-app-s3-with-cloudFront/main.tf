@@ -167,6 +167,18 @@ resource "aws_cloudfront_distribution" "movie_app_www_distribution" {
     }
   }
 
+  custom_error_response {
+    error_code         = 404
+    response_page_path = "/index.html"
+    response_code      = 200
+  }
+
+  custom_error_response {
+    error_code         = 403
+    response_page_path = "/index.html"
+    response_code      = 200
+  }
+
   restrictions {
     geo_restriction {
       restriction_type = "none"
