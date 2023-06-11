@@ -15,7 +15,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/index.html" element={<Navigate to="/" />} />
-          <Route path="/" element={<GetStarted />} />
+            <Route path="/" element={<GetStarted />} />
             <Route path="/home" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/register" element={<Register />} />
