@@ -17,6 +17,7 @@ def handler(event, context):
     if checkLambdaWarmUp(event):
         return "Lambda is warmed"
 
+    return
     # Get the name of the CSV file
     csv_name = event['Records'][0]['s3']['object']['key']
 

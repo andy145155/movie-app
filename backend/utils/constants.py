@@ -20,8 +20,13 @@ DB_TABLE = {
 }
 
 S3_BUCKETS_NAME = {
-    "DATABASE": "movie-app-database",
+    "DATABASE": "movie-app-athena-database",
     "CSV_BUCKET": "movie-app-csv-bucket"
+}
+
+DYNAMO_DB_LIST = {
+    "MOVIES_SIMILARITY": 'movies_similarity',
+    "USER_SELECTION": 'user_selection',
 }
 
 GLUE_CRAWLER = {

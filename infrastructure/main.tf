@@ -72,8 +72,12 @@ module "movie_app_api" {
   source                    = "./modules/movie-app-api"
   root_domain_name          = var.root_domain_name
   movie_app_api_domain_name = var.movie_app_api_domain_name
+  acm_domain_name           = var.acm_domain_name
 }
 
-# module "movie_app_dynamo" {
-#   source = "./modules/movie-app-dynamoDB"
-# }
+module "movie_app_dynamo" {
+  source                 = "./modules/movie-app-dynamoDB"
+  region                 = var.region
+  vpc_id                 = module.movie_app_vpc.vpc_id
+  private_route_table_id = module.movie_app_vpc.private_route_table_id
+}

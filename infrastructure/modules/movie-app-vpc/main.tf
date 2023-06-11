@@ -69,6 +69,11 @@ resource "aws_route_table" "public" {
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.movie_app.id
 
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.movie_app_nat.id
+  }
+
   tags = {
     Name = "${var.service}-private-route-table"
   }
@@ -92,4 +97,21 @@ resource "aws_route_table_association" "private_a" {
 resource "aws_route_table_association" "private_b" {
   subnet_id      = aws_subnet.private_subnet_b.id
   route_table_id = aws_route_table.private.id
+}
+
+resource "aws_eip" "nat_gateway" {
+  vpc = true
+}
+
+resource "aws_nat_gateway" "movie_app_nat" {
+  allocation_id = aws_eip.nat_gateway.id
+  subnet_id     = aws_subnet.public_subnet_a.id
+
+  tags = {
+    Name = "Movie app NAT"
+  }
+
+  # To ensure proper ordering, it is recommended to add an explicit dependency
+  # on the Internet Gateway for the VPC.
+  depends_on = [aws_internet_gateway.movie_app]
 }

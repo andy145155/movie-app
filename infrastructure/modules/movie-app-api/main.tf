@@ -6,7 +6,7 @@ provider "aws" {
 
 data "aws_acm_certificate" "movie＿app_api_ssl_certificate" {
   provider = aws.acm
-  domain   = var.movie_app_api_domain_name
+  domain   = var.acm_domain_name
   statuses = ["ISSUED"]
 }
 

@@ -83,7 +83,7 @@ resource "aws_security_group" "lambda" {
   }
 }
 
-resource "aws_security_group_rule" "ig_gateway_egress" {
+resource "aws_security_group_rule" "eg_gateway_egress" {
   description       = "Outbound traffic from Lambda to ECS Tasks"
   type              = "egress"
   from_port         = 443

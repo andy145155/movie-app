@@ -1,12 +1,5 @@
-'''
-This function will
-'''
-try:
-    import unzip_requirements
-except ImportError:
-    pass
-from utils.constants import TMDB_5000_CSV, S3_BUCKETS_NAME, S3_DATABASE_FILE_PATH, TMDB_KEY
-from utils.apiFunctions import getS3Object, uploadCsvToS3, uploadCsvToDB
+from utils.constants import TMDB_5000_CSV, S3_BUCKETS_NAME, S3_DATABASE_FILE_PATH, TMDB_KEY, DYNAMO_DB_LIST
+from utils.apiFunctions import getS3Object, uploadCsvToS3, uploadDataToDynamoDB
 import pandas as pd
 import boto3
 from sklearn.feature_extraction.text import CountVectorizer
@@ -46,11 +39,14 @@ def main():
         similarity_df = similarity_df.apply(fetch_poster, axis=1)
         similarity_df = similarity_df.reset_index()
         similarity_df['index'] = similarity_df['index'].astype(int)
+        similarity_df.rename(columns={'movie_id': 'movieId'},
+                             inplace=True, errors='raise')
         print("------ similarity_df informations -------")
         similarity_df.info()
         uploadCsvToS3(S3_DATABASE_FILE_PATH["SIMILARITY"],
                       S3_BUCKETS_NAME["DATABASE"], similarity_df)
-        uploadCsvToDB(similarity_df)
+        uploadDataToDynamoDB(
+            similarity_df, DYNAMO_DB_LIST['MOVIES_SIMILARITY'], partition_key='movieId')
     except Exception as error:
         print("Error processing raw movie app data: %s" % (error))
     return
