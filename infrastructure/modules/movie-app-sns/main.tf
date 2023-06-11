@@ -1,6 +1,6 @@
 resource "aws_sns_topic" "movie_app_topic" {
   name              = var.sns_name
-  kms_master_key_id = aws_kms_alias.movie_app_sns_key_alias.name
+  kms_master_key_id = aws_kms_alias.topic_key_alias.name
   policy = jsonencode(
     {
       "Version" : "2012-10-17",
@@ -28,9 +28,8 @@ resource "aws_s3_bucket_notification" "movie_app_s3_notif" {
   }
 }
 
-
-resource "aws_kms_key" "movie_app_sns_key" {
-  description = "Topic Key"
+resource "aws_kms_key" "topic_key" {
+  description = "SNS Topic Key"
   policy      = data.aws_iam_policy_document.topic_key_kms_policy.json
 }
 
@@ -38,16 +37,20 @@ data "aws_iam_policy_document" "topic_key_kms_policy" {
   statement {
     effect = "Allow"
     principals {
-      identifiers = ["s3.amazonaws.com", "lambda.amazonaws.com"]
+      identifiers = ["s3.amazonaws.com"]
+      type        = "Service"
+    }
+    principals {
+      identifiers = ["sns.amazonaws.com"]
       type        = "Service"
     }
     actions = [
       "kms:GenerateDataKey",
       "kms:Decrypt"
     ]
+    // TODO: Allow only var.movie_app_csv_buckets_arn and aws_sns_topic.movie_app_topic.arn
     resources = ["*"]
   }
-
   # allow root user to administrate key
   statement {
     effect = "Allow"
@@ -62,7 +65,7 @@ data "aws_iam_policy_document" "topic_key_kms_policy" {
   }
 }
 
-resource "aws_kms_alias" "movie_app_sns_key_alias" {
+resource "aws_kms_alias" "topic_key_alias" {
   name          = "alias/topic-key"
-  target_key_id = aws_kms_key.movie_app_sns_key.key_id
+  target_key_id = aws_kms_key.topic_key.key_id
 }

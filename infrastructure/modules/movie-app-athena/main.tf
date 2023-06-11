@@ -45,10 +45,10 @@ resource "aws_glue_classifier" "csv_classifier" {
 
 resource "aws_iam_role" "glue_role" {
   name               = "glue_role"
-  assume_role_policy = data.aws_iam_policy_document.glue-assume-role-policy.json
+  assume_role_policy = data.aws_iam_policy_document.glue_assume_role_policy.json
 }
 
-data "aws_iam_policy_document" "glue-assume-role-policy" {
+data "aws_iam_policy_document" "glue_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
 
@@ -59,14 +59,13 @@ data "aws_iam_policy_document" "glue-assume-role-policy" {
   }
 }
 
-resource "aws_iam_policy" "extra-policy" {
-  name        = "extra-policy"
-  description = "A test policy"
-  policy      = data.aws_iam_policy_document.extra-policy-document.json
+resource "aws_iam_policy" "glue_s3_policy" {
+  name   = "glue-s3-policy"
+  policy = data.aws_iam_policy_document.glue_s3_policy_document.json
 
 }
 
-data "aws_iam_policy_document" "extra-policy-document" {
+data "aws_iam_policy_document" "glue_s3_policy_document" {
   statement {
     actions = [
       "s3:GetBucketLocation",
@@ -83,13 +82,13 @@ data "aws_iam_policy_document" "extra-policy-document" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "extra-policy-attachment" {
+resource "aws_iam_role_policy_attachment" "glue_s3_policy_attachment" {
   role       = aws_iam_role.glue_role.name
-  policy_arn = aws_iam_policy.extra-policy.arn
+  policy_arn = aws_iam_policy.glue_s3_policy.arn
 }
 
 
-resource "aws_iam_role_policy_attachment" "glue-service-role-attachment" {
+resource "aws_iam_role_policy_attachment" "glue_service_role_attachment" {
   role       = aws_iam_role.glue_role.name
   policy_arn = data.aws_iam_policy.AWSGlueServiceRole.arn
 }
@@ -97,3 +96,4 @@ resource "aws_iam_role_policy_attachment" "glue-service-role-attachment" {
 data "aws_iam_policy" "AWSGlueServiceRole" {
   arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
 }
+

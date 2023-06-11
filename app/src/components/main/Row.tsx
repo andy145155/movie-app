@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import { IRowInputProps } from '../../helper/interfaces';
 import '../../assets/css/Row.css';
 import { truncate, ClickedMovieContext } from '../../helper/utils';
-import { ITmdbRowMovieDetails, IRowMovieContextType, IRecommenedRowMovieDetails } from '../../helper/interfaces';
+import { ITmdbRowMovieDetails, IRecommenedRowMovieDetails } from '../../helper/interfaces';
 import {
   TMDB_BASE_URL,
   TMDB_VIDEO_TYPE,

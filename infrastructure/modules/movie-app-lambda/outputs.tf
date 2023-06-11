@@ -1,5 +1,5 @@
 output "lambda_iam_role_arn" {
-  value = aws_iam_role.lambda.arn
+  value = aws_iam_role.lambda_role.arn
 }
 
 output "lambda_security_group_id" {

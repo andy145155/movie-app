@@ -3,8 +3,8 @@ try:
 except ImportError:
     pass
 import boto3
-from utils.apiFunctions import checkLambdaWarmUp, listS3Objects
-from utils.constants import TMDB_5000_CSV
+from utils.apiFunctions import checkLambdaWarmUp, ok
+from utils.constants import DYNAMO_DB_TABLE_LIST
 import json
 
 
@@ -18,7 +18,7 @@ def handler(event, context):
 
     try:
         dynamodb = boto3.resource("dynamodb")
-        table = dynamodb.Table('user_selection')
+        table = dynamodb.Table(DYNAMO_DB_TABLE_LIST['USER_SELECTION'])
 
         response = table.get_item(
             Key={
@@ -51,14 +51,6 @@ def handler(event, context):
         print("Error getting data from dynamodb: ", e)
         return e
 
-    return {
-        'statusCode': 200,
-        'headers': {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': "true",
-        },
-        'body': json.dumps(message,
-                           default=str
-                           )
-    }
+    return ok(json.dumps(message,
+                         default=str
+                         ))

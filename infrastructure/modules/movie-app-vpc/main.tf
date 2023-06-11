@@ -1,12 +1,12 @@
 data "aws_availability_zones" "available" {
-  state = var.state
+  state = "available"
 }
 
 # VPC Resources
 resource "aws_vpc" "movie_app" {
   cidr_block           = var.main_vpc_cidr
-  enable_dns_support   = var.dns_support
-  enable_dns_hostnames = var.dns_hostnames
+  enable_dns_support   = true
+  enable_dns_hostnames = true
   tags = {
     Name = "${var.service}-vpc"
   }
@@ -69,6 +69,11 @@ resource "aws_route_table" "public" {
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.movie_app.id
 
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.movie_app_nat.id
+  }
+
   tags = {
     Name = "${var.service}-private-route-table"
   }
@@ -94,19 +99,19 @@ resource "aws_route_table_association" "private_b" {
   route_table_id = aws_route_table.private.id
 }
 
-resource "aws_db_subnet_group" "public_subnet_group" {
-  name = "${var.service}-public-subnet-group"
-  subnet_ids = [
-    aws_subnet.public_subnet_a.id,
-    aws_subnet.public_subnet_b.id
-  ]
+resource "aws_eip" "nat_gateway" {
+  vpc = true
 }
 
-resource "aws_db_subnet_group" "private_subnet_group" {
-  name = "${var.service}-private-subnet-group"
-  subnet_ids = [
-    aws_subnet.private_subnet_a.id,
-    aws_subnet.private_subnet_b.id
-  ]
-}
+resource "aws_nat_gateway" "movie_app_nat" {
+  allocation_id = aws_eip.nat_gateway.id
+  subnet_id     = aws_subnet.public_subnet_a.id
 
+  tags = {
+    Name = "Movie app NAT"
+  }
+
+  # To ensure proper ordering, it is recommended to add an explicit dependency
+  # on the Internet Gateway for the VPC.
+  depends_on = [aws_internet_gateway.movie_app]
+}
