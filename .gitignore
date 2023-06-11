@@ -55,6 +55,3 @@ secrets.tfvars.json
 config.json
 terraform.tfstate
 terraform.tfstate.backup
-
-# Others 
-/awsImages

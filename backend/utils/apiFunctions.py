@@ -78,15 +78,6 @@ def getS3Object(bucket, key):
         print("Error retrieving object from S3 bucker: %s" % (error))
 
 
-def getS3Objects(bucket, prefix=None):
-
-    s3 = boto3.resource('s3')
-    my_bucket = s3.Bucket(bucket)
-    s3_objects = my_bucket.objects.filter(
-        Prefix=prefix)
-    return s3_objects
-
-
 def listS3Objects(bucket, prefix=None):
     # Create S3 bucket client
     s3 = boto3.client('s3', region_name=MOVIE_APP_REGION_NAME)
@@ -130,24 +121,13 @@ def uploadDataToDynamoDB(pd_object, db_table, partition_key):
         return e
 
 
-def uploadCsvToS3d(file_path, bucket, pd_object):
-    try:
-        # Upload the file
-        s3_client = boto3.client('s3')
-        with StringIO() as csv_buffer:
-            pd_object.to_csv(csv_buffer, index=False)
-
-            response = s3_client.put_object(
-                Bucket=bucket, Key=file_path, Body=csv_buffer.getvalue()
-            )
-
-            status = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
-
-            if status == 200:
-                print(f"Successful S3 put_object response. Status - {status}")
-            else:
-                print(
-                    f"Unsuccessful S3 put_object response. Status - {status}")
-    except Exception as e:
-        print("Error uploading csv to s3: ", e)
-        return e
+def ok(body):
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': "true",
+        },
+        'body': body
+    }

@@ -24,7 +24,7 @@ S3_BUCKETS_NAME = {
     "CSV_BUCKET": "movie-app-csv-bucket"
 }
 
-DYNAMO_DB_LIST = {
+DYNAMO_DB_TABLE_LIST = {
     "MOVIES_SIMILARITY": 'movies_similarity',
     "USER_SELECTION": 'user_selection',
 }

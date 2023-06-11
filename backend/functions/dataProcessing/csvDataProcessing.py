@@ -1,4 +1,4 @@
-from utils.constants import TMDB_5000_CSV, S3_BUCKETS_NAME, S3_DATABASE_FILE_PATH, TMDB_KEY, DYNAMO_DB_LIST
+from utils.constants import TMDB_5000_CSV, S3_BUCKETS_NAME, S3_DATABASE_FILE_PATH, TMDB_KEY, DYNAMO_DB_TABLE_LIST
 from utils.apiFunctions import getS3Object, uploadCsvToS3, uploadDataToDynamoDB
 import pandas as pd
 import boto3
@@ -46,7 +46,7 @@ def main():
         uploadCsvToS3(S3_DATABASE_FILE_PATH["SIMILARITY"],
                       S3_BUCKETS_NAME["DATABASE"], similarity_df)
         uploadDataToDynamoDB(
-            similarity_df, DYNAMO_DB_LIST['MOVIES_SIMILARITY'], partition_key='movieId')
+            similarity_df, DYNAMO_DB_TABLE_LIST['MOVIES_SIMILARITY'], partition_key='movieId')
     except Exception as error:
         print("Error processing raw movie app data: %s" % (error))
     return

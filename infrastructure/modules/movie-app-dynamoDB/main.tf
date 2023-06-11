@@ -8,6 +8,17 @@ resource "aws_dynamodb_table" "movie_similarity_table" {
     type = "N"
   }
 
+  attribute {
+    name = "index"
+    type = "N"
+  }
+
+  global_secondary_index {
+    hash_key        = "index"
+    name            = "getIndex"
+    projection_type = "ALL"
+  }
+
 }
 
 resource "aws_dynamodb_table" "movie_user_selection_table" {
@@ -19,6 +30,7 @@ resource "aws_dynamodb_table" "movie_user_selection_table" {
     name = "email"
     type = "S"
   }
+
 }
 
 resource "aws_vpc_endpoint" "movie_app_dynamo_db" {

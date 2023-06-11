@@ -40,7 +40,7 @@ def handler(event, context):
         table.put_item(
             Item=item
         )
-        print("dafd: ")
+
     except Exception as e:
         print("Error uploading data to dynamodb: ", e)
         return e
