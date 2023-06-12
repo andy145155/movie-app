@@ -64,10 +64,7 @@ resource "aws_vpc_endpoint_policy" "dynamoDB_endpoint_policy" {
           "dynamodb:Query",
           "dynamodb:Scan"
         ],
-        "Resource" : [
-          aws_dynamodb_table.movie_user_selection_table.arn,
-          aws_dynamodb_table.movie_similarity_table.arn,
-        ]
+        "Resource" : ["*"]
       }
     ]
   })
