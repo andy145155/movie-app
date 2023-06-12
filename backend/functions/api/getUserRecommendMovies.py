@@ -7,14 +7,17 @@ from utils.apiFunctions import checkLambdaWarmUp, ok
 from utils.constants import DYNAMO_DB_TABLE_LIST
 import json
 
+# sls invoke local -f=getUserRecommendMovies --path sample/getUserRecommendMovies.json
+
 
 def handler(event, context):
     print(json.dumps(event))
+
     if checkLambdaWarmUp(event):
         return "Lambda is warmed"
 
-    payload = event["queryStringParameters"]
-    email = payload["email"]
+    payload = event.get("queryStringParameters", {})
+    email = payload.get("email")
 
     try:
         dynamodb = boto3.resource("dynamodb")
@@ -29,8 +32,8 @@ def handler(event, context):
         print("response", response)
 
         if 'Item' in response:
-            recommendedMovies = response["Item"]["recommendedMovies"]
-            selectedMovies = response["Item"]["selectedMovies"]
+            recommendedMovies = response["Item"].get("recommendedMovies", [])
+            selectedMovies = response["Item"].get("selectedMovies", [])
             message = {
                 'message': {
                     'email': email,

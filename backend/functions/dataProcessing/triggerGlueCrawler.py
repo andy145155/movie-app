@@ -13,32 +13,22 @@ from utils.constants import S3_DATABASE_FILE_PATH, GLUE_CRAWLER
 def handler(event, context):
     print(event)
 
-    # Check if the Lambda function is already warmed up
     if checkLambdaWarmUp(event):
         return "Lambda is warmed"
 
-    return
-    # Get the name of the CSV file
     csv_name = event['Records'][0]['s3']['object']['key']
 
     try:
-        # Trigger the appropriate Glue Crawler based on the CSV file name
-        if csv_name == S3_DATABASE_FILE_PATH["CREDITS"]:
-            triggerGlueCrawler(GLUE_CRAWLER["CREDITS"])
-            print(
-                f"""Successfully triggered {GLUE_CRAWLER["CREDITS"]}""")
-        elif csv_name == S3_DATABASE_FILE_PATH["MOVIES"]:
-            triggerGlueCrawler(GLUE_CRAWLER["MOVIES"])
-            print(
-                f"""Successfully triggered {GLUE_CRAWLER["MOVIES"]}""")
-        elif csv_name == S3_DATABASE_FILE_PATH["SIMILARITY"]:
-            triggerGlueCrawler(GLUE_CRAWLER["SIMILARITY"])
-            print(
-                f"""Successfully triggered {GLUE_CRAWLER["SIMILARITY"]}""")
+        if csv_name in S3_DATABASE_FILE_PATH.values():
+            for crawler_name, file_path in S3_DATABASE_FILE_PATH.items():
+                if csv_name == file_path:
+                    triggerGlueCrawler(GLUE_CRAWLER[crawler_name])
+                    print(
+                        f"Successfully triggered {GLUE_CRAWLER[crawler_name]}")
+                    break
         else:
-            # Raise an exception if the CSV file name is unknown
             raise Exception("Unknown input object")
     except Exception as error:
-        print("Error triggering the glue crawlers: %s" % (error))
+        print("Error triggering the glue crawlers: %s" % error)
 
     return

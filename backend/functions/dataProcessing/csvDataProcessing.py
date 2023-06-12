@@ -22,27 +22,18 @@ def main():
         merge.dropna(inplace=True)
 
         new_df = dataFrameProcessing(merge)
-        counter = CountVectorizer(max_features=5000, stop_words='english')
-        vectors = counter.fit_transform(new_df['tags']).toarray()
-        counter.fit_transform(new_df['tags']).toarray().shape
-        new_df['tags'] = new_df['tags'].apply(stemming)
+        vectors = getVectors(new_df['tags'])
         similarity = cosine_similarity(vectors)
-        similarity_series = pd.Series(similarity.tolist())
+        similarity_df = getSimilarityDataFrame(new_df, overview, similarity)
 
-        similarity_df = pd.DataFrame().assign(
-            movie_id=new_df['movie_id'], title=new_df['title'], overview=overview, similarity=similarity_series.values)
-
-        # Get Recommended Movie Based on Similarity Score
-        similarity_df["similarity"] = similarity_df["similarity"].apply(
-            lambda x: getRecommendedMovieId(x, similarity_df))
-        similarity_df.head()
-        similarity_df = similarity_df.apply(fetch_poster, axis=1)
+        similarity_df = similarity_df.apply(fetchPoster, axis=1)
         similarity_df = similarity_df.reset_index()
         similarity_df['index'] = similarity_df['index'].astype(int)
         similarity_df.rename(columns={'movie_id': 'movieId'},
                              inplace=True, errors='raise')
         print("------ similarity_df informations -------")
         similarity_df.info()
+
         uploadCsvToS3(S3_DATABASE_FILE_PATH["SIMILARITY"],
                       S3_BUCKETS_NAME["DATABASE"], similarity_df)
         uploadDataToDynamoDB(
@@ -50,6 +41,23 @@ def main():
     except Exception as error:
         print("Error processing raw movie app data: %s" % (error))
     return
+
+
+def getVectors(tags):
+    counter = CountVectorizer(max_features=5000, stop_words='english')
+    vectors = counter.fit_transform(tags).toarray()
+    return vectors
+
+
+def getSimilarityDataFrame(new_df, overview, similarity):
+    similarity_series = pd.Series(similarity.tolist())
+    similarity_df = pd.DataFrame().assign(
+        movie_id=new_df['movie_id'], title=new_df['title'], overview=overview, similarity=similarity_series.values
+    )
+    similarity_df["similarity"] = similarity_df["similarity"].apply(
+        lambda x: getRecommendedMovieId(x, similarity_df)
+    )
+    return similarity_df
 
 
 def getRecommendedMovieId(obj, similarity_df):
@@ -61,7 +69,7 @@ def getRecommendedMovieId(obj, similarity_df):
     return result
 
 
-def fetch_poster(obj):
+def fetchPoster(obj):
     response = requests.get(
         'https://api.themoviedb.org/3/movie/{}?api_key={}&language=en-US'.format(obj['movie_id'], TMDB_KEY))
     data = response.json()

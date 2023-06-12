@@ -25,7 +25,6 @@ module "movie_app_lambda" {
 module "movie_app_sns" {
   source                    = "./modules/movie-app-sns"
   region                    = var.region
-  service                   = var.service
   movie_app_csv_buckets_id  = module.movie_app_s3.movie_app_csv_buckets_id
   movie_app_csv_buckets_arn = module.movie_app_s3.movie_app_csv_buckets_arn
   current_iam_caller        = data.aws_caller_identity.current
@@ -34,7 +33,6 @@ module "movie_app_sns" {
 
 module "movie_app_s3" {
   source                 = "./modules/movie-app-s3"
-  service                = var.service
   region                 = var.region
   s3_bucket_names        = var.s3_bucket_names
   vpc_id                 = module.movie_app_vpc.vpc_id
@@ -45,8 +43,6 @@ module "movie_app_s3" {
 module "movie_app_athena" {
   source                          = "./modules/movie-app-athena"
   movie_app_database_buckets_name = module.movie_app_s3.movie_app_database_buckets_name
-  vpc_id                          = module.movie_app_vpc.vpc_id
-  service                         = var.service
 }
 
 module "movie_app_fargate" {
@@ -60,7 +56,6 @@ module "movie_app_s3_app" {
   movie_app_www_domain_name  = var.movie_app_www_domain_name
   movie_app_root_domain_name = var.movie_app_root_domain_name
   root_domain_name           = var.root_domain_name
-  current_iam_caller         = data.aws_caller_identity.current
   acm_domain_name            = var.acm_domain_name
 }
 

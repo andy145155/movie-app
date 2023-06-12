@@ -9,19 +9,22 @@ from boto3.dynamodb.conditions import Key
 import random
 import json
 
+# sls invoke local -f=getMovies --path sample/getMovies.json
+
 
 def handler(event, context):
     print(event)
+
     if checkLambdaWarmUp(event):
         return "Lambda is warmed"
 
     params = event["queryStringParameters"]
     number = params.get('number', None)
-    ran = params.get('random', None)
+    isRandom = params.get('random', None)
     movieIdList = params.get('movieIdList', None)
 
     print(number)
-    print(ran)
+    print(isRandom)
     print(movieIdList)
     dynamodb = boto3.resource("dynamodb")
     table = dynamodb.Table(DYNAMO_DB_TABLE_LIST["MOVIES_SIMILARITY"])
@@ -29,49 +32,57 @@ def handler(event, context):
 
     try:
         if number is not None:
-            numberList = []
-            if ran is not None and ran == "true":
-                numberList = random.sample(range(4800), int(number))
-                for randomNumber in numberList:
-                    response = table.query(
-                        IndexName='getIndex',
-                        KeyConditionExpression=Key('index').eq(randomNumber)
-                    )
-                    resultList.append(response['Items'][0])
-            else:
-                numberList = (list(range(number)))
-                for fixNumber in numberList:
-                    response = table.query(
-                        IndexName='getIndex',
-                        KeyConditionExpression=Key('index').eq(fixNumber)
-                    )
-                    resultList.append(response['Items'][0])
-
+            resultList = getMoviesByNumber(
+                table, int(number), isRandom == "true")
         elif movieIdList is not None:
-            batch_keys = {
-                DYNAMO_DB_TABLE_LIST["MOVIES_SIMILARITY"]: {
-                    'Keys': [{'movieId': int(movie)} for movie in set(json.loads(movieIdList))]
-                }
-            }
-            response = dynamodb.batch_get_item(
-                RequestItems=batch_keys,    ReturnConsumedCapacity='TOTAL')
-            for movie in response["Responses"][DYNAMO_DB_TABLE_LIST["MOVIES_SIMILARITY"]]:
-                resultList.append(
-                    {
-                        "movieId": movie['movieId'],
-                        "poster": movie['poster'],
-                        "similarity": movie['similarity'],
-                        "overview": movie['overview'],
-                        'title': movie['title']
-                    })
-
+            resultList = getMoviesByIdList(dynamodb, json.loads(movieIdList))
     except Exception as e:
         print("Error getting movie data: ", e)
         return e
 
-    message = {
+    response = {
         'message': resultList
     }
 
-    return ok(json.dumps(message,  default=str
+    return ok(json.dumps(response,  default=str
                          ))
+
+
+def getMoviesByNumber(table, number, isRandom):
+    query_count = 4800
+    number_list = random.sample(
+        range(query_count), number) if isRandom else list(range(number))
+    result_list = []
+
+    for number in number_list:
+        response = table.query(
+            IndexName='getIndex',
+            KeyConditionExpression=Key('index').eq(number)
+        )
+        result_list.append(response['Items'][0])
+
+    return result_list
+
+
+def getMoviesByIdList(dynamodb, movieIdList):
+    batch_keys = {
+        DYNAMO_DB_TABLE_LIST["MOVIES_SIMILARITY"]: {
+            'Keys': [{'movieId': int(movie)} for movie in set(movieIdList)]
+        }
+    }
+
+    response = dynamodb.batch_get_item(
+        RequestItems=batch_keys, ReturnConsumedCapacity='TOTAL')
+
+    result_list = []
+
+    for movie in response["Responses"][DYNAMO_DB_TABLE_LIST["MOVIES_SIMILARITY"]]:
+        result_list.append({
+            "movieId": movie['movieId'],
+            "poster": movie['poster'],
+            "similarity": movie['similarity'],
+            "overview": movie['overview'],
+            'title': movie['title']
+        })
+
+    return result_list

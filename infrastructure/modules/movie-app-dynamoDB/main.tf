@@ -53,10 +53,21 @@ resource "aws_vpc_endpoint_policy" "dynamoDB_endpoint_policy" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
-        "Principal" : "*",
-        "Action" : ["*"],
+        "Sid" : "AccessToSpecificTable",
         "Effect" : "Allow",
-        "Resource" : ["*"],
+        "Principal" : "*",
+        "Action" : [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:BatchWriteItem",
+          "dynamodb:BatchGetItem",
+          "dynamodb:Query",
+          "dynamodb:Scan"
+        ],
+        "Resource" : [
+          aws_dynamodb_table.movie_user_selection_table.arn,
+          aws_dynamodb_table.movie_similarity_table.arn,
+        ]
       }
     ]
   })

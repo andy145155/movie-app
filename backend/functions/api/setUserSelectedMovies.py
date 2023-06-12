@@ -3,8 +3,8 @@ try:
 except ImportError:
     pass
 import boto3
-from utils.apiFunctions import checkLambdaWarmUp
-from utils.constants import DATABASE, DB_TABLE
+from utils.apiFunctions import checkLambdaWarmUp, ok
+from utils.constants import DYNAMO_DB_TABLE_LIST
 import json
 
 # sls invoke local -f=setUserSelectedMovies --path sample/setUserSelectedMovies.json
@@ -15,12 +15,14 @@ def handler(event, context):
     if checkLambdaWarmUp(event):
         return "Lambda is warmed"
 
-    payload = event["queryStringParameters"]
-    email = payload["email"]
-    selectedMovies = payload["selectedMovies"]
+    payload = event.get("queryStringParameters", {})
+    email = payload.get("email")
+    selectedMovies = payload.get("selectedMovies", [])
+
     print("email: ", email)
     selectedMovieIdList = []
     recommenedMovieIdList = []
+
     for movie in json.loads(selectedMovies):
         selectedMovieIdList.append(json.loads(movie["movieId"]))
         recommenedMovieIdList.extend(movie["similarity"])
@@ -34,7 +36,7 @@ def handler(event, context):
 
     try:
         dynamodb = boto3.resource('dynamodb')
-        table = dynamodb.Table('user_selection')
+        table = dynamodb.Table(DYNAMO_DB_TABLE_LIST["USER_SELECTION"])
         print("table: ", table)
 
         table.put_item(
@@ -43,14 +45,11 @@ def handler(event, context):
 
     except Exception as e:
         print("Error uploading data to dynamodb: ", e)
-        return e
+        return {
+            'statusCode': 500,
+            'body': 'Internal Server Error'
+        }
 
-    return {
-        'statusCode': 200,
-        'headers': {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': "true",
-        },
-        'body': json.dumps(item)
-    }
+    return ok(json.dumps(item,
+                         default=str
+                         ))

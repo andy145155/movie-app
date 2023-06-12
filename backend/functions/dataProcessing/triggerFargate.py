@@ -2,11 +2,12 @@ try:
     import unzip_requirements
 except ImportError:
     pass
+
 import boto3
-from utils.apiFunctions import getInfoFromSNS, listS3Objects, checkLambdaWarmUp
-from utils.constants import TMDB_5000_CSV
 import os
 import json
+from utils.apiFunctions import getInfoFromSNS, listS3Objects, checkLambdaWarmUp
+from utils.constants import TMDB_5000_CSV
 
 
 def handler(event, context):
@@ -20,24 +21,19 @@ def handler(event, context):
     s3_objects = listS3Objects(bucket, prefix=TMDB_5000_CSV["PREFIX"])
     print(s3_objects)
 
-    count = 0
-    # Can write better
-    for s3_object in s3_objects:
-        if s3_object["Key"] in {TMDB_5000_CSV["CREDITS"], TMDB_5000_CSV["MOVIES"]}:
-            count += 1
-    if count != 2:
-        return f"""${TMDB_5000_CSV["CREDITS"]} or ${TMDB_5000_CSV["MOVIES"]} does not exits"""
+    required_files = {TMDB_5000_CSV["CREDITS"], TMDB_5000_CSV["MOVIES"]}
+    if not all(s3_object["Key"] in required_files for s3_object in s3_objects):
+        missing_files = required_files - \
+            {s3_object["Key"] for s3_object in s3_objects}
+        return f"The following files are missing: {', '.join(missing_files)}"
 
     client = boto3.client('ecs')
     clusters_list = listClusters(client)
     print(clusters_list)
 
-    # Get movie_app_cluster from cluster_list
-    try:
-        movie_app_cluster = next(
-            cluster for cluster in clusters_list if os.environ["CLUSTER_PREFIX"] in cluster)
-        print("Cluster arn found: ", movie_app_cluster)
-    except StopIteration:
+    movie_app_cluster = findClusterArn(
+        clusters_list, os.environ["CLUSTER_PREFIX"])
+    if movie_app_cluster is None:
         print(
             f"Error finding cluster arn with prefix {os.environ['CLUSTER_PREFIX']}")
 
@@ -45,12 +41,9 @@ def handler(event, context):
         client, os.environ["TASK_DEF_PREFIX"])
     print(task_definitions_list)
 
-   # Get movie_app_task_definition from task_definitions_list
-    try:
-        movie_app_task_definition = next(
-            task_definition for task_definition in task_definitions_list if os.environ["TASK_DEF_PREFIX"] in task_definition)
-        print("Task definition arn found: ", movie_app_task_definition)
-    except StopIteration:
+    movie_app_task_definition = findTaskDefinitionArn(
+        task_definitions_list, os.environ["TASK_DEF_PREFIX"])
+    if movie_app_task_definition is None:
         print(
             f"Error finding task definition arn with prefix {os.environ['TASK_DEF_PREFIX']}")
 
@@ -73,6 +66,22 @@ def listTaskDefinitions(client, prefix=None):
         familyPrefix=prefix
     )
     return response["taskDefinitionArns"]
+
+
+def findClusterArn(clusters_list, prefix):
+    for cluster in clusters_list:
+        if prefix in cluster:
+            print("Cluster arn found: ", cluster)
+            return cluster
+    return None
+
+
+def findTaskDefinitionArn(task_definitions_list, prefix):
+    for task_definition in task_definitions_list:
+        if prefix in task_definition:
+            print("Task definition arn found: ", task_definition)
+            return task_definition
+    return None
 
 
 def runTask(client, cluster, task_definition):
