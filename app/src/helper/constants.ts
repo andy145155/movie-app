@@ -1,5 +1,5 @@
 export const APIKEY = '0e770cd6eb622a65729afb287f266062';
-
+export const API_BASE_URL = 'https://api.movieapp.paohenghsu.com';
 export const TMDB_BASE_URL = {
   IMAGE: 'https://image.tmdb.org/t/p/original/',
   API: 'https://api.themoviedb.org/3',

@@ -107,11 +107,10 @@ def convertToStringColumn(csv_object):
     return csv_object
 
 
-def uploadDataToDynamoDB(pd_object, db_table, partition_key):
+def uploadDataToDynamoDB(pd_object, db_table):
     try:
         dynamodb = boto3.resource('dynamodb')
         table = dynamodb.Table(db_table)
-        pd_object = pd_object.drop_duplicates(subset=partition_key)
         with table.batch_writer() as batch:
             for index, row in pd_object.iterrows():
                 batch.put_item(Item=json.loads(row.to_json()))

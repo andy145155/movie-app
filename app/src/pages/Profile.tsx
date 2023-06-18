@@ -1,16 +1,16 @@
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../store/auth';
 import '../assets/css/Profile.css';
 import Nav from '../components/main/Nav';
-import { IUser } from '../helper/interfaces';
 import { MovieAPI } from '../helper/apis/movieApi';
 import { TMDB_BASE_URL } from '../helper/constants';
+import { useUser } from '../store/user';
 
 function Profile() {
   const auth = useAuth();
   const navigate = useNavigate();
-  const userData = useRef({} as IUser);
+  const user = useUser();
   const [movies, setMovies] = useState<any[]>([]);
 
   const logOut = async () => {
@@ -23,14 +23,9 @@ function Profile() {
   };
 
   useMemo(() => {
-    const localStorageEstData = localStorage.getItem('userData');
-    if (localStorageEstData !== null) {
-      userData.current = JSON.parse(localStorageEstData);
-    }
-
     async function fetchMovies() {
       const movies = await MovieAPI.getMovies({
-        movieIdList: JSON.stringify(userData.current.selectedMovies?.selectedMovies),
+        movieIdList: JSON.stringify(user.selectedMovies?.selectedMovies),
       });
       setMovies(movies);
     }
@@ -46,7 +41,7 @@ function Profile() {
         <div className="profileScreen_info">
           <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" alt="" />
           <div className="profileScreen_details">
-            <h2>Email: {userData.current.email}</h2>
+            <h2>Email: {user.cognitoUser!.attributes.email}</h2>
             <div className="profileScreen_plans">
               <h3>Your selected Movies</h3>
               <div className="profileScreen_posters">

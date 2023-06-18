@@ -1,8 +1,9 @@
 import { Auth } from '@aws-amplify/auth';
 import { IUseAuth, IUserSelectedMovies } from '../helper/interfaces';
-import React, { createContext, useContext, useState, useMemo } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 import { useUser } from './user';
-import { MovieAPI } from '../helper/apis/movieApi';
+import { MovieAPI, setAccessToken } from '../helper/apis/movieApi';
+import { CognitoUserInterface } from '@aws-amplify/ui-components';
 
 const AwsConfigAuth = {
   region: 'ap-southeast-1',
@@ -27,11 +28,11 @@ export const useAuth = () => {
   return useContext(AuthContext);
 };
 
+
 const useProvideAuth = (): IUseAuth => {
   const user = useUser();
-  const [isLoading, setIsLoading] = useState(true);
 
-  useMemo(() => {
+  useMemo(async() => {
     async function fetchMovies(email: string): Promise<IUserSelectedMovies> {
       const userMovies = await MovieAPI.getUserSelectedMovies({
         email,
@@ -40,57 +41,37 @@ const useProvideAuth = (): IUseAuth => {
       return userMovies;
     }
 
-    Auth.currentAuthenticatedUser()
-      .then(async (result) => {
-        console.log('Afdsafdasfd: ', result);
-        user.setIsAuthenticated(true);
-        user.setEmail(result.attributes.email);
-        user.setUsername(result.username);
-        user.setIdToken(result.signInUserSession.idToken);
-        user.setRefreshToken(result.signInUserSession.idToken);
-        user.setAccessToken(result.signInUserSession.accessToken);
-        const userMovies = await fetchMovies(result.attributes.email);
-        userMovies.selectedMovies.length === 0 ? user.setSelectedMovies(null) : user.setSelectedMovies(userMovies);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
+   const cognitoUser = await Auth.currentAuthenticatedUser() as CognitoUserInterface;
 
-        user.setEmail('');
-        user.setUsername('');
-        user.setIsAuthenticated(false);
-        setIsLoading(false);
-      });
+   if(cognitoUser){
+    user.setIsLoading(true)
+    user.setCognitoUser(cognitoUser)
+    setAccessToken(cognitoUser.signInUserSession.accessToken)
+    const userSelectedMovies = await fetchMovies(cognitoUser.attributes.email)
+    user.setSelectedMovies(userSelectedMovies)
+    user.setIsAuthenticated(true)
+    user.setIsLoading(false)
+   }
+   else{
+    user.resetUserData()
+   }
   }, []);
-
-  useMemo(() => {
-    if (user.email) {
-      window.localStorage.setItem('userData', JSON.stringify(user));
-    }
-  }, [user]);
 
   const signIn = async (username: string, password: string) => {
     try {
-      const result = await Auth.signIn(username, password);
-
-      console.log('afdasdfafdfffff ', result);
-
-      user.setUsername(result.username);
-      user.setIsAuthenticated(true);
-      user.setEmail(result.attributes.email);
-      user.setIdToken(result.signInUserSession.idToken);
-      user.setRefreshToken(result.signInUserSession.idToken);
-      user.setAccessToken(result.signInUserSession.accessToken);
+      const cognitoUser = await Auth.signIn(username, password);
+      user.setCognitoUser(cognitoUser)
+      user.setIsAuthenticated(true)
 
       const userMovies = await MovieAPI.getUserSelectedMovies({
-        email: result.attributes.email,
+        email: cognitoUser.attributes.email,
       });
 
       userMovies.selectedMovies.length === 0 ? user.setSelectedMovies(null) : user.setSelectedMovies(userMovies);
 
       return {
         success: true,
-        message: result,
+        message: cognitoUser,
         directToMovieSelection: userMovies.selectedMovies.length === 0,
       };
     } catch (error) {
@@ -104,13 +85,7 @@ const useProvideAuth = (): IUseAuth => {
   const signOut = async () => {
     try {
       await Auth.signOut();
-      user.setUsername('');
-      user.setIsAuthenticated(false);
-      user.setEmail('');
-      user.setIdToken('');
-      user.setRefreshToken('');
-      user.setAccessToken('');
-      user.setSelectedMovies(null);
+      user.resetUserData();
       return { success: true, message: '' };
     } catch (error) {
       return {
@@ -156,8 +131,6 @@ const useProvideAuth = (): IUseAuth => {
   };
 
   return {
-    isLoading,
-    isAuthenticated: user.isAuthenticated,
     signIn,
     signOut,
     signUp,

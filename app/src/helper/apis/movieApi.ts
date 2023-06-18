@@ -1,20 +1,19 @@
 import axios from 'axios';
+import { API_BASE_URL } from '../constants';
 
 export const movieAPI = axios.create({
-  baseURL: 'https://api.movieapp.paohenghsu.com',
+  baseURL: API_BASE_URL,
 });
+
 
 movieAPI.interceptors.response.use(undefined, (error) => {
   return errorHandler(error);
 });
 
-movieAPI.interceptors.request.use(function (config) {
-  const token: any = getAuthToken();
-  config.headers.Authorization = token.accessToken.jwtToken;
-
-  return config;
-});
-
+export const setAccessToken = (accessToken: any) => {  
+  movieAPI.defaults.headers.common['Authorization'] =
+      `Bearer ${accessToken.jwtToken}`;
+}
 // defining a custom error handler for all APIs
 const errorHandler = (error: any) => {
   const statusCode = error.response?.status;
@@ -29,15 +28,6 @@ const errorHandler = (error: any) => {
   }
 
   return Promise.reject(error);
-};
-
-const getAuthToken = () => {
-  let userData: any = {};
-  const localStorageEstData = localStorage.getItem('userData');
-  if (localStorageEstData !== null) {
-    userData = JSON.parse(localStorageEstData);
-  }
-  return userData;
 };
 
 export const MovieAPI = {
@@ -84,8 +74,6 @@ export const MovieAPI = {
         },
         params,
       });
-      console.log(request);
-
       return request.data.message;
     } catch (error) {
       console.log('error', error);

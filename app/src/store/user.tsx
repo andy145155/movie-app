@@ -1,5 +1,6 @@
 import { IUser, IUserSelectedMovies } from '../helper/interfaces';
-import React, { createContext, useContext, useState, useMemo } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import { CognitoUserInterface } from '@aws-amplify/ui-components';
 
 const UserContext = createContext({} as IUser);
 
@@ -14,29 +15,28 @@ export const useUser = () => {
   return useContext(UserContext);
 };
 
-const useProvideUserData = (): IUser => {
+export const useProvideUserData = (): IUser => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [username, setUsername] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedMovies, setSelectedMovies] = useState<IUserSelectedMovies | null>(null);
-  const [email, setEmail] = useState('');
-  const [idToken, setIdToken] = useState('');
-  const [refreshToken, setRefreshToken] = useState('');
-  const [accessToken, setAccessToken] = useState('');
+  const [cognitoUser, setCognitoUser] = useState<CognitoUserInterface | null>(null)
+
+  const resetUserData = () => {
+    setIsAuthenticated(false)
+    setSelectedMovies(null)
+    setCognitoUser(null)
+    setIsLoading(false)
+  }
 
   return {
-    email,
-    idToken,
-    refreshToken,
     isAuthenticated,
-    username,
+    isLoading,
     selectedMovies,
-    accessToken,
-    setEmail,
-    setIdToken,
-    setRefreshToken,
-    setUsername,
+    cognitoUser,
+    setIsLoading,
     setIsAuthenticated,
     setSelectedMovies,
-    setAccessToken,
+    setCognitoUser,
+    resetUserData
   };
 };

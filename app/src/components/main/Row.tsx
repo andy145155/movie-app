@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useMemo } from 'react';
 import { IRowInputProps } from '../../helper/interfaces';
 import '../../assets/css/Row.css';
 import { truncate, ClickedMovieContext } from '../../helper/utils';
@@ -13,6 +13,7 @@ import {
 import { TmdbAPI } from '../../helper/apis/tmdbApi';
 import Youtube from 'react-youtube';
 import { MovieAPI } from '../../helper/apis/movieApi';
+import { useUser } from '../../store/user';
 
 function TmdbMoviesRow({
   title,
@@ -198,38 +199,29 @@ function RecommendedMoviesRow({
   );
 }
 
-function Row({ title, fetchUrl, index, recommendId = null }: IRowInputProps) {
+function Row({ title, fetchUrl, index }: IRowInputProps) {
   const [movies, setMovies] = useState<ITmdbRowMovieDetails[]>([]);
-
+  const user = useUser();
   const [trailerUrl, setTrailerUrl] = useState({
     type: TRAILER_TYPE.VIDEO,
     src: '',
   });
 
-  useEffect(() => {
+  useMemo(() => {
     async function fetchData() {
       if (!fetchUrl) {
-        return;
+        const movies = await MovieAPI.getMovies({
+          movieIdList: JSON.stringify(user.selectedMovies!.recommendedMovies),
+        });
+        setMovies(movies);
       }
-      const request = await TmdbAPI.getMovies(fetchUrl);
-      setMovies(request);
-      return request;
+      else{
+        const request = await TmdbAPI.getMovies(fetchUrl);
+        setMovies(request);
+      }
     }
-
     fetchData();
   }, [fetchUrl]);
-
-  useEffect(() => {
-    if (title === ROW_TITLE.RECOMMEND_MOVIES) {
-      fetchMovies();
-    }
-    async function fetchMovies() {
-      const movies = await MovieAPI.getMovies({
-        movieIdList: JSON.stringify(recommendId),
-      });
-      setMovies(movies);
-    }
-  }, [recommendId, title]);
 
   const props = {
     title,

@@ -9,35 +9,25 @@ function Banner({ selectedMovies }: { selectedMovies: ISelectedMovies[] }) {
   const navigateTo = useNavigate();
 
   async function sendSelectedMoviesAndUpdateUserMovies() {
-    const email = getUserEmail();
-
-    try {
-      const test = await MovieAPI.setUserSelectedMovies({
-        selectedMovies: JSON.stringify(selectedMovies),
-        email,
-      });
-
-      console.log('Adfasdf', test);
-
-      const userMovies = await MovieAPI.getUserSelectedMovies({
-        email,
-      });
-      userMovies.selectedMovies.length === 0 ? user.setSelectedMovies(null) : user.setSelectedMovies(userMovies);
-
-      navigateTo('/home');
-    } catch (error) {
-      console.log(error);
+    if(user.cognitoUser){
+      const email = user.cognitoUser.attributes.email;
+      try {
+        await MovieAPI.setUserSelectedMovies({
+          selectedMovies: JSON.stringify(selectedMovies),
+          email,
+        });
+  
+        const userMovies = await MovieAPI.getUserSelectedMovies({
+          email,
+        });
+        userMovies.selectedMovies.length === 0 ? user.setSelectedMovies(null) : user.setSelectedMovies(userMovies);
+  
+        navigateTo('/home');
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
-
-  const getUserEmail = (): string => {
-    let userData: any = {};
-    const localStorageEstData = localStorage.getItem('userData');
-    if (localStorageEstData !== null) {
-      userData = JSON.parse(localStorageEstData);
-    }
-    return userData.email;
-  };
 
   return (
     <div className="selection-banner">

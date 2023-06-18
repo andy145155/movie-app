@@ -51,10 +51,11 @@ def handler(event, context):
 def getMoviesByNumber(table, number, isRandom):
     query_count = 4800
     number_list = random.sample(
-        range(query_count), number) if isRandom else list(range(number))
+        range(1, query_count), number) if isRandom else list(range(number))
     result_list = []
 
     for number in number_list:
+        print(number)
         response = table.query(
             IndexName='getIndex',
             KeyConditionExpression=Key('index').eq(number)

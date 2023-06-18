@@ -1,13 +1,12 @@
-from utils.constants import TMDB_5000_CSV, S3_BUCKETS_NAME, S3_DATABASE_FILE_PATH, TMDB_KEY, DYNAMO_DB_TABLE_LIST
-from utils.apiFunctions import getS3Object, uploadCsvToS3, uploadDataToDynamoDB
-import pandas as pd
-import boto3
-from sklearn.feature_extraction.text import CountVectorizer
-from nltk.stem.porter import PorterStemmer
-from sklearn.metrics.pairwise import cosine_similarity
-from io import StringIO
 import ast
+import boto3
 import requests
+import pandas as pd
+from io import StringIO
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import CountVectorizer
+from utils.apiFunctions import getS3Object, uploadCsvToS3, uploadDataToDynamoDB
+from utils.constants import TMDB_5000_CSV, S3_BUCKETS_NAME, S3_DATABASE_FILE_PATH, TMDB_KEY, DYNAMO_DB_TABLE_LIST
 
 
 def main():
@@ -27,17 +26,18 @@ def main():
         similarity_df = getSimilarityDataFrame(new_df, overview, similarity)
 
         similarity_df = similarity_df.apply(fetchPoster, axis=1)
-        similarity_df = similarity_df.reset_index()
-        similarity_df['index'] = similarity_df['index'].astype(int)
         similarity_df.rename(columns={'movie_id': 'movieId'},
                              inplace=True, errors='raise')
+        similarity_df = similarity_df.drop_duplicates(subset="movieId")
+        similarity_df = similarity_df.reset_index(drop=True)
+        similarity_df['index'] = similarity_df.index
         print("------ similarity_df informations -------")
         similarity_df.info()
 
         uploadCsvToS3(S3_DATABASE_FILE_PATH["SIMILARITY"],
                       S3_BUCKETS_NAME["DATABASE"], similarity_df)
         uploadDataToDynamoDB(
-            similarity_df, DYNAMO_DB_TABLE_LIST['MOVIES_SIMILARITY'], partition_key='movieId')
+            similarity_df, DYNAMO_DB_TABLE_LIST['MOVIES_SIMILARITY'])
     except Exception as error:
         print("Error processing raw movie app data: %s" % (error))
     return
@@ -150,14 +150,6 @@ def fetchDirector(obj):
             L.append(i['name'])
             break
     return L
-
-
-def stemming(text):
-    y = []
-    ps = PorterStemmer()
-    for i in text.split():
-        y.append(ps.stem(i))
-    return " ".join(y)
 
 
 if __name__ == '__main__':

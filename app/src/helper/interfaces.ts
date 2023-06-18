@@ -1,3 +1,5 @@
+import { CognitoUserInterface } from '@aws-amplify/ui-components';
+
 export interface ITmdbHeaderMovieDetails {
   backdrop_path: string;
   first_air_date: Date;
@@ -50,8 +52,6 @@ export interface IRowInputProps {
 }
 
 export interface IUseAuth {
-  isLoading: boolean;
-  isAuthenticated: boolean;
   signIn: (username: string, password: string) => Promise<IResult>;
   signOut: () => Promise<IResult>;
   signUp: (username: string, password: string) => Promise<IResult>;
@@ -66,20 +66,15 @@ export interface IUserSelectedMovies {
 }
 
 export interface IUser {
-  email: string;
-  idToken: string;
   isAuthenticated: boolean;
-  username: string;
+  isLoading: boolean;
   selectedMovies: IUserSelectedMovies | null;
-  refreshToken: string;
-  accessToken: string;
-  setEmail: React.Dispatch<React.SetStateAction<string>>;
-  setIdToken: React.Dispatch<React.SetStateAction<string>>;
+  cognitoUser: CognitoUserInterface | null;
+  setCognitoUser: React.Dispatch<React.SetStateAction<CognitoUserInterface | null>>;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-  setUsername: React.Dispatch<React.SetStateAction<string>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedMovies: React.Dispatch<React.SetStateAction<IUserSelectedMovies | null>>;
-  setRefreshToken: React.Dispatch<React.SetStateAction<string>>;
-  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
+  resetUserData: () => void;
 }
 
 export interface IResult {
