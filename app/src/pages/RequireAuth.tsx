@@ -1,10 +1,7 @@
-import { useLocation, Navigate, Outlet } from "react-router-dom"
+import { useLocation, Navigate, Outlet } from 'react-router-dom';
 
 function RequireAuth() {
-    
-  return (
-    <div>RequireAuth</div>
-  )
+  return <div>RequireAuth</div>;
 }
 
-export default RequireAuth
+export default RequireAuth;

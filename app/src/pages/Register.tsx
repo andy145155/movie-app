@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../store/auth';
 import PhoneVerifyForm from './PhoneVerifyForm';
-import '../assets/css/Register.css';
+import '../assets/css/Register.scss';
 function Register() {
   const auth = useAuth();
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
-import { useEffect, useState, useContext, useMemo } from 'react';
+import '../../assets/css/Row.scss';
+import { useEffect, useState, useContext } from 'react';
 import { IRowInputProps } from '../../helper/interfaces';
-import '../../assets/css/Row.css';
 import { truncate, ClickedMovieContext } from '../../helper/utils';
 import { ITmdbRowMovieDetails, IRecommenedRowMovieDetails } from '../../helper/interfaces';
 import {
@@ -15,13 +15,7 @@ import Youtube from 'react-youtube';
 import { MovieAPI } from '../../helper/apis/movieApi';
 import { useUser } from '../../store/user';
 
-function TmdbMoviesRow({
-  title,
-  movies,
-  index,
-  trailerUrl,
-  setTrailerUrl,
-}: {
+type TmdbMoviesRowProps = {
   title: string;
   movies: ITmdbRowMovieDetails[];
   index: number;
@@ -32,7 +26,9 @@ function TmdbMoviesRow({
       src: string;
     }>
   >;
-}) {
+};
+
+function TmdbMoviesRow({ title, movies, index, trailerUrl, setTrailerUrl }: TmdbMoviesRowProps) {
   const { clickedMovie, rowIndex, setClickedMovie, setRowIndex } = useContext(ClickedMovieContext) as {
     clickedMovie: ITmdbRowMovieDetails | null;
     rowIndex: number | null;
@@ -45,6 +41,7 @@ function TmdbMoviesRow({
       if (video.type === TMDB_VIDEO_TYPE.TRAILER) {
         return index;
       }
+      return 0;
     });
   };
 
@@ -139,6 +136,7 @@ function RecommendedMoviesRow({
       if (video.type === TMDB_VIDEO_TYPE.TRAILER) {
         return index;
       }
+      return 0;
     });
   };
   const handleClick = async (movie: any) => {
@@ -207,15 +205,14 @@ function Row({ title, fetchUrl, index }: IRowInputProps) {
     src: '',
   });
 
-  useMemo(() => {
+  useEffect(() => {
     async function fetchData() {
       if (!fetchUrl) {
         const movies = await MovieAPI.getMovies({
           movieIdList: JSON.stringify(user.selectedMovies!.recommendedMovies),
         });
         setMovies(movies);
-      }
-      else{
+      } else {
         const request = await TmdbAPI.getMovies(fetchUrl);
         setMovies(request);
       }

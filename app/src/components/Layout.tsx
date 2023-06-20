@@ -1,10 +1,10 @@
-import { Outlet } from "react-router-dom"
+import { Outlet } from 'react-router-dom';
 function Layout() {
   return (
-<main className="App">
-    <Outlet/>
-</main>
-  )
+    <div>
+      <Outlet />
+    </div>
+  );
 }
 
-export default Layout
+export default Layout;

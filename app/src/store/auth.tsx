@@ -28,11 +28,10 @@ export const useAuth = () => {
   return useContext(AuthContext);
 };
 
-
 const useProvideAuth = (): IUseAuth => {
   const user = useUser();
 
-  useMemo(async() => {
+  useMemo(async () => {
     async function fetchMovies(email: string): Promise<IUserSelectedMovies> {
       const userMovies = await MovieAPI.getUserSelectedMovies({
         email,
@@ -41,40 +40,42 @@ const useProvideAuth = (): IUseAuth => {
       return userMovies;
     }
 
-   const cognitoUser = await Auth.currentAuthenticatedUser() as CognitoUserInterface;
+    const cognitoUser = (await Auth.currentAuthenticatedUser()) as CognitoUserInterface;
 
-   if(cognitoUser){
-    user.setIsLoading(true)
-    user.setCognitoUser(cognitoUser)
-    setAccessToken(cognitoUser.signInUserSession.accessToken)
-    const userSelectedMovies = await fetchMovies(cognitoUser.attributes.email)
-    user.setSelectedMovies(userSelectedMovies)
-    user.setIsAuthenticated(true)
-    user.setIsLoading(false)
-   }
-   else{
-    user.resetUserData()
-   }
+    if (cognitoUser) {
+      user.setIsLoading(true);
+      user.setCognitoUser(cognitoUser);
+      setAccessToken(cognitoUser.signInUserSession.accessToken);
+      const userSelectedMovies = await fetchMovies(cognitoUser.attributes.email);
+      user.setSelectedMovies(userSelectedMovies);
+      user.setIsAuthenticated(true);
+      user.setIsLoading(false);
+    } else {
+      user.resetUserData();
+    }
   }, []);
 
   const signIn = async (username: string, password: string) => {
     try {
       const cognitoUser = await Auth.signIn(username, password);
-      user.setCognitoUser(cognitoUser)
-      user.setIsAuthenticated(true)
+      user.setIsLoading(true);
+      user.setCognitoUser(cognitoUser);
+      setAccessToken(cognitoUser.signInUserSession.accessToken);
+      user.setIsAuthenticated(true);
 
       const userMovies = await MovieAPI.getUserSelectedMovies({
         email: cognitoUser.attributes.email,
       });
 
       userMovies.selectedMovies.length === 0 ? user.setSelectedMovies(null) : user.setSelectedMovies(userMovies);
-
+      user.setIsLoading(false);
       return {
         success: true,
         message: cognitoUser,
         directToMovieSelection: userMovies.selectedMovies.length === 0,
       };
     } catch (error) {
+      user.resetUserData();
       return {
         success: false,
         message: error,

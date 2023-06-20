@@ -5,15 +5,13 @@ export const movieAPI = axios.create({
   baseURL: API_BASE_URL,
 });
 
-
 movieAPI.interceptors.response.use(undefined, (error) => {
   return errorHandler(error);
 });
 
-export const setAccessToken = (accessToken: any) => {  
-  movieAPI.defaults.headers.common['Authorization'] =
-      `Bearer ${accessToken.jwtToken}`;
-}
+export const setAccessToken = (accessToken: any) => {
+  movieAPI.defaults.headers.common['Authorization'] = `Bearer ${accessToken.jwtToken}`;
+};
 // defining a custom error handler for all APIs
 const errorHandler = (error: any) => {
   const statusCode = error.response?.status;
@@ -76,9 +74,6 @@ export const MovieAPI = {
       });
       return request.data.message;
     } catch (error) {
-      console.log('error', error);
-      console.log('error', JSON.stringify(error));
-
       throw Error(`getUserSelectedMovies Error: ${error}`);
     }
   },

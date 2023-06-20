@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../assets/css/Nav.css';
+import '../../assets/css/Nav.scss';
 import mainLogo from '../../assets/img/logo.png';
 import avatar from '../../assets/img/avatar.png';
 

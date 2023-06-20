@@ -1,4 +1,3 @@
-import { ITmdbRowMovieDetails } from '../interfaces';
 import axios from 'axios';
 import { TMDB_BASE_URL } from '../constants';
 import { APIKEY } from '../constants';

@@ -19,14 +19,14 @@ export const useProvideUserData = (): IUser => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedMovies, setSelectedMovies] = useState<IUserSelectedMovies | null>(null);
-  const [cognitoUser, setCognitoUser] = useState<CognitoUserInterface | null>(null)
+  const [cognitoUser, setCognitoUser] = useState<CognitoUserInterface | null>(null);
 
   const resetUserData = () => {
-    setIsAuthenticated(false)
-    setSelectedMovies(null)
-    setCognitoUser(null)
-    setIsLoading(false)
-  }
+    setIsAuthenticated(false);
+    setSelectedMovies(null);
+    setCognitoUser(null);
+    setIsLoading(false);
+  };
 
   return {
     isAuthenticated,
@@ -37,6 +37,6 @@ export const useProvideUserData = (): IUser => {
     setIsAuthenticated,
     setSelectedMovies,
     setCognitoUser,
-    resetUserData
+    resetUserData,
   };
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AiOutlineLike } from 'react-icons/ai';
-import '../../assets/css/selection/Row.css';
+import '../../assets/css/selection/Row.scss';
 import { MovieAPI } from '../../helper/apis/movieApi';
 import { ISelectedMovies } from '../../helper/interfaces';
 

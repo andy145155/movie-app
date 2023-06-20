@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SignIn from './SignIn';
-import '../assets/css/Login.css';
+import '../assets/css/Login.scss';
 
 function GetStarted() {
   const [signIn, setSignIn] = useState(false);
@@ -10,19 +10,19 @@ function GetStarted() {
 
   return (
     <div className="login">
-      <div className="loginScreem_background">
+      <div>
         <img
-          className="loginScreen_logo"
+          className="login_logo"
           src="https://www.edigitalagency.com.au/wp-content/uploads/netflix-logo-png-large.png"
           alt=""
         />
-        <button onClick={signIn ? () => navigate('/register') : () => setSignIn(true)} className="loginScreen_button">
+        <button onClick={signIn ? () => navigate('/register') : () => setSignIn(true)} className="login_button">
           {signIn ? 'Sign Up' : 'Sign In'}
         </button>
-        <div className="loginScreen_gradient" />
+        <div className="login_gradient" />
       </div>
 
-      <div className="loginScreen_body">
+      <div className="login_body">
         {signIn ? (
           <SignIn email={email} setEmail={setEmail} />
         ) : (
@@ -30,7 +30,7 @@ function GetStarted() {
             <h1>Unlimited films, TV programmes, and more.</h1>
             <h2>Watch anywhere. Cancel at any time</h2>
             <h3>Ready to watch? Enter your email to create or restart your membership</h3>
-            <div className="loginScreen_input">
+            <div className="login_input">
               <form action="">
                 <input
                   type="email"
@@ -38,7 +38,7 @@ function GetStarted() {
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                 />
-                <button onClick={() => setSignIn(true)} className="loginScreen_getStarted">
+                <button onClick={() => setSignIn(true)} className="login_getStarted">
                   Get Started
                 </button>
               </form>

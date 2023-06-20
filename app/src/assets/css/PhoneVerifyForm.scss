@@ -1,19 +1,22 @@
+.signup {
+  &_gray {
+    color: grey;
+  }
+
+  &_email {
+    margin: 5px 0px;
+  }
+
+  &_link:hover {
+    cursor: pointer;
+    color: gray;
+  }
+}
+
 form > h4 {
   text-align: left;
   margin-bottom: 5px;
   font-size: 14px;
-}
-.signupSreen_gray {
-  color: grey;
-}
-
-.signupSreen_email {
-  margin: 5px 0px;
-}
-
-.signupSreen_link:hover {
-  cursor: pointer;
-  color: gray;
 }
 
 .resend_button {

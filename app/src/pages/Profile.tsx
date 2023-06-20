@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../store/auth';
-import '../assets/css/Profile.css';
+import '../assets/css/Profile.scss';
 import Nav from '../components/main/Nav';
 import { MovieAPI } from '../helper/apis/movieApi';
 import { TMDB_BASE_URL } from '../helper/constants';
@@ -31,31 +31,31 @@ function Profile() {
     }
 
     fetchMovies();
-  }, []);
+  }, [user.selectedMovies?.selectedMovies]);
 
   return (
-    <div className="profileScreen">
+    <div className="profile">
       <Nav />
-      <div className="profileScreen_body">
+      <div className="profile_body">
         <h1>Edit Profile</h1>
-        <div className="profileScreen_info">
+        <div className="profile_info">
           <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" alt="" />
-          <div className="profileScreen_details">
+          <div className="profile_details">
             <h2>Email: {user.cognitoUser!.attributes.email}</h2>
-            <div className="profileScreen_plans">
+            <div className="profile_plans">
               <h3>Your selected Movies</h3>
-              <div className="profileScreen_posters">
+              <div className="profile_posters">
                 {movies.map((item) => {
                   return (
-                    <div className="profileScreen_poster">
-                      <div className="profileScreen_poster_title">
+                    <div className="profile_poster">
+                      <div className="profile_poster_title">
                         <span className="span_poste"> {item.title}</span>
                       </div>
-                      <div className="profileScreen_posters">
+                      <div className="profile_posters">
                         {item.poster && (
                           <img
                             key={item.movieId}
-                            className="profileScreen_poster_img"
+                            className="profile_poster_img"
                             src={`${TMDB_BASE_URL.IMAGE}${item.poster}`}
                             alt={item.name}
                           />
@@ -65,10 +65,10 @@ function Profile() {
                   );
                 })}
               </div>
-              <button className="profileScreen_signOut" onClick={() => navigate('/selectMovies')}>
+              <button className="profile_signOut" onClick={() => navigate('/selectMovies')}>
                 Choose your movies
               </button>
-              <button className="profileScreen_signOut" onClick={() => logOut()}>
+              <button className="profile_signOut" onClick={() => logOut()}>
                 Sign Out
               </button>
             </div>

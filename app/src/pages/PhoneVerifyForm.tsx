@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../store/auth';
-import '../assets/css/PhoneVerifyForm.css';
+import '../assets/css/PhoneVerifyForm.scss';
 function PhoneVerifyForm({
   email,
   setRegister,
@@ -60,14 +60,14 @@ function PhoneVerifyForm({
 
   return (
     <>
-      <form action="" onSubmit={executeEmailVerification}>
+      <form onSubmit={executeEmailVerification}>
         <h1>Sign up for Movie Recommender System</h1>
 
         <h4>
-          <div className="signupSreen_gray">We sent an email with a verification code to</div>
-          <div className="signupSreen_email">
+          <div className="signup_gray">We sent an email with a verification code to</div>
+          <div className="signup_email">
             <span> {email}. </span>
-            <span className="signupSreen_link" onClick={() => setRegister(false)}>
+            <span className="signup_link" onClick={() => setRegister(false)}>
               not you?
             </span>
           </div>

@@ -1,4 +1,4 @@
-import '../../assets/css/selection/Banner.css';
+import '../../assets/css/selection/Banner.scss';
 import { MovieAPI } from '../../helper/apis/movieApi';
 import { ISelectedMovies } from '../../helper/interfaces';
 import { useUser } from '../../store/user';
@@ -9,19 +9,19 @@ function Banner({ selectedMovies }: { selectedMovies: ISelectedMovies[] }) {
   const navigateTo = useNavigate();
 
   async function sendSelectedMoviesAndUpdateUserMovies() {
-    if(user.cognitoUser){
+    if (user.cognitoUser) {
       const email = user.cognitoUser.attributes.email;
       try {
         await MovieAPI.setUserSelectedMovies({
           selectedMovies: JSON.stringify(selectedMovies),
           email,
         });
-  
+
         const userMovies = await MovieAPI.getUserSelectedMovies({
           email,
         });
         userMovies.selectedMovies.length === 0 ? user.setSelectedMovies(null) : user.setSelectedMovies(userMovies);
-  
+
         navigateTo('/home');
       } catch (error) {
         console.log(error);
@@ -30,7 +30,7 @@ function Banner({ selectedMovies }: { selectedMovies: ISelectedMovies[] }) {
   }
 
   return (
-    <div className="selection-banner">
+    <div className="selection_banner">
       <div className="titleText">
         <h1 className="stepTitle">
           <div className="text">Choose three you like!!</div>
