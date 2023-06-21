@@ -7,6 +7,7 @@ const Profile = lazy(() => import('./pages/Profile'));
 const Register = lazy(() => import('./pages/Register'));
 const SelectMovies = lazy(() => import('./pages/SelectMovies'));
 const Layout = lazy(() => import('./components/Layout'));
+const PersistLogin = lazy(() => import('./components/PersistLogin'));
 const Loading = lazy(() => import('./components/Loading'));
 
 function App() {
@@ -21,9 +22,11 @@ function App() {
             <Route path="index.html" element={<Navigate to="/" />} />
 
             {/* Private routes */}
-            <Route path="home" element={<Home />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="selectMovies" element={<SelectMovies />} />
+            <Route element={<PersistLogin />}>
+              <Route path="home" element={<Home />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="selectMovies" element={<SelectMovies />} />
+            </Route>
           </Route>
         </Routes>
       </Suspense>

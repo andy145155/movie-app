@@ -40,7 +40,7 @@ function PhoneVerifyForm({
     event.preventDefault();
     const result = await auth.confirmSignUp(email, verifyCode);
     if (result.success) {
-      navigate({ pathname: '/home' });
+      navigate({ pathname: '/' });
     } else {
       alert(result.message);
     }

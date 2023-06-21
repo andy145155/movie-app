@@ -28,33 +28,39 @@ export const useAuth = () => {
   return useContext(AuthContext);
 };
 
+async function fetchMovies(email: string): Promise<IUserSelectedMovies> {
+  const userMovies = await MovieAPI.getUserSelectedMovies({
+    email,
+  });
+
+  return userMovies;
+}
+
 const useProvideAuth = (): IUseAuth => {
   const user = useUser();
 
-  useMemo(async () => {
-    async function fetchMovies(email: string): Promise<IUserSelectedMovies> {
-      const userMovies = await MovieAPI.getUserSelectedMovies({
-        email,
-      });
-
-      return userMovies;
-    }
-
-    const cognitoUser = (await Auth.currentAuthenticatedUser()) as CognitoUserInterface;
-
-    if (cognitoUser) {
+  const getCurrentAuthenticatedUser = async () => {
+    try {
       user.setIsLoading(true);
+      const cognitoUser = (await Auth.currentAuthenticatedUser()) as CognitoUserInterface;
       user.setCognitoUser(cognitoUser);
       setAccessToken(cognitoUser.signInUserSession.accessToken);
       const userSelectedMovies = await fetchMovies(cognitoUser.attributes.email);
       user.setSelectedMovies(userSelectedMovies);
       user.setIsAuthenticated(true);
       user.setIsLoading(false);
-    } else {
+      return {
+        success: true,
+        message: cognitoUser,
+      };
+    } catch (error) {
       user.resetUserData();
+      return {
+        success: false,
+        message: error,
+      };
     }
-  }, []);
-
+  };
   const signIn = async (username: string, password: string) => {
     try {
       const cognitoUser = await Auth.signIn(username, password);
@@ -111,9 +117,8 @@ const useProvideAuth = (): IUseAuth => {
 
   const confirmSignUp = async (username: string, code: string) => {
     try {
-      const test = await Auth.confirmSignUp(username, code);
-      console.log(test);
-      return { success: true, message: test };
+      const signupConfirm = await Auth.confirmSignUp(username, code);
+      return { success: true, message: signupConfirm };
     } catch (error) {
       console.log('error signing up:', error);
       return { success: false, message: error };
@@ -137,5 +142,6 @@ const useProvideAuth = (): IUseAuth => {
     signUp,
     confirmSignUp,
     resendConfirmationCode,
+    getCurrentAuthenticatedUser,
   };
 };

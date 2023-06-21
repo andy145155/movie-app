@@ -57,6 +57,7 @@ export interface IUseAuth {
   signUp: (username: string, password: string) => Promise<IResult>;
   confirmSignUp: (username: string, code: string) => Promise<IResult>;
   resendConfirmationCode: (username: string) => Promise<IResult>;
+  getCurrentAuthenticatedUser: () => Promise<IResult>;
 }
 
 export interface IUserSelectedMovies {
