@@ -1,6 +1,6 @@
 import { Auth } from '@aws-amplify/auth';
 import { IUseAuth, IUserSelectedMovies } from '../helper/interfaces';
-import React, { createContext, useContext, useMemo } from 'react';
+import React, { createContext, useContext } from 'react';
 import { useUser } from './user';
 import { MovieAPI, setAccessToken } from '../helper/apis/movieApi';
 import { CognitoUserInterface } from '@aws-amplify/ui-components';

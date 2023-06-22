@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../store/auth';
 import '../assets/css/Profile.scss';
@@ -22,7 +22,7 @@ function Profile() {
     }
   };
 
-  useMemo(() => {
+  useEffect(() => {
     async function fetchMovies() {
       const movies = await MovieAPI.getMovies({
         movieIdList: JSON.stringify(user.selectedMovies?.selectedMovies),

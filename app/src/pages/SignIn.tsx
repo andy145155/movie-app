@@ -11,8 +11,6 @@ function SignIn({ email, setEmail }: { email: string; setEmail: React.Dispatch<R
   const executeSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await auth.signIn(email, password);
-    console.log('signIn: ', result);
-
     if (result.success) {
       result.directToMovieSelection ? navigate({ pathname: '/selectMovies' }) : navigate({ pathname: '/home' });
     } else {
@@ -33,8 +31,8 @@ function SignIn({ email, setEmail }: { email: string; setEmail: React.Dispatch<R
         />
         <button type="submit">Sign In</button>
         <h4>
-          <span className="signupSreen_gray">New to Netflix? </span>
-          <span className="signupSreen_link" onClick={() => navigate('/register')}>
+          <span className="signupScreen_gray">New to Netflix? </span>
+          <span className="signupScreen_link" onClick={() => navigate('/register')}>
             Sign up now.
           </span>
         </h4>
