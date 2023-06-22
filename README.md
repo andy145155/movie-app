@@ -11,7 +11,7 @@
   <p align="center">
     Personalised Movie Recommendations Just for You
     <br />
-    <a href="https://www.movieapp.paohenghsu.com/">View Demo</a>
+    <a href="https://www.movieapp.paohenghsu.com/" target="_blank">View App</a>
     ·
     <a href="https://github.com/andy145155/movie-app/issues">Report Bug</a>
     ·
@@ -56,9 +56,9 @@ This project was inspired by Sonny Sangha's and CampusX's tutorials on building 
 
   <img src="images/movieapp.png">
 
-The Movie Recommender App is fully built with AWS services. The web hosting is done with S3 bucket and CloudFront. User login is handled with AWS Cognito. The API is built with API Gateway and Lambda, and the data is stored in DynamoDB.
+The Movie Recommender App uses several AWS services to function. It utilizes S3 bucket and CloudFront for web hosting, AWS Cognito for user login, and API Gateway and Lambda for the API. Cognito verifies the authorization of the API. The app also stores processed movie and user data in DynamoDB.
 
-In addition, the app uses a dataset of TMDB 5000 movies for its content-based recommendation system. To auto streamline data processing, the app also uses SNS, Lambda, Fargate, Glue Crawlers, and Athena to automatically ingest new data and update the movie recommendations.
+To trigger the automated event-driven data processing pipeline, users can import the TMDB5000 dataset to the S3 bucket. The app also uses SNS, Lambda, Fargate, Glue Crawlers, and Athena to streamline data processing and automatically ingest new data to update movie recommendations. All processed data is stored in the S3 bucket for Athena SQL investigation.
 
 ### Built With
 
@@ -72,13 +72,19 @@ In addition, the app uses a dataset of TMDB 5000 movies for its content-based re
 - [![devContainer][devContainer]][devContainer-url]
 - [![Serverless][Serverless]][Serverless-url]
 
+### Movie Datasets
+
+The Movie Recommender App uses the [TMDB 5000 movie dataset](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata), which includes information on over 5,000 movies, including their titles, genres, release dates, production companies, and user ratings. To extract useful information from this dataset, we use content-based filtering techniques that analyze the features of movies that users have previously enjoyed and then suggest similar movies.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 
 ## Getting Started
 
-To get started with the Movie Recommender App, follow these steps:
+To get started with the Movie Recommender App, follow these steps: 
+
+Note that you will need your own domain name to fully reproduce app on your own. 
 
 ### Prerequisites
 
@@ -96,8 +102,13 @@ git clone <https://github.com/andy145155/movie-app.git>
 cd movie-app
 ```
 
-2. Configure your AWS credentials using the `aws configure` command.
-3. To deploy the AWS infrastructure using Terraform, run the `yarn deployInfra` command:
+2. Configure your AWS credentials by following [AWS Configuration and credential file settings guidelines](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html).
+3. To deploy the AWS infrastructure using Terraform, run the following command by 
+
+```sh
+yarn deployInfra
+```
+
 4. To deploy any code changes to Lambda, run `yarn deployLambda`. This command will automatically deploy all changes to Lambda.
 5. To deploy any code changes to Fargate, run `yarn deployFargate`. This command will automatically deploy all changes to Fargate.
 6. To run the data processing stream, run `yarn uploadCsvToS3`. Once the CSV file has been uploaded to the S3 bucket, S3 will trigger SNS and start the data processing stream automatically.
