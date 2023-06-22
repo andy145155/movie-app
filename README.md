@@ -29,14 +29,14 @@
       <ul>
         <li><a href="#architecture-on-aws">Architecture on AWS</a></li>
 				<li><a href="#built-with">Built With</a></li>
+        <li><a href="#movie-datasets">Movie Datasets</a></li>
       </ul>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#activating-vs-code-dev-container">Activating VS code dev container</a></li>
         <li><a href="#installation">Installation</a></li>
-			  <li><a href="#activating-vs-code-dev-container">Activating VS code dev container</a></li>
       </ul>
     </li>
     <li><a href="#license">License</a></li>
@@ -49,8 +49,6 @@
 ## About The Project
 
 The Movie Recommender App is a web-based application that allows users to browse and discover movies based on their personal preferences. The app uses a content-based recommender system to suggest movies that are similar to ones the user has liked in the past.
-
-This project was inspired by Sonny Sangha's and CampusX's tutorials on building a movie recommender system using React.js and content-based recommendation techniques. Their guidance and inspiration were instrumental in the creation of this app. You can find their tutorials in the Acknowledgments section of this document.
 
 ### Architecture on AWS
 
@@ -82,37 +80,9 @@ The Movie Recommender App uses the [TMDB 5000 movie dataset](https://www.kaggle.
 
 ## Getting Started
 
-To get started with the Movie Recommender App, follow these steps: 
+To get started with the Movie Recommender App, follow these steps:
 
-Note that you will need your own domain name to fully reproduce app on your own. 
-
-### Prerequisites
-
-Before you begin, ensure you have met the following requirements:
-
-- You have installed the latest version of `yarn`.
-- You have an AWS account and have configured [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) on your machine.
-
-### Installation
-
-1. Clone the repo
-
-```sh
-git clone <https://github.com/andy145155/movie-app.git>
-cd movie-app
-```
-
-2. Configure your AWS credentials by following [AWS Configuration and credential file settings guidelines](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html).
-3. To deploy the AWS infrastructure using Terraform, run the following command by 
-
-```sh
-yarn deployInfra
-```
-
-4. To deploy any code changes to Lambda, run `yarn deployLambda`. This command will automatically deploy all changes to Lambda.
-5. To deploy any code changes to Fargate, run `yarn deployFargate`. This command will automatically deploy all changes to Fargate.
-6. To run the data processing stream, run `yarn uploadCsvToS3`. Once the CSV file has been uploaded to the S3 bucket, S3 will trigger SNS and start the data processing stream automatically.
-7. To deploy changes to the React website, run `yarn deployMovieApp`. This command will upload new changes to the S3 bucket and distribute them through CloudFront.
+Note that you will need your own domain name to fully reproduce app on your own.
 
 ### Activating VS code dev container
 
@@ -125,6 +95,44 @@ If you are using VS Code as your IDE, you can take advantage of the dev containe
 5. Wait for the container to build and the project to load in the dev container.
 6. You're ready to start developing!
 
+### Installation
+
+1. Clone the repo
+
+```sh
+git clone <https://github.com/andy145155/movie-app.git>
+cd movie-app
+```
+
+2. Configure your AWS credentials by following [AWS Configuration and credential file settings guidelines](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html).
+3. To deploy the AWS infrastructure using Terraform, run the following command
+
+```sh
+yarn deployInfra
+```
+4. To deploy any code changes to Lambda, run the following command.
+
+```sh
+yarn deployLambda
+```
+5. To deploy any code changes to Fargate, run the following command.
+
+```sh
+yarn deployFargate
+```
+
+6. To run the data processing stream, run the following command.. Once the CSV file has been uploaded to the S3 bucket, S3 will trigger SNS and start the data processing stream automatically.
+
+```sh
+yarn uploadCsvToS3
+```
+
+7. To deploy changes to the React website, run the following command. This command will upload new changes to the S3 bucket and distribute them through CloudFront.
+
+```sh
+yarn deployMovieApp
+```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
@@ -133,7 +141,7 @@ If you are using VS Code as your IDE, you can take advantage of the dev containe
 
 Andy Hsu - andy57291@gmail.com
 
-Project Link: [https://github.com/andy145155/movie-app](https://github.com/andy145155/movie-app)
+Project Link: [https://www.movieapp.paohenghsu.com/](https://www.movieapp.paohenghsu.com/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
