@@ -14,21 +14,10 @@ variable "main_vpc_cidr" {
   type        = string
   description = "Main VPC CIDR value"
 }
-variable "public_subnet_a" {
-  type        = string
-  description = "CIDR value for public subnet a"
-}
-variable "private_subnet_a" {
-  type        = string
-  description = "CIDR value for private subnet a"
-}
-variable "public_subnet_b" {
-  type        = string
-  description = "CIDR value for public subnet b"
-}
-variable "private_subnet_b" {
-  type        = string
-  description = "CIDR value for private subnet b"
+variable "public_subnets" {
+  description = "A list of public subnets inside the VPC"
+  type        = list(string)
+  default     = []
 }
 
 # SNS variables
@@ -38,9 +27,23 @@ variable "sns_name" {
 }
 
 # S3 buckets variables
-variable "s3_bucket_names" {
-  type        = list(any)
-  description = "List of s3 bucket names"
+variable "movie_csv_source_bucket" {
+  type = string
+}
+variable "movie_csv_processed_bucket" {
+  type = string
+}
+
+variable "movie_serverless_bucket" {
+  type = string
+}
+
+variable "movie_app_bucket" {
+  type = string
+}
+
+variable "movie_app_www_bucket" {
+  type = string
 }
 
 
@@ -48,10 +51,14 @@ variable "s3_bucket_names" {
 variable "db_user" {}
 
 # S3 App variables
-variable "movie_app_www_domain_name" {}
-variable "movie_app_root_domain_name" {}
 variable "root_domain_name" {}
 variable "acm_domain_name" {}
 
 # API variables
 variable "movie_app_api_domain_name" {}
+
+# Athena & Glue
+variable "glue_crawlers_list" {}
+
+# Cognito
+variable "user_pool_name" {}

@@ -1,20 +1,35 @@
-# VPC Outputs
+################################################################################
+# VPC
+################################################################################
 output "vpc_id" {
-  value = module.movie_app_vpc.vpc_id
+  description = "The ID of the VPC"
+  value       = module.vpc.vpc_id
 }
-output "public_subnet_a_id" {
-  value = module.movie_app_vpc.public_subnet_a_id
+
+output "vpc_arn" {
+  description = "The ARN of the VPC"
+  value       = module.vpc.vpc_arn
 }
-output "public_subnet_b_id" {
-  value = module.movie_app_vpc.public_subnet_b_id
+
+output "public_subnets" {
+  description = "List of IDs of public subnets"
+  value       = module.vpc.public_subnets
 }
-output "private_subnet_a_id" {
-  value = module.movie_app_vpc.private_subnet_a_id
+
+output "public_subnet_arns" {
+  description = "List of ARNs of public subnets"
+  value       = module.vpc.public_subnet_arns
 }
-output "private_subnet_b_id" {
-  value = module.movie_app_vpc.private_subnet_b_id
+
+output "public_subnets_cidr_blocks" {
+  description = "List of cidr_blocks of public subnets"
+  value       = module.vpc.public_subnets_cidr_blocks
 }
-# Lambda Outputs
+
+################################################################################
+# Lambda
+################################################################################
+
 output "lambda_iam_role_arn" {
   value = module.movie_app_lambda.lambda_iam_role_arn
 }
@@ -23,24 +38,26 @@ output "lambda_security_group_id" {
   value = module.movie_app_lambda.lambda_security_group_id
 }
 
-# S3 Outputs
-output "movie_app_csv_buckets_id" {
-  value = module.movie_app_s3.movie_app_csv_buckets_id
+################################################################################
+# S3 Bucket
+################################################################################
+
+output "movie_csv_source_bucket_name" {
+  value = module.movie_csv_source_bucket.s3_bucket_id
 }
 
-output "movie_app_csv_buckets_arn" {
-  value = module.movie_app_s3.movie_app_csv_buckets_arn
+output "movie_csv_processed_bucket_name" {
+  value = module.movie_csv_processed_bucket.s3_bucket_id
 }
 
-output "movie_app_database_buckets_name" {
-  value = module.movie_app_s3.movie_app_database_buckets_name
+output "movie_serverless_bucket_name" {
+  value = module.movie_serverless_bucket.s3_bucket_id
 }
 
-output "movie_app_database_buckets_arn" {
-  value = module.movie_app_s3.movie_app_database_buckets_arn
-}
+################################################################################
+# SNS
+################################################################################
 
-# SNS Outputs
 output "movie_app_sns_arn" {
   value = module.movie_app_sns.movie_app_sns_arn
 }
@@ -48,23 +65,28 @@ output "movie_app_sns_name" {
   value = module.movie_app_sns.movie_app_sns_name
 }
 
-# Fargate Outputs
+################################################################################
+# Fargate
+################################################################################
 output "fargate_security_group_id" {
   value = module.movie_app_fargate.fargate_security_group_id
 }
 
-# S3 and CloudFront Outputs
-
+################################################################################
+# CloudFront & S3 
+# ################################################################################
 output "movie_app_bucket_www_name" {
-  value = module.movie_app_s3_app.movie_app_bucket_www_name
+  value = module.movie_app_www_bucket.s3_bucket_id
 }
 
 output "movie_app_www_distribution_id" {
-  value = module.movie_app_s3_app.movie_app_www_distribution_id
+  value = module.movie_app_www_cloudfront.cloudfront_distribution_arn
 }
 
 
-# Cognito Outputs
+################################################################################
+# Cognito
+################################################################################
 
 output "movie_app_user_pool_id" {
   value = module.movie_app_cognito.movie_app_user_pool_id
@@ -77,3 +99,22 @@ output "movie_app_user_pool_client_id" {
   value = module.movie_app_cognito.movie_app_user_pool_client_id
 }
 
+################################################################################
+# DynamoDB
+################################################################################
+
+output "movie_similarity_table_name" {
+  value = module.movie_similarity_table.dynamodb_table_id
+}
+
+output "movie_user_selection_name" {
+  value = module.movie_user_selection_table.dynamodb_table_id
+}
+
+################################################################################
+# Glue & Athena
+################################################################################
+
+output "movie_app_glue_crawlers_name" {
+  value = module.movie_app_athena.glue_crawler_name
+}
