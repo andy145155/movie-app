@@ -28,7 +28,8 @@ variable "sns_name" {
 
 # S3 buckets variables
 variable "movie_csv_source_bucket" {
-  type = string
+  description = "Name of the csv source bucket"
+  type        = string
 }
 variable "movie_csv_processed_bucket" {
   type = string
@@ -47,9 +48,6 @@ variable "movie_app_www_bucket" {
 }
 
 
-# IAM variables 
-variable "db_user" {}
-
 # S3 App variables
 variable "root_domain_name" {}
 variable "acm_domain_name" {}
@@ -62,3 +60,8 @@ variable "glue_crawlers_list" {}
 
 # Cognito
 variable "user_pool_name" {}
+
+# DynamoDB
+variable "movie_similarity_table_name" {}
+variable "user_selection_table_name" {}
+

@@ -214,9 +214,12 @@ module "movie_app_athena" {
 }
 
 module "movie_app_fargate" {
-  source  = "./modules/fargate"
-  service = var.service
-  vpc_id  = module.vpc.vpc_id
+  source                              = "./modules/fargate"
+  service                             = var.service
+  vpc_id                              = module.vpc.vpc_id
+  movie_csv_processed_bucket_arn      = module.movie_csv_processed_bucket.s3_bucket_arn
+  movie_csv_source_bucket_arn         = module.movie_csv_source_bucket.s3_bucket_arn
+  movie_similarity_dynamodb_table_arn = module.movie_similarity_table.dynamodb_table_arn
 }
 
 module "movie_app_cognito" {
@@ -233,7 +236,7 @@ module "movie_app_api" {
 
 module "movie_similarity_table" {
   source   = "./modules/dynamoDB"
-  name     = "movies_similarity"
+  name     = var.movie_similarity_table_name
   hash_key = "movieId"
   attributes = [{
     name = "movieId"
@@ -254,7 +257,7 @@ module "movie_similarity_table" {
 
 module "movie_user_selection_table" {
   source   = "./modules/dynamoDB"
-  name     = "user_selection"
+  name     = var.user_selection_table_name
   hash_key = "email"
   attributes = [{
     name = "email"

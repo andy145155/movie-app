@@ -72,6 +72,10 @@ output "fargate_security_group_id" {
   value = module.movie_app_fargate.fargate_security_group_id
 }
 
+output "fargate_task_role_arn" {
+  value = module.movie_app_fargate.fargate_task_role_arn
+}
+
 ################################################################################
 # CloudFront & S3 
 # ################################################################################
