@@ -1,0 +1,80 @@
+service: ${self:custom.app_name}-${self:custom.service_name}
+
+frameworkVersion: '3'
+
+custom:
+  app_name: 'movie-app'
+  service_name: 'fargate'
+  region: ${env:region, 'ap-southeast-1'}
+
+  tf: ${file(../../infrastructure/appResources.json)}
+  FARGATE_SG_ID: ${self:custom.tf.fargate_security_group_id}
+  SUBNET_A_ID: ${self:custom.tf.public_subnets.0}
+  SUBNET_B_ID: ${self:custom.tf.public_subnets.1}
+  FARGATE_TASK_ROLE_ARN: ${self:custom.tf.fargate_task_role_arn}
+  SERVERLESS_BUCKET_NAME: ${self:custom.tf.movie_serverless_bucket_name}
+  MOVIES_SIMILARITY_DYNAMO_DB_NAME: ${self:custom.tf.movie_similarity_table_name}
+  MOVE_CSV_PROCESSED_BUCKET_NAME: ${self:custom.tf.movie_csv_processed_bucket_name}
+  MOVE_CSV_SOURCE_BUCKET_NAME: ${self:custom.tf.movie_csv_source_bucket_name}
+
+  # serverless-stack-output
+  output:
+    handler: scripts/output.handler
+    file_path: ../../deployment/resources/sls.fargate.json
+
+plugins:
+  - serverless-fargate
+  - serverless-stack-output
+
+provider:
+  name: aws
+  region: ${self:custom.region}
+  deploymentBucket:
+    name: ${self:custom.SERVERLESS_BUCKET_NAME}
+    maxPreviousDeploymentArtifacts: 3
+    blockPublicAccess: true
+    serverSideEncryption: AES256
+  ecr:
+    images:
+      dataProcessing:
+        path: ../
+        file: Dockerfile
+
+fargate:
+  memory: '4GB'
+  cpu: 512
+  environment:
+    MOVE_CSV_PROCESSED_BUCKET_NAME: ${self:custom.MOVE_CSV_PROCESSED_BUCKET_NAME}
+    MOVE_CSV_SOURCE_BUCKET_NAME: ${self:custom.MOVE_CSV_SOURCE_BUCKET_NAME}
+    MOVIES_SIMILARITY_DYNAMO_DB_NAME: ${self:custom.MOVIES_SIMILARITY_DYNAMO_DB_NAME}
+
+  architecture: ARM64
+  vpc:
+    securityGroupIds:
+      - ${self:custom.FARGATE_SG_ID}
+    subnetIds:
+      - ${self:custom.SUBNET_A_ID}
+      - ${self:custom.SUBNET_B_ID}
+  taskRoleArn: ${self:custom.FARGATE_TASK_ROLE_ARN}
+  logGroupName: /aws/fargate/movie-app-dataProcessing
+  tasks:
+    dataProcessing:
+      image: dataProcessing
+      service:
+        desiredCount: 0
+
+resources:
+  Outputs:
+    FargateClusterArn:
+      Value:
+        Fn::GetAtt: [FargateTasksCluster, Arn]
+    DataProcessingTaskDefinitionArn:
+      Value:
+        Fn::Join:
+          - ''
+          - - 'arn:aws:ecs:'
+            - Ref: AWS::Region
+            - ':'
+            - Ref: AWS::AccountId
+            - ':task-definition/'
+            - Fn::GetAtt: ['DataProcessingService', 'Name']

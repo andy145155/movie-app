@@ -1,15 +1,16 @@
 {
   "dependencies": {
     "serverless": "^3.25.0",
-    "serverless-domain-manager": "^6.4.4",
     "serverless-fargate": "^0.0.11"
   },
   "devDependencies": {
     "serverless-plugin-warmup": "^8.2.1",
-    "serverless-python-requirements": "^6.0.0"
+    "serverless-stack-output": "^0.2.3"
   },
   "scripts": {
-    "deployLambda": "sls deploy",
+    "deployLambdaApi": "sls deploy -c serverless.api.yml",
+    "deployLambdaDataProcessing": "sls deploy -c serverless.dataProcessing.yml",
+    "deployTriggeredTasks": "cd /triggered-tasks && sls deploy",
     "deployFargate": "sls deploy -c serverless.fargate.yml",
     "removeLambda": "sls remove",
     "removeFargate": "sls remove -c serverless.fargate.yml"
