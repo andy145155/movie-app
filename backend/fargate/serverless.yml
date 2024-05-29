@@ -7,7 +7,7 @@ custom:
   service_name: 'fargate'
   region: ${env:region, 'ap-southeast-1'}
 
-  tf: ${file(../../infrastructure/appResources.json)}
+  tf: ${file(../../deployment/resources/terraform.resources.json)}
   FARGATE_SG_ID: ${self:custom.tf.fargate_security_group_id}
   SUBNET_A_ID: ${self:custom.tf.public_subnets.0}
   SUBNET_B_ID: ${self:custom.tf.public_subnets.1}

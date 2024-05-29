@@ -14,8 +14,3 @@ S3_PROCESSED_FILE_PATH = {
     "MOVIES":  "csv/movies/movies_raw_data.csv",
     "SIMILARITY": "csv/similarity/similarity_data.csv"
 }
-
-DYNAMO_DB_TABLE_LIST = {
-    "MOVIES_SIMILARITY": 'movies_similarity',
-    "USER_SELECTION": 'user_selection',
-}

@@ -51,7 +51,7 @@ data "aws_iam_policy_document" "fargate_task_role" {
   statement {
     effect = "Allow"
 
-    actions = ["dynamodb:PutItem"]
+    actions = ["dynamodb:PutItem", "dynamodb:BatchWriteItem"]
 
     resources = ["${var.movie_similarity_dynamodb_table_arn}"]
   }

@@ -6,12 +6,14 @@ package:
   patterns:
     - '!requirements.txt'
     - '!sample/**'
+    - '!scripts/**'
+    - '!openapi.yml'
     - '../utils/**'
 
 custom:
   app_name: 'movie-app'
   service_name: 'triggered-tasks'
-  tf: ${file(../../infrastructure/appResources.json)}
+  tf: ${file(../../deployment/resources/terraform.resources.json)}
   fargate_service: ${file(../../deployment/resources/sls.fargate.json)}
   FARGATE_SG_ID: ${self:custom.tf.fargate_security_group_id}
   DEFAULT_LAMBDA_ROLE_ARN: ${self:custom.tf.lambda_iam_role_arn}
@@ -27,6 +29,11 @@ custom:
   GLUE_CRAWLER_CREDITS: ${self:custom.tf.movie_app_glue_crawlers_name.credits}
   GLUE_CRAWLER_MOVIES: ${self:custom.tf.movie_app_glue_crawlers_name.movies}
   GLUE_CRAWLER_SIMILARITY: ${self:custom.tf.movie_app_glue_crawlers_name.similarity}
+
+  # serverless-stack-output
+  output:
+    handler: scripts/output.handler
+    file_path: ../../deployment/resources/sls.triggered-tasks.json
 
 provider:
   name: aws

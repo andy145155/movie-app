@@ -3,7 +3,7 @@ from botocore.exceptions import ClientError
 import os
 import logging
 import json
-from backend.utils.functions import get_s3_info_from_sns
+from utils.functions import get_s3_info_from_sns
 from utils.constants import TMDB_5000_CSV, MOVIE_APP_REGION_NAME
 from typing import List
 

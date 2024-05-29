@@ -10,7 +10,7 @@ from typing import Tuple, Optional, List, Dict, Any
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
 from utils.constants import TMDB_5000_CSV, S3_PROCESSED_FILE_PATH, TMDB_KEY
-from backend.utils.functions import get_s3_object, upload_to_s3, upload_to_dynamoDB
+from utils.functions import get_s3_object, upload_to_s3, upload_to_dynamoDB
 
 # Get environment variables
 MOVE_CSV_PROCESSED_BUCKET_NAME = os.getenv("MOVE_CSV_PROCESSED_BUCKET_NAME")
@@ -45,12 +45,13 @@ def process_data(movies: pd.DataFrame, credits: pd.DataFrame) -> pd.DataFrame:
     merged_df = merge_dataframes(movies, credits)
     merged_df = extract_useful_information(merged_df)
     merged_df.dropna(inplace=True)
+    overview = merged_df['overview']
 
     processed_df = process_dataframe(merged_df)
     vectors = create_feature_vectors(processed_df['tags'])
     similarity = cosine_similarity(vectors)
     
-    similarity_df = get_similarity_df(processed_df, merged_df['overview'], similarity)
+    similarity_df = get_similarity_df(processed_df, overview, similarity)
     similarity_df = apply_fetch_movie_poster(similarity_df)
     similarity_df = rename_columns_and_reset_index(similarity_df)
     logger.info("------ similarity_df informations -------")

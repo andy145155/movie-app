@@ -1,14 +1,13 @@
 import boto3
 from botocore.exceptions import ClientError
-from typing import Tuple
+from typing import Tuple, Dict, Union
 from io import StringIO
 import json
 import pandas as pd
 import logging
-# Retrieve csv from SNS topic that contains S3 trigger event
  
 
-def check_lambda_warmup(event):
+def check_lambda_warmup(event: dict) -> bool:
     if event.get("source") == "warmup":
         return True
     return False
@@ -78,5 +77,5 @@ def ok(body: dict) -> dict:
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': "true",
         },
-        'body': json.dumps(body)
+        'body': json.dumps(body, default=str)
     }

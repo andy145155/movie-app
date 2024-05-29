@@ -9,7 +9,7 @@ import pandas as pd
 from io import StringIO
 from ast import literal_eval
 from utils.constants import TMDB_5000_CSV, S3_PROCESSED_FILE_PATH
-from backend.utils.functions import upload_to_s3, get_s3_info_from_sns, get_s3_object
+from utils.functions import upload_to_s3, get_s3_info_from_sns, get_s3_object
 
 # Get environment variable
 CSV_PROCESSED_BUCKET = os.getenv("MOVE_CSV_PROCESSED_BUCKET_NAME")
