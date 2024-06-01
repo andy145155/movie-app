@@ -1,29 +1,9 @@
 ################################################################################
 # VPC
 ################################################################################
-output "vpc_id" {
-  description = "The ID of the VPC"
-  value       = module.vpc.vpc_id
-}
-
-output "vpc_arn" {
-  description = "The ARN of the VPC"
-  value       = module.vpc.vpc_arn
-}
-
 output "public_subnets" {
   description = "List of IDs of public subnets"
   value       = module.vpc.public_subnets
-}
-
-output "public_subnet_arns" {
-  description = "List of ARNs of public subnets"
-  value       = module.vpc.public_subnet_arns
-}
-
-output "public_subnets_cidr_blocks" {
-  description = "List of cidr_blocks of public subnets"
-  value       = module.vpc.public_subnets_cidr_blocks
 }
 
 ################################################################################
@@ -61,9 +41,6 @@ output "movie_serverless_bucket_name" {
 output "movie_app_sns_arn" {
   value = module.movie_app_sns.movie_app_sns_arn
 }
-output "movie_app_sns_name" {
-  value = module.movie_app_sns.movie_app_sns_name
-}
 
 ################################################################################
 # Fargate
@@ -84,7 +61,7 @@ output "movie_app_bucket_www_name" {
 }
 
 output "movie_app_www_distribution_id" {
-  value = module.movie_app_www_cloudfront.cloudfront_distribution_arn
+  value = module.movie_app_www_cloudfront.cloudfront_distribution_id
 }
 
 

@@ -13,3 +13,8 @@ output "cloudfront_distribution_arn" {
   description = "The ARN (Amazon Resource Name) for the distribution."
   value       = try(aws_cloudfront_distribution.this[0].arn, "")
 }
+
+output "cloudfront_distribution_id" {
+  description = "Identifier for the distribution"
+  value       = try(aws_cloudfront_distribution.this[0].id, "")
+}
