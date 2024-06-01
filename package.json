@@ -4,13 +4,15 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "uploadCsvToS3": "bash scripts/uploadCsvToS3.sh",
-    "deployLambda": "cd backend && yarn deployLambda",
-    "deployFargate": "cd backend && yarn deployFargate",
+    "uploadCsvToS3": "bash ./deployment/scripts/upload_csv_to_s3.sh",
+    "deployLambda": "bash ./deployment/scripts/deploy_lambda.sh",
+    "deployInfra": "bash ./deployment/scripts/deploy_lambda.sh",
+    "deployFargate": "COMPONENT=fargate yarn deployLambda",
+    "deployTriggeredTask": "COMPONENT=triggered-tasks yarn deployLambda",
+    "deployApi": "COMPONENT=api yarn deployLambda",
     "removeLambda": "cd backend && yarn removeLambda",
     "removeFargate": "cd backend && yarn removeFargate",
-    "deployMovieApp": "cd app && yarn deploy",
-    "deployInfra": "cd infrastructure && bash refreshAndUpdateResources.sh",
+    "deployMovieApp": "bash ./deployment/scripts/deploy_app.sh",
     "format": "npx prettier --write ."
   },
   "husky": {

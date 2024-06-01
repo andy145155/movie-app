@@ -1,0 +1,26 @@
+{
+  "fargate_security_group_id": "sg-01156858c7871ec6c",
+  "fargate_task_role_arn": "arn:aws:iam::410370150231:role/movie-app-FargateTaskRole",
+  "lambda_iam_role_arn": "arn:aws:iam::410370150231:role/movie-app-LambdaExecuteRole",
+  "lambda_security_group_id": "sg-0735c702b1cd455e6",
+  "movie_app_bucket_www_name": "www.movieapp.paohenghsu.com",
+  "movie_app_glue_crawlers_name": {
+    "credits": "credits-csv",
+    "movies": "movies-csv",
+    "similarity": "similarity-csv"
+  },
+  "movie_app_sns_arn": "arn:aws:sns:ap-southeast-1:410370150231:movie-app-s3-triggered-event",
+  "movie_app_user_pool_arn": "arn:aws:cognito-idp:ap-southeast-1:410370150231:userpool/ap-southeast-1_yz7eb44ia",
+  "movie_app_user_pool_client_id": "4t3f1n3ptj21omm15kd3jjastn",
+  "movie_app_user_pool_id": "ap-southeast-1_yz7eb44ia",
+  "movie_app_www_distribution_id": "E14SG1HHD3N65C",
+  "movie_csv_processed_bucket_name": "movie-app-csv-processed-bucket",
+  "movie_csv_source_bucket_name": "movie-app-csv-source-bucket",
+  "movie_serverless_bucket_name": "movie-app-serverless-bucket",
+  "movie_similarity_table_name": "movie-similarity",
+  "movie_user_selection_name": "user-selection",
+  "public_subnets": [
+    "subnet-069ee4c1a5955765d",
+    "subnet-0ce7bc386fe60d549"
+  ]
+}

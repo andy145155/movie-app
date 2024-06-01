@@ -80,9 +80,9 @@ The Movie Recommender App uses the [TMDB 5000 movie dataset](https://www.kaggle.
 
 ## Getting Started
 
-To get started with the Movie Recommender App, follow these steps:
+To start using the Movie Recommender App, follow these steps:
 
-Note that you will need your own domain name to fully reproduce app on your own.
+Note that you will need your own domain name to fully reproduce the app on your own.
 
 ### Activating VS code dev container
 

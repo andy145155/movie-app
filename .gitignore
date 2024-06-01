@@ -36,6 +36,8 @@ sw.*
 .requirements.zip
 unzip_requirements.py
 .warmup
+layers
+sample
 
 # terraform cache
 .terraform
@@ -52,13 +54,11 @@ node_modules/
 secrets.tfvars.json
 *.tfplan
 .terraform.lock.hcl
-config.json
 terraform.tfstate
 terraform.tfstate.backup
 
 
 # Which files should be gitignored? -> https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
-
 .yarn/*
 !.yarn/cache
 !.yarn/patches
