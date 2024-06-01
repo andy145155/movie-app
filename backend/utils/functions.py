@@ -5,13 +5,12 @@ from io import StringIO
 import json
 import pandas as pd
 import logging
- 
+from utils.types import Movie 
 
 def check_lambda_warmup(event: dict) -> bool:
     if event.get("source") == "warmup":
         return True
     return False
-
 
 def get_s3_info_from_sns(event: dict) -> Tuple[str, str]:
     try:
@@ -79,3 +78,29 @@ def ok(body: dict) -> dict:
         },
         'body': json.dumps(body, default=str)
     }
+    
+# Batch get items only support using partition key
+def batch_get_dynamodb_item(batch_keys: dict[str, dict]) -> dict[str, list[Movie]]:
+    dynamodb = boto3.resource("dynamodb")
+    
+    try:
+        response = dynamodb.batch_get_item(
+            RequestItems=batch_keys, ReturnConsumedCapacity='TOTAL')
+
+        return response["Responses"]
+    except Exception as e:
+        logging.error("Error getting movies by id list: %s ", e)
+        return e
+
+def get_movies_by_id_list(movieid_list: list[str], table_name: str) -> list[Movie]:   
+     
+    batch_keys = {
+        table_name: {
+            'Keys': [{'movieId': int(movieId)} for movieId in set(movieid_list)]
+        }
+    }
+
+    response = batch_get_dynamodb_item(batch_keys)
+
+    return [movie for movie in response[table_name]]
+

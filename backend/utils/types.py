@@ -4,13 +4,13 @@ class SelectedMovie(TypedDict):
     movieId: str
     similarity: list[str]
     
-class UserSelectedAndRecommendedMovies(TypedDict):
+class UserSelection(TypedDict):
     email: str
     recommendedMovies: list[str]
     selectedMovies: list[int]
 
 class Movie(TypedDict):
-    movieId: str
+    movieId: int
     index: int
     poster: str
     similarity: list[int]

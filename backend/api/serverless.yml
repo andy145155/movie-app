@@ -1,0 +1,157 @@
+service: ${self:custom.app_name}-${self:custom.service_name}
+
+frameworkVersion: '3'
+
+package:
+  patterns:
+    - '!requirements.txt'
+    - '!sample/**'
+    - '../utils/**'
+
+plugins:
+  - serverless-plugin-warmup
+  - serverless-stack-output
+
+custom:
+  # serverless-plugin-warmup
+  warmup:
+    default:
+      payload:
+        source: warmup
+
+  # Environment variables
+  app_name: 'movie-app'
+  service_name: 'api'
+  region: ${env:region, 'ap-southeast-1'}
+
+  tf: ${file(../../deployment/resources/terraform.resources.json)}
+  DEFAULT_LAMBDA_ROLE_ARN: ${self:custom.tf.lambda_iam_role_arn}
+  SNS_TOPIC_ARN: ${self:custom.tf.movie_app_sns_arn}
+  MOVIE_APP_USERPOOL_ARN: ${self:custom.tf.movie_app_user_pool_arn}
+  SERVERLESS_BUCKET_NAME: ${self:custom.tf.movie_serverless_bucket_name}
+  MOVIES_SIMILARITY_DYNAMO_DB_NAME: ${self:custom.tf.movie_similarity_table_name}
+  USER_SELECTION_DYNAMO_DB_NAME: ${self:custom.tf.movie_user_selection_name}
+
+  # serverless-stack-output
+  output:
+    handler: scripts/output.handler
+    file_path: ../../deployment/resources/sls.api.json
+
+provider:
+  name: aws
+  region: ${self:custom.region}
+  architecture: arm64
+  runtime: python3.11
+  timeout: 30
+  deploymentBucket:
+    name: ${self:custom.SERVERLESS_BUCKET_NAME}
+    maxPreviousDeploymentArtifacts: 3
+    blockPublicAccess: true
+    serverSideEncryption: AES256
+  iam:
+    role: ${self:custom.DEFAULT_LAMBDA_ROLE_ARN}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - iam:PassRole
+      Resource:
+        Fn::Join:
+          - ''
+          - - 'arn:aws:iam::'
+            - Ref: 'AWS::AccountId'
+            - ':role/ecsTaskExecutionRole'
+layers:
+  MovieAppApi:
+    path: layers
+    name: ${self:custom.app_name}-${self:custom.service_name}-layer
+    compatibleRuntimes:
+      - python3.11
+
+functions:
+  getMovies:
+    handler: functions/getMovies.handler
+    environment:
+      MOVIES_SIMILARITY_DYNAMO_DB_NAME: ${self:custom.MOVIES_SIMILARITY_DYNAMO_DB_NAME}
+    warmup:
+      default:
+        enabled: true
+    layers:
+      - { Ref: MovieAppApiLambdaLayer }
+  setUserSelectedMovies:
+    handler: functions/setUserSelectedMovies.handler
+    environment:
+      USER_SELECTION_DYNAMO_DB_NAME: ${self:custom.USER_SELECTION_DYNAMO_DB_NAME}
+      MOVIES_SIMILARITY_DYNAMO_DB_NAME: ${self:custom.MOVIES_SIMILARITY_DYNAMO_DB_NAME}
+    warmup:
+      default:
+        enabled: true
+    layers:
+      - { Ref: MovieAppApiLambdaLayer }
+  getUserRecommendMovies:
+    handler: functions/getUserRecommendMovies.handler
+    environment:
+      USER_SELECTION_DYNAMO_DB_NAME: ${self:custom.USER_SELECTION_DYNAMO_DB_NAME}
+      MOVIES_SIMILARITY_DYNAMO_DB_NAME: ${self:custom.MOVIES_SIMILARITY_DYNAMO_DB_NAME}
+    warmup:
+      default:
+        enabled: true
+    layers:
+      - { Ref: MovieAppApiLambdaLayer }
+
+resources:
+  Resources:
+    ApiGatewayRestApi:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Body: ${file(./openapi.yml)}
+    ApiGatewayDeployment:
+      Type: AWS::ApiGateway::Deployment
+      Properties:
+        RestApiId:
+          Ref: ApiGatewayRestApi
+    ApiGatewayStage:
+      Type: AWS::ApiGateway::Stage
+      Properties:
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        StageName: v1
+        DeploymentId: !Ref ApiGatewayDeployment
+    ApiGatewayBasePathMapping:
+      Type: AWS::ApiGateway::BasePathMapping
+      Properties:
+        DomainName: api.movieapp.paohenghsu.com
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        Stage:
+          Ref: ApiGatewayStage
+    PermissionToGetMovies:
+      Type: AWS::Lambda::Permission
+      Properties:
+        FunctionName:
+          Fn::GetAtt:
+            - GetMoviesLambdaFunction
+            - Arn
+        Action: lambda:InvokeFunction
+        Principal: apigateway.amazonaws.com
+    PermissionToSetUserSelectedMovies:
+      Type: AWS::Lambda::Permission
+      Properties:
+        FunctionName:
+          Fn::GetAtt:
+            - SetUserSelectedMoviesLambdaFunction
+            - Arn
+        Action: lambda:InvokeFunction
+        Principal: apigateway.amazonaws.com
+    PermissionToGetUserRecommendMovies:
+      Type: AWS::Lambda::Permission
+      Properties:
+        FunctionName:
+          Fn::GetAtt:
+            - GetUserRecommendMoviesLambdaFunction
+            - Arn
+        Action: lambda:InvokeFunction
+        Principal: apigateway.amazonaws.com
+  Outputs:
+    ApiId:
+      Value:
+        Ref: ApiGatewayRestApi
