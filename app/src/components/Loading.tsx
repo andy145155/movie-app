@@ -1,9 +1,7 @@
-import '../assets/css/Loading.scss';
-import Nav from '../components/main/Nav';
 function Loading() {
   return (
     <div>
-      <Nav />
+      <svg className="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24"></svg>
       <div className="loading">Loading....</div>
     </div>
   );

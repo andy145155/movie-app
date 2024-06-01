@@ -1,16 +1,15 @@
 import { useState } from 'react';
-import Nav from '../components/selection/Nav';
-import Banner from '../components/selection/Banner';
-import Row from '../components/selection/Row';
-import { ISelectedMovies } from '../helper/interfaces';
+import Nav from '@/components/selectMovies/navbar';
+import SelectedMovies from '@/components/selectMovies/selectedMovies';
+import Row from '@/components/selectMovies/row';
+import { Movie } from '@/lib/schemas/apiResponses';
 
 function SelectMovies() {
-  const [selectedMovies, setSelectedMovies] = useState<ISelectedMovies[]>([]);
-
+  const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
   return (
-    <div style={{ backgroundColor: '#ffffff' }}>
+    <div className="bg-white">
       <Nav />
-      <Banner selectedMovies={selectedMovies} />
+      <SelectedMovies selectedMovies={selectedMovies} />
       <Row selectedMovies={selectedMovies} setSelectedMovies={setSelectedMovies} />
     </div>
   );

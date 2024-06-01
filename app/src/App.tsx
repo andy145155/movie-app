@@ -1,37 +1,38 @@
-import './assets/css/App.scss';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
-const Home = lazy(() => import('./pages/Home'));
-const GetStarted = lazy(() => import('./pages/GetStarted'));
-const Profile = lazy(() => import('./pages/Profile'));
-const Register = lazy(() => import('./pages/Register'));
-const SelectMovies = lazy(() => import('./pages/SelectMovies'));
+import { PATH } from './lib/constants';
+
+const GetStarted = lazy(() => import('./pages/getStarted'));
+const SignIn = lazy(() => import('./pages/signIn'));
+const Register = lazy(() => import('./pages/register'));
+const ConfirmSignup = lazy(() => import('./pages/confirmSignup'));
+
+const Home = lazy(() => import('./pages/home'));
+const Profile = lazy(() => import('./pages/profile'));
+const SelectMovies = lazy(() => import('./pages/selectMovies'));
 const Layout = lazy(() => import('./components/Layout'));
-const PersistLogin = lazy(() => import('./components/PersistLogin'));
+const PersistLogin = lazy(() => import('./components/persistLogin'));
 const Loading = lazy(() => import('./components/Loading'));
 
-function App() {
+export default function App() {
   return (
-    <div className="app">
-      <Suspense fallback={<Loading />}>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            {/* Public routes */}
-            <Route path="/" element={<GetStarted />} />
-            <Route path="register" element={<Register />} />
-            <Route path="index.html" element={<Navigate to="/" />} />
+    <Suspense fallback={<Loading />}>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          {/* Public routes */}
+          <Route path={PATH.GET_STARTED} element={<GetStarted />} />
+          <Route path={PATH.SIGNIN} element={<SignIn />} />
+          <Route path={PATH.CONFIRM_SIGNUP} element={<ConfirmSignup />} />
+          <Route path={PATH.REGISTER} element={<Register />} />
 
-            {/* Private routes */}
-            <Route element={<PersistLogin />}>
-              <Route path="home" element={<Home />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="selectMovies" element={<SelectMovies />} />
-            </Route>
+          {/* Private routes */}
+          <Route element={<PersistLogin />}>
+            <Route path={PATH.HOME} element={<Home />} />
+            <Route path={PATH.PROFILE} element={<Profile />} />
+            <Route path={PATH.SELECT_MOVIES} element={<SelectMovies />} />
           </Route>
-        </Routes>
-      </Suspense>
-    </div>
+        </Route>
+      </Routes>
+    </Suspense>
   );
 }
-
-export default App;

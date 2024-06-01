@@ -1,25 +1,37 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import { useUser } from '../store/user';
-import { useEffect } from 'react';
-import { useAuth } from '../store/auth';
+import { useContext, useEffect, useState } from 'react';
 import Loading from './Loading';
+import { getCurrentUser } from '@/plugins/amplify/auth';
+import { UserContext } from '@/store/userContext';
+import { PATH } from '@/lib/constants';
 
-function PersistLogin() {
-  const { isAuthenticated, isLoading } = useUser();
-  const { getCurrentAuthenticatedUser } = useAuth();
+export default function PersistLogin() {
   const navigateTo = useNavigate();
 
-  useEffect(() => {
-    const verifyRefreshToken = async () => {
-      await getCurrentAuthenticatedUser();
-    };
+  const [loading, setLoading] = useState(true);
+  const { user, setUserInformation } = useContext(UserContext);
 
-    if (!isAuthenticated) {
-      verifyRefreshToken();
-    }
+  useEffect(() => {
+    getCurrentUser()
+      .then((amplifyUser) => {
+        if (!amplifyUser || !amplifyUser.signInDetails?.loginId) {
+          return;
+        }
+        setUserInformation({
+          ...user,
+          isLoggedIn: true,
+          userId: amplifyUser.userId,
+          email: amplifyUser.signInDetails.loginId,
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
-  return <>{isLoading ? <Loading /> : isAuthenticated ? <Outlet /> : navigateTo('/')}</>;
-}
+  if (loading) {
+    return <Loading />;
+  }
 
-export default PersistLogin;
+  return <>{user.email ? <Outlet /> : navigateTo(PATH.SIGNIN)}</>;
+}

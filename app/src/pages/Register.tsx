@@ -1,66 +1,71 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import background from '../assets/images/netflix_background.png';
+import { signUp } from '@/plugins/amplify/auth';
+import TopNavBar from '@/components/topNavbar';
+import { AMPLIFY_SIGN_UP_STATE, PATH } from '@/lib/constants';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../store/auth';
-import PhoneVerifyForm from './PhoneVerifyForm';
-import '../assets/css/Register.scss';
-function Register() {
-  const auth = useAuth();
+import { UserContext } from '@/store/userContext';
+
+export default function Register() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [register, setRegister] = useState(false);
+  const { user, setUserEmail } = useContext(UserContext);
+  const [password, setPassword] = useState<string>('');
 
   const executeSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const result = await auth.signUp(email, password);
-    if (result.success) {
-      setRegister(true);
-    } else {
-      alert(result.message);
+
+    if (!user.email) {
+      alert('Please enter your email');
+      return;
     }
+
+    const result = await signUp({ username: user.email, password });
+
+    if (result?.nextStep.signUpStep === AMPLIFY_SIGN_UP_STATE.CONFIRM_SIGN_UP) {
+      navigate(PATH.CONFIRM_SIGNUP);
+    }
+
+    console.log(result);
   };
 
   return (
-    <div className="register">
-      <div className="registerScreem_background">
-        <img
-          className="registerScreen_logo"
-          src="https://www.edigitalagency.com.au/wp-content/uploads/netflix-logo-png-large.png"
-          alt=""
-        />
-        <button onClick={() => navigate('/')} className="registerScreen_button">
-          Sign In
-        </button>
-        <div className="registerScreen_gradient" />
-      </div>
-      <div className="registerScreen_body">
-        <div className="registerScreen">
-          {register ? (
-            <PhoneVerifyForm email={email} setRegister={setRegister} />
-          ) : (
-            <>
-              <form action="" onSubmit={executeSignUp}>
-                <h1>Register</h1>
-                <input
-                  type="email"
-                  placeholder="Email"
-                  onChange={(event) => setEmail(event.target.value)}
-                  value={email}
-                />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  onChange={(event) => setPassword(event.target.value)}
-                  value={password}
-                />
-                <button type="submit">Register now</button>
-              </form>
-            </>
-          )}
+    <div
+      className="bg-cover"
+      style={{
+        backgroundImage: `url(${background})`,
+      }}
+    >
+      <div className="bg-black bg-opacity-40 bg-gradient-to-t from-black via-transparent to-black">
+        <TopNavBar />
+        <div className="flex justify-center items-center h-content">
+          <div className="bg-black/[.75] text-white p-16">
+            <form className="flex flex-col gap-y-4" onSubmit={executeSignUp}>
+              <h1 className="text-3xl font-semibold text-left">Register</h1>
+              <Input
+                type="email"
+                className="w-64"
+                placeholder="Email"
+                onChange={(event) => setUserEmail(event.target.value)}
+                required
+                value={user.email}
+              />
+              <Input
+                type="password"
+                className="w-64"
+                placeholder="Password"
+                onChange={(event) => setPassword(event.target.value)}
+                required
+                value={password}
+              />
+              <Button className="rounded-md mt-5" type="submit">
+                Register now
+              </Button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
-export default Register;
