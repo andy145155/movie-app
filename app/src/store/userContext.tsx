@@ -51,7 +51,7 @@ const useProvideUserData = () => {
     });
 
   const setUserEmail = (email: string) =>
-    setUser(() => {
+    setUser((user) => {
       return {
         ...user,
         email,
@@ -59,7 +59,7 @@ const useProvideUserData = () => {
     });
 
   const setUserLoggedIn = (isLoggedIn: boolean) =>
-    setUser(() => {
+    setUser((user) => {
       return {
         ...user,
         isLoggedIn,
@@ -67,7 +67,7 @@ const useProvideUserData = () => {
     });
 
   const setSelectedMovies = (selectedMovies: Movie[]) =>
-    setUser(() => {
+    setUser((user) => {
       return {
         ...user,
         selectedMovies,
@@ -75,7 +75,7 @@ const useProvideUserData = () => {
     });
 
   const setRecommenedMovies = (recommendedMovies: Movie[]) =>
-    setUser(() => {
+    setUser((user) => {
       return {
         ...user,
         recommendedMovies,

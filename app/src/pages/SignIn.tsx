@@ -7,17 +7,30 @@ import { Button } from '@/components/ui/button';
 import { UserContext } from '@/store/userContext';
 import { signIn } from '@/plugins/amplify/auth';
 import { PATH } from '@/lib/constants';
+import { getUserSelectedMovies } from '@/plugins/amplify/apis';
 
 export default function Signin() {
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
-  const { user, setUserEmail } = useContext(UserContext);
+  const { user, setUserEmail, setUserLoggedIn, setRecommenedMovies, setSelectedMovies } = useContext(UserContext);
 
   const executeSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await signIn({ username: user.email, password });
     if (result?.isSignedIn) {
-      navigate(PATH.HOME);
+      getUserSelectedMovies({ email: user.email }).then((data) => {
+        setUserLoggedIn(true);
+
+        if (!data || !data.selectedMovies || data.selectedMovies.length === 0) {
+          navigate(PATH.SELECT_MOVIES);
+        }
+
+        if (data) {
+          setRecommenedMovies(data.recommendedMovies);
+          setSelectedMovies(data.selectedMovies);
+          navigate(PATH.HOME);
+        }
+      });
     }
   };
 

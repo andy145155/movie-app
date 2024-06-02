@@ -1,24 +1,11 @@
 import { movieSchema, userSelectionSchema, Movie, UserSelection } from '@/lib/schemas/apiResponses';
 import { GetMoviesRequest, SetUserSelectedMoviesRequest } from '@/lib/schemas/apiRequests';
-import { Amplify } from 'aws-amplify';
-import { ApiError, get, post } from 'aws-amplify/api';
+import { get, post } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { z } from 'zod';
 
-Amplify.configure({
-  API: {
-    REST: {
-      movieApi: {
-        endpoint: 'https://api.movieapp.paohenghsu.com',
-        region: 'ap-southeast-1',
-      },
-    },
-  },
-});
-
 const getAuthorizationHeader = async () => {
   const authSession = await fetchAuthSession();
-  console.log('authSession', authSession);
 
   return {
     Authorization: 'Bearer ' + authSession.tokens?.idToken,
@@ -60,12 +47,7 @@ export async function getMovies(params: GetMoviesRequest): Promise<Movie[] | und
 
     return parseResult.data;
   } catch (error) {
-    if (error instanceof ApiError) {
-      console.log('ApiError: getMovies api call failed ', JSON.parse(error.message));
-    }
-    if (error instanceof Error) {
-      console.log('Error: getMovies api call failed ', JSON.parse(error.message));
-    }
+    console.log('ApiError: getMovies api call failed ', error);
   }
 }
 
@@ -94,12 +76,7 @@ export async function getUserSelectedMovies(params: { email: string }): Promise<
 
     return parseResult.data;
   } catch (error) {
-    if (error instanceof ApiError) {
-      console.log('ApiError: getMovies api call failed ', JSON.parse(error.message));
-    }
-    if (error instanceof Error) {
-      console.log('Error: getMovies api call failed ', JSON.parse(error.message));
-    }
+    console.log('getUserSelectedMovies call failed: ', error);
   }
 }
 
@@ -128,6 +105,6 @@ export async function setUserSelectedMovies(body: SetUserSelectedMoviesRequest):
 
     return parseResult.data;
   } catch (error) {
-    console.log('POST call failed: ', error);
+    console.log('setUserSelectedMovies call failed: ', error);
   }
 }

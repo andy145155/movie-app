@@ -10,7 +10,7 @@ import { PATH } from '@/lib/constants';
 
 export default function ConfirmSignup() {
   const navigate = useNavigate();
-  const { user, setUserLoggedIn } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [verifyCode, setVerifyCode] = useState('');
   const [countdown, setCountdown] = useState(120);
 
@@ -29,11 +29,8 @@ export default function ConfirmSignup() {
   const executeEmailVerification = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await confirmSignUp({ username: user.email, confirmationCode: verifyCode });
-    console.log('result', result);
-
     if (result?.isSignUpComplete) {
-      setUserLoggedIn(result?.isSignUpComplete);
-      navigate(PATH.HOME);
+      navigate(PATH.SIGNIN);
     } else {
       alert(result?.nextStep.signUpStep);
     }

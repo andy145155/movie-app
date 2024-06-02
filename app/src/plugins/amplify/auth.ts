@@ -9,7 +9,7 @@ import {
   SignUpOutput,
   ConfirmSignUpInput,
   ResendSignUpCodeInput,
-} from '@aws-amplify/auth';
+} from 'aws-amplify/auth';
 import { Amplify } from 'aws-amplify';
 
 const TERRAFORM_ENV = process.env.TERRAFORM_ENV! as unknown as {
@@ -24,6 +24,14 @@ Amplify.configure({
       userPoolId: TERRAFORM_ENV.movie_app_user_pool_id,
     },
   },
+  API: {
+    REST: {
+      movieApi: {
+        endpoint: 'https://api.movieapp.paohenghsu.com',
+        region: 'ap-southeast-1',
+      },
+    },
+  },
 });
 
 export const getCurrentUser = async () => {
@@ -31,6 +39,7 @@ export const getCurrentUser = async () => {
     const user = await amplifyGetCurrentUser();
     return user;
   } catch (error) {
+    alert(error);
     console.error(error);
   }
 };
@@ -44,6 +53,7 @@ export const signIn = async ({ username, password }: SignUpInput) => {
 
     return response;
   } catch (error) {
+    alert(error);
     console.error(error);
   }
 };
@@ -57,6 +67,7 @@ export const signUp = async ({ username, password }: SignUpInput): Promise<SignU
 
     return response;
   } catch (error) {
+    alert(error);
     console.error(error);
   }
 };
@@ -70,6 +81,7 @@ export const signOut = async (): Promise<void> => {
       localStorage.clear();
     });
   } catch (error) {
+    alert(error);
     console.error(error);
   }
 };
@@ -83,6 +95,7 @@ export const confirmSignUp = async ({ username, confirmationCode }: ConfirmSignU
 
     return response;
   } catch (error) {
+    alert(error);
     console.error(error);
   }
 };
@@ -92,7 +105,7 @@ export const resendSignUpCode = async ({ username }: ResendSignUpCodeInput) => {
     const response = await amplifyResendSignUpCode({ username });
     return response;
   } catch (error) {
+    alert(error);
     console.error(error);
-    throw error; // Rethrow the error to be handled by the caller
   }
 };

@@ -12,23 +12,19 @@ function SelectedMovies({ selectedMovies }: { selectedMovies: Movie[] }) {
   const navigateTo = useNavigate();
 
   async function sendSelectedMoviesAndUpdateUserMovies() {
-    if (!user.email) {
-      navigateTo(PATH.SIGNIN);
-    }
-
-    const userRecommenedMovies = await setUserSelectedMovies({
+    const response = await setUserSelectedMovies({
       email: user.email,
       selectedMovies: selectedMovies.map((movie) => {
         return { movieId: movie.movieId, similarity: movie.similarity };
       }),
     });
 
-    if (!userRecommenedMovies) {
+    if (!response) {
       return;
     }
 
-    setSelectedMovies(userRecommenedMovies.selectedMovies);
-    setRecommenedMovies(userRecommenedMovies.recommendedMovies);
+    setSelectedMovies(response.selectedMovies);
+    setRecommenedMovies(response.recommendedMovies);
     navigateTo(PATH.HOME);
   }
 
