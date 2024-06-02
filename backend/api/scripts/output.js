@@ -11,10 +11,7 @@ function handler(data, serverless, options) {
   }, {});
   const content = JSON.stringify(cleanedData, null, 2) + '\n';
   fs.writeFileSync(output.file_path, content);
-  global.console.log(
-    `Written Stack Output to ${output.file_path}`,
-    cleanedData
-  );
+  global.console.log(`Written Stack Output to ${output.file_path}`, cleanedData);
 }
 
 module.exports = { handler };

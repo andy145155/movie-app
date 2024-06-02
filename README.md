@@ -110,11 +110,13 @@ cd movie-app
 ```sh
 yarn deployInfra
 ```
+
 4. To deploy any code changes to Lambda, run the following command.
 
 ```sh
 yarn deployLambda
 ```
+
 5. To deploy any code changes to Fargate, run the following command.
 
 ```sh

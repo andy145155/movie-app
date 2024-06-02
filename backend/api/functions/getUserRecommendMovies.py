@@ -30,16 +30,24 @@ def handler(event: dict, context: dict ) -> dict:
     params = event["queryStringParameters"]
     
     email = params.get("email")
-
+    logger.info(f"Fetching recommendations for user: {email}")
+    
     response = fetch_user_selection(email)
     recommended_movieid_list, selected_movieid_list = validate_input(response)
     
     logger.info("recommended_movieid_list: %s", recommended_movieid_list)
     logger.info("selected_movieid_list: %s", selected_movieid_list)
     
-    recommended_movies = get_movies_by_id_list(recommended_movieid_list, table_name=MOVIES_SIMILARITY_DYNAMO_DB_NAME)
+    if len(recommended_movieid_list) == 0:
+        recommended_movies = []
+    else:
+        recommended_movies = get_movies_by_id_list(recommended_movieid_list, table_name=MOVIES_SIMILARITY_DYNAMO_DB_NAME)
     
-    selected_movies = get_movies_by_id_list(selected_movieid_list, table_name=MOVIES_SIMILARITY_DYNAMO_DB_NAME)
+    
+    if len(selected_movieid_list) == 0:
+        selected_movies = []
+    else:    
+        selected_movies = get_movies_by_id_list(selected_movieid_list, table_name=MOVIES_SIMILARITY_DYNAMO_DB_NAME)
     
     return ok({
         'email': email,
@@ -54,6 +62,14 @@ def fetch_user_selection(email: str) -> UserSelection:
                 "email": email
             }
         )
+        
+        if "Item" not in response:
+            return {
+                "email": email,
+                "recommendedMovies": [],
+                "selectedMovies": []
+                }
+        
         return response['Item']
     except Exception as e:
         logger.error("Error getting user movie selection: %s", e)

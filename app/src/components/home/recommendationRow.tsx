@@ -11,7 +11,7 @@ import { getUserSelectedMovies } from '@/plugins/amplify/apis';
 
 function RecommendationRow() {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const { user } = useContext(UserContext);
+  const { user, setRecommenedMovies, setSelectedMovies } = useContext(UserContext);
   const { clickedMovie, setClickedMovie, clickedRow, setClickedRow } = useContext(MovieContext);
   const [trailer, setTrailer] = useState(DEFAULT_TRAILER);
   const navigate = useNavigate();
@@ -19,11 +19,17 @@ function RecommendationRow() {
   useEffect(() => {
     if (user.recommendedMovies.length === 0) {
       getUserSelectedMovies({ email: user.email }).then((data) => {
+        console.log(data);
+
         if (!data || !data.selectedMovies || data.selectedMovies.length === 0) {
           return navigate(PATH.SELECT_MOVIES);
         }
 
+        console.log('data', data);
+
         setMovies(data.recommendedMovies);
+        setRecommenedMovies(data.recommendedMovies);
+        setSelectedMovies(data.selectedMovies);
       });
 
       return;

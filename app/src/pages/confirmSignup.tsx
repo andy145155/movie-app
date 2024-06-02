@@ -29,9 +29,11 @@ export default function ConfirmSignup() {
   const executeEmailVerification = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await confirmSignUp({ username: user.email, confirmationCode: verifyCode });
+    console.log('result', result);
+
     if (result?.isSignUpComplete) {
       setUserLoggedIn(result?.isSignUpComplete);
-      navigate({ pathname: '/' });
+      navigate(PATH.HOME);
     } else {
       alert(result?.nextStep.signUpStep);
     }

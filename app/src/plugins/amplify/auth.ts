@@ -64,6 +64,11 @@ export const signUp = async ({ username, password }: SignUpInput): Promise<SignU
 export const signOut = async (): Promise<void> => {
   try {
     await amplifySignOut();
+
+    // Remove congito user from local storage
+    window.addEventListener('unload', function () {
+      localStorage.clear();
+    });
   } catch (error) {
     console.error(error);
   }

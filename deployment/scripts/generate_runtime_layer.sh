@@ -22,7 +22,7 @@ cd $DIR
 
 echo $pwd
 if [ -d 'layers' ]; then
-  rm -r layers
+  rm -rf layers
 fi
 
 # # https://docs.aws.amazon.com/en_us/lambda/latest/dg/configuration-layers.html#configuration-layers-path

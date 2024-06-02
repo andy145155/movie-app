@@ -14,9 +14,13 @@ export default function PersistLogin() {
   useEffect(() => {
     getCurrentUser()
       .then((amplifyUser) => {
+        console.log('amplifyUser', amplifyUser);
+
         if (!amplifyUser || !amplifyUser.signInDetails?.loginId) {
+          navigateTo(PATH.SIGNIN);
           return;
         }
+
         setUserInformation({
           ...user,
           isLoggedIn: true,
@@ -33,5 +37,5 @@ export default function PersistLogin() {
     return <Loading />;
   }
 
-  return <>{user.email ? <Outlet /> : navigateTo(PATH.SIGNIN)}</>;
+  return <Outlet />;
 }

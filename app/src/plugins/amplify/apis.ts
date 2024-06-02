@@ -18,6 +18,8 @@ Amplify.configure({
 
 const getAuthorizationHeader = async () => {
   const authSession = await fetchAuthSession();
+  console.log('authSession', authSession);
+
   return {
     Authorization: 'Bearer ' + authSession.tokens?.idToken,
     'Content-Type': 'application/json',

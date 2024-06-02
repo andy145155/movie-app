@@ -6,6 +6,7 @@ import TopNavBar from '@/components/topNavbar';
 import { Button } from '@/components/ui/button';
 import { UserContext } from '@/store/userContext';
 import { signIn } from '@/plugins/amplify/auth';
+import { PATH } from '@/lib/constants';
 
 export default function Signin() {
   const navigate = useNavigate();
@@ -15,8 +16,9 @@ export default function Signin() {
   const executeSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await signIn({ username: user.email, password });
-
-    console.log(result);
+    if (result?.isSignedIn) {
+      navigate(PATH.HOME);
+    }
   };
 
   return (

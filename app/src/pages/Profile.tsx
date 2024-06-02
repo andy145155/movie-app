@@ -56,7 +56,7 @@ function Profile() {
             </div>
             <div className="flex flex-col gap-y-4">
               <Button onClick={() => navigate(PATH.SELECT_MOVIES)}>Choose your movies</Button>
-              <Button onClick={() => logOut()}>Sign Out</Button>
+              <Button onClick={async () => await logOut()}>Sign Out</Button>
             </div>
           </div>
         </div>
