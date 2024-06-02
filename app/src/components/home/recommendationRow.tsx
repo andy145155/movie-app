@@ -7,6 +7,7 @@ import { MovieContext } from '@/store/movieContext';
 import { UserContext } from '@/store/userContext';
 import { Movie } from '@/lib/schemas/apiResponses';
 import { useNavigate } from 'react-router-dom';
+import { getUserSelectedMovies } from '@/plugins/amplify/apis';
 
 function RecommendationRow() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -16,8 +17,16 @@ function RecommendationRow() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user.recommendedMovies) {
-      navigate(PATH.SELECT_MOVIES);
+    if (user.recommendedMovies.length === 0) {
+      getUserSelectedMovies({ email: user.email }).then((data) => {
+        if (!data || !data.selectedMovies || data.selectedMovies.length === 0) {
+          return navigate(PATH.SELECT_MOVIES);
+        }
+
+        setMovies(data.recommendedMovies);
+      });
+
+      return;
     }
 
     setMovies(user.recommendedMovies);

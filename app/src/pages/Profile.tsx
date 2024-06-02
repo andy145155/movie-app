@@ -24,7 +24,6 @@ function Profile() {
     getUserSelectedMovies({ email: user.email }).then((userSelection) => {
       if (!userSelection) return;
       setMovies(userSelection.selectedMovies);
-      console.log(movies);
     });
   }, []);
 
@@ -39,17 +38,17 @@ function Profile() {
           <div className="ml-6 w-full">
             <h2 className="bg-gray-500 p-3">Email: {user.email}</h2>
             <div className="my-5">
-              <h3 className="text-xl font-medium text-center">Your selected Movies</h3>
+              <h3 className="text-3xl font-medium text-center">Your selected Movies</h3>
               <div className="flex justify-center items-end">
-                {movies?.map((item) => {
+                {movies?.map((movie) => {
                   return (
-                    <div className="p-2 justify-center">
-                      <div className="text-center">
-                        <span className="inline-block align-middle leading-normal"> {item.title}</span>
-                      </div>
-                      <div className="profile_posters">
-                        {item.poster && <img key={item.movieId} src={item.poster} alt={item.title} />}
-                      </div>
+                    <div className="p-2 justify-center flex flex-col gap-y-4" key={movie.movieId}>
+                      <div className="text-center align-middle text-sm">{movie.title}</div>
+                      <img
+                        className=" tarnsition-transform hover:scale-105 duration-500"
+                        src={movie.poster}
+                        alt={movie.title}
+                      />
                     </div>
                   );
                 })}
