@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
-import Loading from './Loading';
+import Loading from './loading';
 import { getCurrentUser } from '@/plugins/amplify/auth';
 import { UserContext } from '@/store/userContext';
 import { PATH } from '@/lib/constants';
@@ -14,8 +14,6 @@ export default function PersistLogin() {
   useEffect(() => {
     getCurrentUser()
       .then((amplifyUser) => {
-        console.log('amplifyUser', amplifyUser);
-
         if (!amplifyUser || !amplifyUser.signInDetails?.loginId) {
           navigateTo(PATH.SIGNIN);
           return;

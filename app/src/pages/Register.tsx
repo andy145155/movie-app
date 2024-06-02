@@ -26,8 +26,6 @@ export default function Register() {
     if (result?.nextStep.signUpStep === AMPLIFY_SIGN_UP_STATE.CONFIRM_SIGN_UP) {
       navigate(PATH.CONFIRM_SIGNUP);
     }
-
-    console.log(result);
   };
 
   return (

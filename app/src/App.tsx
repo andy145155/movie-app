@@ -10,9 +10,9 @@ const ConfirmSignup = lazy(() => import('./pages/confirmSignup'));
 const Home = lazy(() => import('./pages/home'));
 const Profile = lazy(() => import('./pages/profile'));
 const SelectMovies = lazy(() => import('./pages/selectMovies'));
-const Layout = lazy(() => import('./components/Layout'));
+const Layout = lazy(() => import('./components/layout'));
 const PersistLogin = lazy(() => import('./components/persistLogin'));
-const Loading = lazy(() => import('./components/Loading'));
+const Loading = lazy(() => import('./components/loading'));
 
 export default function App() {
   return (
