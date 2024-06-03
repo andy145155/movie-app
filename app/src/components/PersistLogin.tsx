@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
-import Loading from './loading';
+import Loading from '@/components/loading';
 import { getCurrentUser } from '@/plugins/amplify/auth';
 import { UserContext } from '@/store/userContext';
 import { PATH } from '@/lib/constants';
