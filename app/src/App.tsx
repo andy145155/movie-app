@@ -2,10 +2,10 @@ import { Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import { PATH } from '@/lib/constants';
 
-const GetStarted = lazy(() => import('@/pages/getStarted.ts'));
-const SignIn = lazy(() => import('@/pages/signIn.ts'));
-const Register = lazy(() => import('@/pages/register.ts'));
-const ConfirmSignup = lazy(() => import('@/pages/confirmSignup.ts'));
+const GetStarted = lazy(() => import('@/pages/getStarted.tsx'));
+const SignIn = lazy(() => import('@/pages/signIn'));
+const Register = lazy(() => import('@/pages/register'));
+const ConfirmSignup = lazy(() => import('@/pages/confirmSignup'));
 
 const Home = lazy(() => import('@/pages/home'));
 const Profile = lazy(() => import('@/pages/profile'));
