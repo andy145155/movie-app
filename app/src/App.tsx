@@ -1,18 +1,18 @@
 import { Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
-import { PATH } from './lib/constants';
+import { PATH } from '@/lib/constants';
 
-const GetStarted = lazy(() => import('./pages/getStarted'));
-const SignIn = lazy(() => import('./pages/signIn'));
-const Register = lazy(() => import('./pages/register'));
-const ConfirmSignup = lazy(() => import('./pages/confirmSignup'));
+const GetStarted = lazy(() => import('@/pages/getStarted'));
+const SignIn = lazy(() => import('@/pages/signIn'));
+const Register = lazy(() => import('@/pages/register'));
+const ConfirmSignup = lazy(() => import('@/pages/confirmSignup'));
 
-const Home = lazy(() => import('./pages/home'));
-const Profile = lazy(() => import('./pages/profile'));
-const SelectMovies = lazy(() => import('./pages/selectMovies'));
-const Layout = lazy(() => import('./components/layout'));
-const PersistLogin = lazy(() => import('./components/persistLogin'));
-const Loading = lazy(() => import('./components/loading'));
+const Home = lazy(() => import('@/pages/home'));
+const Profile = lazy(() => import('@/pages/profile'));
+const SelectMovies = lazy(() => import('@/pages/selectMovies'));
+const Layout = lazy(() => import('@/components/layout'));
+const PersistLogin = lazy(() => import('@/components/persistLogin'));
+const Loading = lazy(() => import('@/components/loading'));
 
 export default function App() {
   return (
