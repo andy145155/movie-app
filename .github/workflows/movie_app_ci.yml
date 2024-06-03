@@ -41,7 +41,7 @@ jobs:
         run: cd app && yarn
 
       - name: Build movie app
-        run: yarn build
+        run: cd app && yarn build
 
       - uses: actions/upload-artifact@v4
         with:
