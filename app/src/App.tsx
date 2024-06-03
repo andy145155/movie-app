@@ -4,15 +4,15 @@ import { PATH } from '@/lib/constants';
 
 const GetStarted = lazy(() => import(`${__dirname}//pages/getStated`));
 const SignIn = lazy(() => import(`${__dirname}//pages/signIn`));
-const Register = lazy(() => import('@/pages/register'));
-const ConfirmSignup = lazy(() => import('@/pages/confirmSignup'));
+const Register = lazy(() => import(`${__dirname}/pages/register`));
+const ConfirmSignup = lazy(() => import(`${__dirname}/pages/confirmSignup`));
 
-const Home = lazy(() => import('@/pages/home'));
-const Profile = lazy(() => import('@/pages/profile'));
-const SelectMovies = lazy(() => import('@/pages/selectMovies'));
-const Layout = lazy(() => import('@/components/layout'));
-const PersistLogin = lazy(() => import('@/components/persistLogin'));
-const Loading = lazy(() => import('@/components/loading'));
+const Home = lazy(() => import(`${__dirname}/pages/home`));
+const Profile = lazy(() => import(`${__dirname}/pages/profile`));
+const SelectMovies = lazy(() => import(`${__dirname}/pages/selectMovies`));
+const Layout = lazy(() => import(`${__dirname}/components/layout`));
+const PersistLogin = lazy(() => import(`${__dirname}/components/persistLogin`));
+const Loading = lazy(() => import(`${__dirname}/components/loading`));
 
 export default function App() {
   return (
