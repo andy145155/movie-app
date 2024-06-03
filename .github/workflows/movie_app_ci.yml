@@ -9,18 +9,43 @@ on:
     branches:
       - master
 
-  concurrency:
-    group: movie_app_ci
-    cancel-in-progress: true
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
-  permissions:
-    contents: read
-    id-token: write
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_DEFAULT_REGION: ap-southeast-1
+  AWS_CI_IAM_ROLE: arn:aws:iam::702755696329:role/waveflow-github-action-ci
 
 jobs:
-  build-fargate:
+  build-app:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            app
+            deployment/resources
+
+      - name: Set up node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run yarn in app directory
+        run: cd app && yarn
+
+      - name: Build movie app
+        run: yarn build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artifact-apps
+          path: dist/
+          if-no-files-found: error
+          retention-days: 1
