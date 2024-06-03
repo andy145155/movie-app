@@ -2,8 +2,8 @@ import { Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import { PATH } from '@/lib/constants';
 
-const GetStarted = lazy(() => import('@/pages/getStarted'));
-const SignIn = lazy(() => import('@/pages/signIn'));
+const GetStarted = lazy(() => import(`${__dirname}//pages/getStated`));
+const SignIn = lazy(() => import(`${__dirname}//pages/signIn`));
 const Register = lazy(() => import('@/pages/register'));
 const ConfirmSignup = lazy(() => import('@/pages/confirmSignup'));
 
