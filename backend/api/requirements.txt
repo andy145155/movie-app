@@ -9,3 +9,5 @@ setuptools==65.5.0
 six==1.16.0
 tzdata==2023.4
 urllib3==1.26.8
+aws_lambda_powertools
+fastjsonschema

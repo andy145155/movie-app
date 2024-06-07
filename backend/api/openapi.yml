@@ -105,11 +105,15 @@ paths:
           schema:
             type: string
             enum: [true, false]
+          required: true
+          description: Return random movie list or not
         - name: limit
           in: query
           schema:
             type: integer
             format: int64
+          required: true
+          description: Length of the movie list
       responses:
         '200':
           description: 200 response
