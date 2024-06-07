@@ -72,7 +72,7 @@ jobs:
         run: pip install -r backend/api/requirements.txt
 
       - name: Install serverless
-        run: cd api && yarn install
+        run: cd backend && yarn install
 
       - name: Build movie api
         run: cd backend/api && sls pacakge
