@@ -78,4 +78,4 @@ jobs:
         run: cd backend && yarn install
 
       - name: Build movie api
-        run: cd backend/api && sls pacakge
+        run: cd backend/api && sls package
