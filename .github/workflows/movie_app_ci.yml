@@ -51,7 +51,10 @@ jobs:
           retention-days: 1
 
   build-api:
-    runs-on: ['macos-latest', 'ubuntu-latest']
+    strategy:
+      matrix:
+        service: ['macos-latest', 'ubuntu-latest']
+    runs-on: ${{ matrix.service }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
