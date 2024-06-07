@@ -2,12 +2,6 @@ service: ${self:custom.app_name}-${self:custom.service_name}
 
 frameworkVersion: '3'
 
-package:
-  patterns:
-    - '!requirements.txt'
-    - '!sample/**'
-    - '../utils/**'
-
 plugins:
   - serverless-plugin-warmup
   - serverless-stack-output
