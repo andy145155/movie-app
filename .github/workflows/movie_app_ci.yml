@@ -49,3 +49,24 @@ jobs:
           path: app/dist/
           if-no-files-found: error
           retention-days: 1
+
+  build-api:
+    runs-on: ['macos-latest', 'ubuntu-latest']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            backend
+            deployment/resources
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r backend/api/requirements.txt
+
+      - name: Build movie api
+        run: cd backend/api && sls pacakge
