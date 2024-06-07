@@ -72,6 +72,9 @@ jobs:
         run: pip install -r backend/api/requirements.txt
 
       - name: Install serverless
+        run: npm install --prefix=$HOME/.local --global serverless@^3.38.0
+
+      - name: Run yarn in backend directory
         run: cd backend && yarn install
 
       - name: Build movie api
