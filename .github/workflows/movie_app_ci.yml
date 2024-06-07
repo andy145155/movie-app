@@ -51,10 +51,7 @@ jobs:
           retention-days: 1
 
   build-api:
-    strategy:
-      matrix:
-        service: ['macos-latest', 'ubuntu-latest']
-    runs-on: ${{ matrix.service }}
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -76,6 +73,11 @@ jobs:
 
       - name: Run yarn in backend directory
         run: cd backend && yarn install
+
+      - name: Run yarn in backend directory
+        run: |
+          cd backend/api &&  
+          pip install -t layers/python/lib/python3.11/site-packages --platform manylinux2014_aarch64 --only-binary=:all: --upgrade --python-version 3.11 --implementation cp -r requirements.txt
 
       - name: Build movie api
         run: cd backend/api && sls package
