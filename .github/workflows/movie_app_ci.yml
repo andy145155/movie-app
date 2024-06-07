@@ -71,5 +71,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r backend/api/requirements.txt
 
+      - name: Install serverless
+        run: npm install --prefix=$HOME/.local --global serverless@^3.38.0
+
       - name: Build movie api
         run: cd backend/api && sls pacakge
