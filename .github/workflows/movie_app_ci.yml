@@ -19,7 +19,7 @@ permissions:
 
 env:
   AWS_DEFAULT_REGION: ap-southeast-1
-  AWS_CI_IAM_ROLE: arn:aws:iam::702755696329:role/waveflow-github-action-ci
+  AWS_CI_IAM_ROLE: arn:aws:iam::410370150231:role/movie-app-github-action-ci
 
 jobs:
   build-app:
@@ -78,6 +78,12 @@ jobs:
         run: |
           cd backend/api &&  
           pip install -t layers/python/lib/python3.11/site-packages --platform manylinux2014_aarch64 --only-binary=:all: --upgrade --python-version 3.11 --implementation cp -r requirements.txt
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_CI_IAM_ROLE }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
       - name: Build movie api
         run: cd backend/api && sls package
