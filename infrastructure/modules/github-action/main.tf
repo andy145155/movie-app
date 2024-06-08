@@ -1,5 +1,7 @@
 locals {
-  service = var.service
+  service    = var.service
+  account_id = var.current_iam_caller.account_id
+  region     = var.region
 }
 
 resource "aws_iam_role" "github_actions_ci" {
@@ -19,7 +21,7 @@ resource "aws_iam_policy" "github_actions_ci" {
       {
         Action   = "cloudformation:DescribeStacks"
         Effect   = "Allow"
-        Resource = "arn:aws:cloudformation:ap-southeast-1:702755696329:stack/*/*"
+        Resource = "arn:aws:cloudformation:${local.region}:${local.account_id}:stack/movie-app-*/*"
       }
     ]
   })
