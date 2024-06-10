@@ -12,11 +12,12 @@
     "removeLambda": "cd backend && yarn removeLambda",
     "removeFargate": "cd backend && yarn removeFargate",
     "deployMovieApp": "bash ./deployment/scripts/deploy_app.sh",
+    "prettify": "bash ./prettier.sh",
     "format": "npx prettier --write ."
   },
   "husky": {
     "hooks": {
-      "pre-commit": "prettier --write . && git add -A ."
+      "pre-commit": "yarn prettify"
     }
   },
   "devDependencies": {
