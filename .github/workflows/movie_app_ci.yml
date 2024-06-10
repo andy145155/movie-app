@@ -75,7 +75,7 @@ jobs:
         run: cd backend && yarn install
 
       - name: Install unit tests dependencies
-        run: cd backend/api/tests && pip install -r backend/api/requirements.txt
+        run: pip install -r backend/api/tests/requirements.txt
 
       - name: Run unit tests
         run: cd backend && python3 -m pytest -s api/tests/unit  -v
