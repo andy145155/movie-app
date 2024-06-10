@@ -70,38 +70,3 @@ def fetch_movie_by_index(index: int, dynamo_db: LambdaDynamoDBClass) -> Movie:
     except Exception as e:
         logger.error("Error getting movies by index: %s", e)
         return e
-
-
-    @patch("src.sample_lambda.app.LambdaDynamoDBClass")
-    @patch("src.sample_lambda.app.LambdaS3Class")
-    @patch("src.sample_lambda.app.create_letter_in_s3")
-    def test_lambda_handler_valid_event_returns_200(self,
-                            patch_create_letter_in_s3 : MagicMock,
-                            patch_lambda_s3_class : MagicMock,
-                            patch_lambda_dynamodb_class : MagicMock
-                            ):
-        """
-        Verify the event is parsed, AWS resources are passed, the 
-        create_letter_in_s3 function is called, and a 200 is returned.
-        """
-
-        # [14] Test setup - Return a mock for the global variables and resources
-        patch_lambda_dynamodb_class.return_value = self.mocked_dynamodb_class
-        patch_lambda_s3_class.return_value = self.mocked_s3_class
-
-        return_value_200 = {"statusCode" : 200, "body":"OK"}
-        patch_create_letter_in_s3.return_value = return_value_200
-
-        # [15] Run Test using a test event from /tests/events/*.json
-        test_event = self.load_sample_event_from_file("sampleEvent1")
-        test_return_value = lambda_handler(event=test_event, context=None)
-
-        # [16] Validate the function was called with the mocked globals
-        # and event values
-        patch_create_letter_in_s3.assert_called_once_with(
-                                        dynamo_db=self.mocked_dynamodb_class,
-                                        s3=self.mocked_s3_class,
-                                        doc_type=test_event["pathParameters"]["docType"],
-                                        cust_id=test_event["pathParameters"]["customerId"])
-
-        self.assertEqual(test_return_value, return_value_200)
