@@ -1,6 +1,7 @@
-'''
+"""
 This function will trigger a Glue Crawler when an S3 event is detected.
-'''
+"""
+
 import os
 import boto3
 import logging
@@ -30,7 +31,8 @@ GLUE_CRAWLER = {
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-glue_client = boto3.client('glue')
+glue_client = boto3.client("glue")
+
 
 def trigger_glue_crawler(crawler_name: str) -> None:
     try:
@@ -45,8 +47,8 @@ def trigger_glue_crawler(crawler_name: str) -> None:
 
 def handler(event: dict, context) -> None:
     logger.info(f"Received event: {event}")
-    csv_name = event['Records'][0]['s3']['object']['key']
-    
+    csv_name = event["Records"][0]["s3"]["object"]["key"]
+
     try:
         if csv_name in S3_PROCESSED_FILE_PATH.values():
             for crawler_name, file_path in S3_PROCESSED_FILE_PATH.items():
