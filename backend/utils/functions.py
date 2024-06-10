@@ -69,6 +69,7 @@ def upload_to_dynamoDB(pd_object: pd.DataFrame, table_name: str) -> None:
         return e
 
 def ok(body: dict) -> dict:
+    print("body", body)
     return {
         'statusCode': 200,
         'headers': {

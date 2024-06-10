@@ -1,0 +1,76 @@
+{
+  "resource": "/movies",
+  "path": "/movies",
+  "httpMethod": "GET",
+  "headers": {
+    "Accept": "*/*",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Accept-Language": "en-US,en;q=0.9,zh-TW;q=0.8,zh;q=0.7",
+    "CloudFront-Forwarded-Proto": "https",
+    "CloudFront-Is-Desktop-Viewer": "true",
+    "CloudFront-Is-Mobile-Viewer": "false",
+    "CloudFront-Is-SmartTV-Viewer": "false",
+    "CloudFront-Is-Tablet-Viewer": "false",
+    "CloudFront-Viewer-ASN": "9269",
+    "CloudFront-Viewer-Country": "HK",
+    "content-type": "application/json",
+    "Host": "api.movieapp.paohenghsu.com",
+    "origin": "http://localhost:5173",
+    "priority": "u=1, i",
+    "Referer": "http://localhost:5173/",
+    "sec-ch-ua": "\"Google Chrome\";v=\"125\", \"Chromium\";v=\"125\", \"Not.A/Brand\";v=\"24\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"macOS\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "cross-site",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+    "Via": "2.0 e74ae1ee8d87215b42aa8a1c59137a48.cloudfront.net (CloudFront)",
+    "X-Amz-Cf-Id": "jWYY7ft-8FMNne1XwSyc331uDiD_CeB987ll8AzYPvfxMPvgts3t2g==",
+    "X-Amzn-Trace-Id": "Root=1-66575bb2-637f032a09d6a18e5e325071",
+    "X-Forwarded-For": "61.93.77.200, 64.252.139.82",
+    "X-Forwarded-Port": "443",
+    "X-Forwarded-Proto": "https"
+  },
+  "queryStringParameters": {
+    "limit": "1",
+    "random": "false"
+  },
+  "multiValueQueryStringParameters": {
+    "limit": [
+      "1"
+    ],
+    "random": [
+      "false"
+    ]
+  },
+  "pathParameters": null,
+  "stageVariables": null,
+  "requestContext": {
+    "resourceId": "123456",
+    "resourcePath": "/movies",
+    "operationName": "getMovies",
+    "httpMethod": "GET",
+    "path": "/movies",
+    "protocol": "HTTP/1.1",
+    "stage": "v1",
+    "domainPrefix": "api",
+    "requestId": "4ffd59e4-0c2e-44a4-95d6-3d7ecc49ca50",
+    "identity": {
+      "cognitoIdentityPoolId": null,
+      "accountId": null,
+      "cognitoIdentityId": null,
+      "caller": null,
+      "sourceIp": "127.0.0.1",
+      "principalOrgId": null,
+      "accessKey": null,
+      "cognitoAuthenticationType": null,
+      "cognitoAuthenticationProvider": null,
+      "userArn": null,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+      "user": null
+    }
+  },
+  "body": null,
+  "isBase64Encoded": false
+}

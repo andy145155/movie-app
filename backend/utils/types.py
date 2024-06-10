@@ -15,4 +15,4 @@ class Movie(TypedDict):
     poster: str
     similarity: list[int]
     overview: str
-    title: str
+    title: str 
