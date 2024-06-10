@@ -78,7 +78,7 @@ jobs:
         run: pip install -r backend/api/tests/requirements.txt
 
       - name: Run unit tests
-        run: cd backend && python3 -m pytest -s api/tests/unit  -v
+        run: cd backend/api && python3 -m pytest -s tests/unit  -v
 
       - name: Run yarn in backend directory
         run: |
