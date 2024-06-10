@@ -66,3 +66,7 @@ terraform.tfstate.backup
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+venv/
+.pytest_cache/
+__pycache__/
