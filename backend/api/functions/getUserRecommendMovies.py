@@ -46,7 +46,7 @@ def handler(event: APIGatewayProxyEvent, context: LambdaContext) -> dict[str, an
 
     params = event["queryStringParameters"]
 
-    email = params.get("email")
+    email: str = params.get("email")
     logger.info(f"Fetching recommendations for user: {email}")
 
     response = fetch_user_selection(email, user_dynamodb_resource)
@@ -92,11 +92,7 @@ def fetch_user_selection(email: str, dynamo_db: LambdaDynamoDBClass) -> UserSele
 
 
 def validate_input(response: UserSelection) -> tuple[list[str], list[int]]:
-    try:
-        recommended_movieid_list = response.get("recommendedMovies", [])
-        selected_movieid_list = response.get("selectedMovies", [])
+    recommended_movieid_list = response.get("recommendedMovies", [])
+    selected_movieid_list = response.get("selectedMovies", [])
 
-        return recommended_movieid_list, selected_movieid_list
-    except Exception as e:
-        logger.error("Validation error: %s", e)
-        return e
+    return recommended_movieid_list, selected_movieid_list

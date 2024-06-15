@@ -40,8 +40,8 @@ def handler(event: APIGatewayProxyEvent, context: LambdaContext) -> dict[str, an
     movie_dynamodb_resource = LambdaDynamoDBClass(_MOVIE_SIMILARITY_DYNAMODB_RESOURCE)
     params = event["queryStringParameters"]
 
-    limit = params["limit"]
-    random = params["random"]
+    limit: str = params["limit"]
+    random: str = params["random"]
 
     logger.info("limit: %s", limit)
     logger.info("random: %s", random)
