@@ -6,4 +6,4 @@ build
 *.cjs
 layers
 app/dist
-*/venv/
+venv
