@@ -26,9 +26,7 @@
     "sec-fetch-site": "cross-site",
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
     "Via": "2.0 e74ae1ee8d87215b42aa8a1c59137a48.cloudfront.net (CloudFront)",
-    "X-Amz-Cf-Id": "jWYY7ft-8FMNne1XwSyc331uDiD_CeB987ll8AzYPvfxMPvgts3t2g==",
-    "X-Amzn-Trace-Id": "Root=1-66575bb2-637f032a09d6a18e5e325071",
-    "X-Forwarded-For": "61.93.77.200, 64.252.139.82",
+    "X-Amz-Cf-Id": "aaaaasa-8FMNne1XwSyc331uDiD_CeB987ll8AzYPvfxMPvgts3t2g==",
     "X-Forwarded-Port": "443",
     "X-Forwarded-Proto": "https"
   },
