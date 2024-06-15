@@ -27,7 +27,7 @@ def batch_get_dynamodb_item(
     batch_keys: dict[str, dict], dynamo_db: LambdaDynamoDBClass
 ) -> dict[str, list[Movie]]:
     try:
-        response = dynamo_db.batch_get_item(
+        response = dynamo_db.resource.batch_get_item(
             RequestItems=batch_keys, ReturnConsumedCapacity="TOTAL"
         )
 
