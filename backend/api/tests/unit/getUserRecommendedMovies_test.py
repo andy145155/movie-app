@@ -165,14 +165,12 @@ class TestGetUserRecommenedMoviesLambda(TestCase):
             return event
 
     @patch("utils.classes.LambdaDynamoDBClass")
-    @patch("utils.functions.ok")
     @patch("functions.getUserRecommendMovies.fetch_user_selection")
     @patch("utils.functions.get_movies_by_id_list")
     def test_lambda_handler_valid_event(
         self,
         patch_fetch_movie_by_index: MagicMock,
         patch_fetch_user_selection: MagicMock,
-        patch_ok: MagicMock,
         patch_lambda_dynamodb_class: MagicMock,
     ):
 
