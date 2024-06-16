@@ -6,6 +6,8 @@ import logging
 from typing import Optional, TypedDict
 from utils.types import SelectedMovie, UserSelection
 from utils.classes import LambdaDynamoDBClass
+from aws_lambda_powertools.utilities.data_classes import APIGatewayProxyEvent
+from aws_lambda_powertools.utilities.typing import LambdaContext
 
 
 class BodyRequest(TypedDict):
@@ -45,7 +47,7 @@ def extract_and_validate_data(body: BodyRequest) -> tuple[str, list[SelectedMovi
     return email, selectedMovies
 
 
-def handler(event: dict, context: dict) -> dict:
+def handler(event: APIGatewayProxyEvent, context: LambdaContext) -> dict[str, any]:
     logger.info(event)
 
     if check_lambda_warmup(event):
