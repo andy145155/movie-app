@@ -172,6 +172,6 @@ jobs:
           REPOSITORY: serverless-movie-app-fargate-dev
           IMAGE_TAG: dataProcessing
         run: |
-          cd backend/fargate &&
+          cd backend &&
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG --build-arg FILE=csvDataProcessing.ts .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
