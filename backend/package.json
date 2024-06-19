@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "serverless": "^3.25.0",
+    "serverless": "^3.39.0",
     "serverless-fargate": "^0.0.11"
   },
   "devDependencies": {
