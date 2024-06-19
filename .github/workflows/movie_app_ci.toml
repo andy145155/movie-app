@@ -1,0 +1,176 @@
+name: Continues integration - Movie recommendation app
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_DEFAULT_REGION: ap-southeast-1
+  AWS_CI_IAM_ROLE: arn:aws:iam::410370150231:role/movie-app-github-action-ci
+
+jobs:
+  build-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            app
+            deployment/resources
+
+      - name: Set up node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run yarn in app directory
+        run: cd app && yarn
+
+      - name: Build movie app
+        run: cd app && yarn build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artifact-apps
+          path: app/dist/
+          if-no-files-found: error
+          retention-days: 1
+
+  build-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            backend
+            deployment/resources
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install serverless
+        run: npm install --prefix=$HOME/.local --global serverless@^3.39.0
+
+      - name: Run yarn in backend directory
+        run: cd backend && yarn install
+
+      - name: Install unit tests dependencies
+        run: pip install -r backend/api/tests/requirements.txt
+
+      - name: Run unit tests
+        run: cd backend/api && python3 -m pytest -s tests/unit  -v
+
+      - name: Create lambda layers
+        run: |
+          cd backend/api &&  
+          pip install -t layers/python/lib/python3.11/site-packages --platform manylinux2014_aarch64 --only-binary=:all: --upgrade --python-version 3.11 --implementation cp -r requirements.txt
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_CI_IAM_ROLE }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Build movie api
+        run: cd backend/api && sls package --package artifact-api
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artifact-api
+          path: backend/api
+          if-no-files-found: error
+          retention-days: 1
+
+  build-triggered-tasks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            backend
+            deployment/resources
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install serverless
+        run: npm install --prefix=$HOME/.local --global serverless@^3.39.0
+
+      - name: Run yarn in backend directory
+        run: cd backend && yarn install
+
+      - name: Create lambda layers
+        run: |
+          cd backend/triggered-tasks &&  
+          pip install -t layers/python/lib/python3.11/site-packages --platform manylinux2014_aarch64 --only-binary=:all: --upgrade --python-version 3.11 --implementation cp -r requirements.txt
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_CI_IAM_ROLE }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Build triggered-tasks
+        run: cd backend/triggered-tasks && sls package --package artifact-triggered-tasks
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artifact-triggered-tasks
+          path: backend/triggered-tasks
+          if-no-files-found: error
+          retention-days: 1
+
+  build-fargate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            backend
+            deployment/resources
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_CI_IAM_ROLE }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push docker image to Amazon ECR
+        id: build-image
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: serverless-movie-app-fargate-dev
+          IMAGE_TAG: dataProcessing
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG --build-arg FILE=csvDataProcessing.ts .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
