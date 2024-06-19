@@ -150,11 +150,6 @@ jobs:
             backend
             deployment/resources
 
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
       - name: Configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -212,3 +207,30 @@ jobs:
 
           git tag $NEW_TAG
           git push origin $NEW_TAG
+
+  deploy-fargate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            backend
+            deployment/resources
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_CI_IAM_ROLE }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Install serverless
+        run: npm install --prefix=$HOME/.local --global serverless@^3.39.0
+
+      - name: Run yarn in backend directory
+        run: cd backend && yarn install
+
+      - name: Deploy fargate
+        run: |
+          cd backend/fargate &&
+          sls deploy

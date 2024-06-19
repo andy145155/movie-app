@@ -16,6 +16,7 @@ custom:
   MOVIES_SIMILARITY_DYNAMO_DB_NAME: ${self:custom.tf.movie_similarity_table_name}
   MOVE_CSV_PROCESSED_BUCKET_NAME: ${self:custom.tf.movie_csv_processed_bucket_name}
   MOVE_CSV_SOURCE_BUCKET_NAME: ${self:custom.tf.movie_csv_source_bucket_name}
+  ECR_IMAGE_URI: 410370150231.dkr.ecr.ap-southeast-1.amazonaws.com/serverless-movie-app-fargate-dev
 
   # serverless-stack-output
   output:
@@ -37,8 +38,7 @@ provider:
   ecr:
     images:
       dataProcessing:
-        path: ../
-        file: Dockerfile
+        uri: ${self:custom.ECR_IMAGE_URI}:dataProcessing
 
 fargate:
   memory: '4GB'
