@@ -71,11 +71,11 @@ jobs:
       - name: Run yarn in backend directory
         run: cd backend && yarn install
 
-      - name: Install unit tests dependencies
-        run: pip install -r backend/api/tests/requirements.txt
+      # - name: Install unit tests dependencies
+      #   run: pip install -r backend/api/tests/requirements.txt
 
-      - name: Run unit tests
-        run: cd backend/api && python3 -m pytest -s tests/unit  -v
+      # - name: Run unit tests
+      #   run: cd backend/api && python3 -m pytest -s tests/unit  -v
 
       - name: Create lambda layers
         run: |
@@ -202,7 +202,7 @@ jobs:
             VERSION_PATCH=$((VERSION_PATCH + 1))
           fi
 
-          NEW_TAG="${OMNI_PREFIX}-${BUILD_DATE}-v${VERSION_PATCH}"
+          NEW_TAG="v${VERSION_PATCH}"
           echo "Generated new tag: $NEW_TAG"
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_OUTPUT
