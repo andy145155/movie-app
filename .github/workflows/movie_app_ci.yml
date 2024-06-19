@@ -190,9 +190,12 @@ jobs:
         shell: bash
         id: generate-tag
         run: |
+          BUILD_DATE=$(date +'%Y-%m-%d')
+          echo "Generated new BUILD_DATE: $BUILD_DATE"
+
           git fetch origin 'refs/tags/*:refs/tags/*'
 
-          VERSION_PATCH=$(git tag --list "v*" --sort=-version:refname | head -n 1 | grep -oE '[0-9]+$' || true)
+          VERSION_PATCH=$(git tag --list "${BUILD_DATE}-v*" --sort=-version:refname | head -n 1 | grep -oE '[0-9]+$' || true)
 
           echo "Generated new VERSION_PATCH: $VERSION_PATCH"
 
@@ -202,7 +205,7 @@ jobs:
             VERSION_PATCH=$((VERSION_PATCH + 1))
           fi
 
-          NEW_TAG="v${VERSION_PATCH}"
+          NEW_TAG="${BUILD_DATE}-v${VERSION_PATCH}"
           echo "Generated new tag: $NEW_TAG"
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_OUTPUT
