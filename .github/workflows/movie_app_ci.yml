@@ -94,7 +94,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: artifact-api
-          path: app/backend/api
+          path: backend/api
           if-no-files-found: error
           retention-days: 1
 
@@ -136,7 +136,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: artifact-triggered-tasks
-          path: app/backend/triggered-tasks
+          path: backend/triggered-tasks
           if-no-files-found: error
           retention-days: 1
 
