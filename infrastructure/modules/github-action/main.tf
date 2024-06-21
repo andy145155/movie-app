@@ -119,6 +119,8 @@ resource "aws_iam_policy" "github_actions_ci" {
       {
         "Action" : [
           "lambda:PublishLayerVersion",
+          "lambda:GetLayerVersion",
+          "lambda:DeleteLayerVersion"
         ],
         "Effect" : "Allow",
         "Resource" : "arn:aws:lambda:${local.region}:${local.account_id}:layer:movie-app-*"
