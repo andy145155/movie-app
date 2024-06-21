@@ -19,10 +19,105 @@ resource "aws_iam_policy" "github_actions_ci" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action   = "cloudformation:DescribeStacks"
+        Action = [
+          "cloudformation:DescribeStacks",
+          "cloudformation:DeleteChangeSet",
+          "cloudformation:CreateChangeSet",
+          "cloudformation:DescribeChangeSet",
+          "cloudformation:ExecuteChangeSet",
+          "cloudformation:DescribeStackEvents",
+          "cloudformation:ListStackResources"
+        ]
         Effect   = "Allow"
         Resource = "arn:aws:cloudformation:${local.region}:${local.account_id}:stack/movie-app-*/*"
-      }
+      },
+      {
+        Action = [
+          "cloudformation:ValidateTemplate",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+      {
+        Action = [
+          "ecr:GetAuthorizationToken",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+      {
+        Action = [
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:PutImage",
+          "ecr:DescribeImages"
+        ]
+        Effect   = "Allow"
+        Resource = "arn:aws:ecr:${local.region}:${local.account_id}:repository/serverless-movie-app-fargate-dev"
+      },
+      {
+        "Action" : [
+          "ecs:TagResource",
+        ],
+        "Effect" : "Allow",
+        "Resource" : "arn:aws:ecs:${local.region}:${local.account_id}:task-definition/*"
+      },
+      {
+        "Action" : [
+          "ecs:RegisterTaskDefinition",
+          "ecs:DeregisterTaskDefinition"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "*"
+      },
+      {
+        "Action" : [
+          "ecs:DescribeClusters",
+        ],
+        "Effect" : "Allow",
+        "Resource" : "arn:aws:ecs:${local.region}:${local.account_id}:cluster/movie-app-fargate-dev-*"
+      },
+
+      {
+        "Action" : [
+          "ecs:DescribeServices",
+          "ecs:UpdateService",
+          "ecs:CreateService",
+          "ecs:DeleteService"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "arn:aws:ecs:${local.region}:${local.account_id}:service/movie-app-fargate-dev-*"
+      },
+      {
+        "Action" : [
+          "iam:PassRole"
+        ],
+        "Effect" : "Allow",
+        "Resource" : [
+          "${var.fargate_task_role_arn}",
+          "arn:aws:iam::${local.account_id}:role/movie-app-fargate-dev-FargateIamExecutionRole-*"
+        ]
+      },
+      {
+        "Action" : [
+          "s3:ListBucket",
+          "s3:GetBucketLocation"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "arn:aws:s3:::movie-app-serverless-bucket"
+      },
+      {
+        "Action" : [
+          "s3:GetObject",
+          "s3:PutObject",
+        ],
+        "Effect" : "Allow",
+        "Resource" : "arn:aws:s3:::movie-app-serverless-bucket/*"
+      },
+
+
     ]
   })
 }
