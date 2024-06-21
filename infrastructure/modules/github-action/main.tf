@@ -97,7 +97,7 @@ resource "aws_iam_policy" "github_actions_ci" {
         "Effect" : "Allow",
         "Resource" : [
           "${var.fargate_task_role_arn}",
-          "arn:aws:iam::${local.account_id}:role/movie-app-fargate-dev-FargateIamExecutionRole-*"
+          "arn:aws:iam::${local.account_id}:role/movie-app-*"
         ]
       },
       {
@@ -116,7 +116,39 @@ resource "aws_iam_policy" "github_actions_ci" {
         "Effect" : "Allow",
         "Resource" : "arn:aws:s3:::movie-app-serverless-bucket/*"
       },
-
+      {
+        "Action" : [
+          "lambda:PublishLayerVersion",
+        ],
+        "Effect" : "Allow",
+        "Resource" : "arn:aws:lambda:${local.region}:${local.account_id}:layer:movie-app-*"
+        }, {
+        "Action" : [
+          "lambda:GetFunction",
+          "lambda:GetFunctionConfiguration",
+          "lambda:UpdateFunctionCode",
+          "lambda:UpdateFunctionConfiguration",
+          "lambda:PublishVersion",
+          "lambda:ListTags",
+          "lambda:ListVersionsByFunction"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "arn:aws:lambda:${local.region}:${local.account_id}:function:movie-app-*"
+      },
+      {
+        "Action" : [
+          "iam:GetRole"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "arn:aws:iam::${local.account_id}:role/movie-app-*"
+      },
+      {
+        "Action" : [
+          "events:DescribeRule"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "arn:aws:events:${local.region}:${local.account_id}:rule/movie-app-*"
+      },
 
     ]
   })
