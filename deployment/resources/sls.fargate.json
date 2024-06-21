@@ -1,7 +1,7 @@
 {
   "DataProcessingServiceArn": "arn:aws:ecs:ap-southeast-1:410370150231:service/movie-app-fargate-dev-FargateTasksCluster-sLoYFCjpH417/dataProcessing",
   "DataProcessingTaskDefinitionArn": "arn:aws:ecs:ap-southeast-1:410370150231:task-definition/dataProcessing",
-  "DataProcessingTaskArn": "arn:aws:ecs:ap-southeast-1:410370150231:task-definition/dataProcessing:71",
+  "DataProcessingTaskArn": "arn:aws:ecs:ap-southeast-1:410370150231:task-definition/dataProcessing:75",
   "FargateClusterArn": "arn:aws:ecs:ap-southeast-1:410370150231:cluster/movie-app-fargate-dev-FargateTasksCluster-sLoYFCjpH417",
   "ServerlessDeploymentBucketName": "movie-app-serverless-bucket"
 }
