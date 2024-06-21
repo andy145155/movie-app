@@ -1,0 +1,223 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "The AWS CloudFormation template for this Serverless application",
+  "Resources": {
+    "TriggerFargateLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/movie-app-triggered-tasks-dev-triggerFargate"
+      }
+    },
+    "CsvToS3DatabaseLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/movie-app-triggered-tasks-dev-csvToS3Database"
+      }
+    },
+    "MovieAppTriggeredTaskLambdaLayer": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": "movie-app-serverless-bucket",
+          "S3Key": "serverless/movie-app-triggered-tasks/dev/1718995144051-2024-06-21T18:39:04.051Z/MovieAppTriggeredTask.zip"
+        },
+        "LayerName": "movie-app-triggered-tasks-layer",
+        "CompatibleRuntimes": [
+          "python3.11"
+        ]
+      }
+    },
+    "TriggerFargateLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "movie-app-serverless-bucket",
+          "S3Key": "serverless/movie-app-triggered-tasks/dev/1718995144051-2024-06-21T18:39:04.051Z/movie-app-triggered-tasks.zip"
+        },
+        "Handler": "functions/triggerFargate.handler",
+        "Runtime": "python3.11",
+        "FunctionName": "movie-app-triggered-tasks-dev-triggerFargate",
+        "MemorySize": 1024,
+        "Timeout": 300,
+        "Architectures": [
+          "arm64"
+        ],
+        "Environment": {
+          "Variables": {
+            "SUBNET_A_ID": "subnet-069ee4c1a5955765d",
+            "SUBNET_B_ID": "subnet-0ce7bc386fe60d549",
+            "FARGATE_SG_ID": "sg-01156858c7871ec6c",
+            "MOVIE_APP_ESC_CLUSTER_ARN": "arn:aws:ecs:ap-southeast-1:410370150231:cluster/movie-app-fargate-dev-FargateTasksCluster-sLoYFCjpH417",
+            "MOVIES_SIMILARITY_DYNAMO_DB_NAME": "movie-similarity",
+            "DATA_PROCESSING_TASK_DEFINITION_ARN": "arn:aws:ecs:ap-southeast-1:410370150231:task-definition/dataProcessing",
+            "MOVE_CSV_PROCESSED_BUCKET_NAME": "movie-app-csv-processed-bucket",
+            "MOVE_CSV_SOURCE_BUCKET_NAME": "movie-app-csv-source-bucket"
+          }
+        },
+        "Role": "arn:aws:iam::410370150231:role/movie-app-LambdaExecuteRole",
+        "Layers": [
+          {
+            "Ref": "MovieAppTriggeredTaskLambdaLayer"
+          }
+        ]
+      },
+      "DependsOn": [
+        "TriggerFargateLogGroup"
+      ]
+    },
+    "CsvToS3DatabaseLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "movie-app-serverless-bucket",
+          "S3Key": "serverless/movie-app-triggered-tasks/dev/1718995144051-2024-06-21T18:39:04.051Z/movie-app-triggered-tasks.zip"
+        },
+        "Handler": "functions/csvToS3Database.handler",
+        "Runtime": "python3.11",
+        "FunctionName": "movie-app-triggered-tasks-dev-csvToS3Database",
+        "MemorySize": 1024,
+        "Timeout": 300,
+        "Architectures": [
+          "arm64"
+        ],
+        "Environment": {
+          "Variables": {
+            "MOVE_CSV_PROCESSED_BUCKET_NAME": "movie-app-csv-processed-bucket"
+          }
+        },
+        "Role": "arn:aws:iam::410370150231:role/movie-app-LambdaExecuteRole",
+        "Layers": [
+          {
+            "Ref": "MovieAppTriggeredTaskLambdaLayer"
+          }
+        ]
+      },
+      "DependsOn": [
+        "CsvToS3DatabaseLogGroup"
+      ]
+    },
+    "TriggerFargateLambdaVersion09e4ImBatRgpqI7hHRnWbkTfqEP9TsU2euCUd55eN6c": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "TriggerFargateLambdaFunction"
+        },
+        "CodeSha256": "0ejNfJ4MqbiTtA8s0ufAuHLtr6r4Y84Q2yBfip9iLuc="
+      }
+    },
+    "CsvToS3DatabaseLambdaVersionZdyK7ihaoQIhyHHBOYrpZR5HtY0zQI50LsSWAYeE1M": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "CsvToS3DatabaseLambdaFunction"
+        },
+        "CodeSha256": "0ejNfJ4MqbiTtA8s0ufAuHLtr6r4Y84Q2yBfip9iLuc="
+      }
+    },
+    "TriggerFargateSnsSubscriptionMovieapps3triggeredevent": {
+      "Type": "AWS::SNS::Subscription",
+      "Properties": {
+        "TopicArn": "arn:aws:sns:ap-southeast-1:410370150231:movie-app-s3-triggered-event",
+        "Protocol": "lambda",
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "TriggerFargateLambdaFunction",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "TriggerFargateLambdaPermissionMovieapps3triggeredeventSNS": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "TriggerFargateLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": "arn:aws:sns:ap-southeast-1:410370150231:movie-app-s3-triggered-event"
+      }
+    },
+    "CsvToS3DatabaseSnsSubscriptionMovieapps3triggeredevent": {
+      "Type": "AWS::SNS::Subscription",
+      "Properties": {
+        "TopicArn": "arn:aws:sns:ap-southeast-1:410370150231:movie-app-s3-triggered-event",
+        "Protocol": "lambda",
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "CsvToS3DatabaseLambdaFunction",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "CsvToS3DatabaseLambdaPermissionMovieapps3triggeredeventSNS": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "CsvToS3DatabaseLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": "arn:aws:sns:ap-southeast-1:410370150231:movie-app-s3-triggered-event"
+      }
+    }
+  },
+  "Outputs": {
+    "ServerlessDeploymentBucketName": {
+      "Value": "movie-app-serverless-bucket",
+      "Export": {
+        "Name": "sls-movie-app-triggered-tasks-dev-ServerlessDeploymentBucketName"
+      }
+    },
+    "MovieAppTriggeredTaskLambdaLayerQualifiedArn": {
+      "Description": "Current Lambda layer version",
+      "Value": {
+        "Ref": "MovieAppTriggeredTaskLambdaLayer"
+      },
+      "Export": {
+        "Name": "sls-movie-app-triggered-tasks-dev-MovieAppTriggeredTaskLambdaLayerQualifiedArn"
+      }
+    },
+    "MovieAppTriggeredTaskLambdaLayerHash": {
+      "Description": "Current Lambda layer hash",
+      "Value": "26c6684d26c3ae167528a0e8f2b85830b4ded53b",
+      "Export": {
+        "Name": "sls-movie-app-triggered-tasks-dev-MovieAppTriggeredTaskLambdaLayerHash"
+      }
+    },
+    "MovieAppTriggeredTaskLambdaLayerS3Key": {
+      "Description": "Current Lambda layer S3Key",
+      "Value": "serverless/movie-app-triggered-tasks/dev/1718995144051-2024-06-21T18:39:04.051Z/MovieAppTriggeredTask.zip",
+      "Export": {
+        "Name": "sls-movie-app-triggered-tasks-dev-MovieAppTriggeredTaskLambdaLayerS3Key"
+      }
+    },
+    "TriggerFargateLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "TriggerFargateLambdaVersion09e4ImBatRgpqI7hHRnWbkTfqEP9TsU2euCUd55eN6c"
+      },
+      "Export": {
+        "Name": "sls-movie-app-triggered-tasks-dev-TriggerFargateLambdaFunctionQualifiedArn"
+      }
+    },
+    "CsvToS3DatabaseLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "CsvToS3DatabaseLambdaVersionZdyK7ihaoQIhyHHBOYrpZR5HtY0zQI50LsSWAYeE1M"
+      },
+      "Export": {
+        "Name": "sls-movie-app-triggered-tasks-dev-CsvToS3DatabaseLambdaFunctionQualifiedArn"
+      }
+    }
+  }
+}
