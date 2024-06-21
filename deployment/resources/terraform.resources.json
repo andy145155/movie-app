@@ -19,5 +19,8 @@
   "movie_serverless_bucket_name": "movie-app-serverless-bucket",
   "movie_similarity_table_name": "movie-similarity",
   "movie_user_selection_name": "user-selection",
-  "public_subnets": ["subnet-069ee4c1a5955765d", "subnet-0ce7bc386fe60d549"]
+  "public_subnets": [
+    "subnet-069ee4c1a5955765d",
+    "subnet-0ce7bc386fe60d549"
+  ]
 }
