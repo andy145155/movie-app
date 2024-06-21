@@ -341,7 +341,7 @@ jobs:
           commit-message: Checkin lambda serverless deployment file
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: deployment-lambda-${{ github.run_id }}-${{ github.run_attempt }}
-          title: ' Lambda serverless deployment file checkin'
+          title: 'Lambda serverless deployment file checkin'
           draft: false
           add-paths: |
             deployment
