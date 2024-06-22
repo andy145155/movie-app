@@ -5,7 +5,7 @@
   "scripts": {
     "uploadCsvToS3": "bash ./deployment/scripts/upload_csv_to_s3.sh",
     "deployLambda": "bash ./deployment/scripts/deploy_lambda.sh",
-    "deployInfra": "bash ./deployment/scripts/deploy_lambda.sh",
+    "deployInfra": "bash ./deployment/scripts/deploy_infra.sh",
     "deployFargate": "COMPONENT=fargate yarn deployLambda",
     "deployTriggeredTask": "COMPONENT=triggered-tasks yarn deployLambda",
     "deployApi": "COMPONENT=api yarn deployLambda",
