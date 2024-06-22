@@ -1,5 +1,18 @@
 #!/bin/bash
 set -u
+CWD=$(pwd)
+
+# Infrastructure directory
+INFRA_DIRCETORY=$CWD/infrastructure
+
+# Check if the infrastructure directory exists
+if [ ! -d "$INFRA_DIRCETORY" ]; then
+  echo "The infrastructure directory does not exist"
+  exit 1
+fi
+
+# Change to the infrastructure directory
+cd $INFRA_DIRCETORY
 
 if [ -d ".terraform" ]; then
   rm -r .terraform
