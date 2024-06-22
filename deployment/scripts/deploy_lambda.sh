@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 CWD=$(pwd)
-# export AWS_PROFILE=main
 
 component=${COMPONENT}
 
