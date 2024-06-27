@@ -1,0 +1,158 @@
+name: Continues deployment - Movie recommendation app
+
+on:
+  workflow_dispatch:
+    inputs:
+      services:
+        description: 'Services to deploy'
+        default: 'all'
+        required: true
+        type: choice
+        options:
+          - all
+          - api
+          - triggered-tasks
+          - fargate
+          - frontend
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+env:
+  AWS_DEFAULT_REGION: ap-southeast-1
+  AWS_CI_IAM_ROLE: arn:aws:iam::410370150231:role/movie-app-github-action-ci
+
+jobs:
+  deploy-fargate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            backend
+            deployment/resources
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_CI_IAM_ROLE }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Install serverless
+        run: npm install --prefix=$HOME/.local --global serverless@^3.39.0
+
+      - name: Run yarn in backend directory
+        run: cd backend && yarn install
+
+      - name: Deploy fargate
+        run: |
+          cd backend/fargate &&
+          sls deploy
+
+      - name: Upload serverless output file
+        uses: actions/upload-artifact@v4
+        with:
+          name: serverless-output-artifact-fargate
+          path: deployment/resources/sls.fargate.json
+          retention-days: 1
+
+  deploy-triggered-tasks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            backend
+            deployment/resources
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_CI_IAM_ROLE }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: artifact-triggered-tasks
+          path: backend/triggered-tasks
+
+      - name: Install serverless
+        run: npm install --prefix=$HOME/.local --global serverless@^3.39.0
+
+      - name: Deploy triggered-tasks
+        run: |
+          cd backend/triggered-tasks
+          yarn &&
+          sls deploy --package artifact-triggered-tasks
+
+      - name: Upload serverless output file
+        uses: actions/upload-artifact@v4
+        with:
+          name: serverless-output-artifact-triggered-tasks
+          path: production/resources/sls.triggered-tasks.json
+          retention-days: 1
+
+  deploy-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: movie_app_ci.yml
+          workflow_conclusion: success
+          name: artifact-api
+          path: backend/api
+
+      - name: Install serverless
+        run: npm install --prefix=$HOME/.local --global serverless@^3.39.0
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_CI_IAM_ROLE }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Deploy api
+        run: |
+          cd backend/api
+          yarn &&
+          sls deploy --package artifact-api
+
+      - name: Upload serverless output file
+        uses: actions/upload-artifact@v4
+        with:
+          name: serverless-output-artifact-api
+          path: deployment/resources/sls.api.json
+          retention-days: 1
+
+  create-pull-request:
+    needs: [deploy-api, deploy-triggered-tasks, deploy-fargate]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: deployment/resources/
+          merge-multiple: true
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v6
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+        with:
+          base: master
+          commit-message: Checkin lambda serverless deployment file
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: deployment-lambda-${{ github.run_id }}-${{ github.run_attempt }}
+          title: 'Lambda serverless deployment file checkin'
+          draft: false
+          add-paths: |
+            deployment
