@@ -59,6 +59,6 @@
             "user": null
         }
     },
-    "body": "{\"email\":\"test@gmail.com\",\"selectedMovies\":[{\"movieId\":\"1\",\"similarity\":[\"1\"]},{\"movieId\":\"3\",\"similarity\":[\"1\",\"2\"]}]}",
+    "body": "{\"email\":\"test@gmail.com\",\"selectedMovies\":[{\"movieId\":\"1\",\"similarity\":[\"2\"]},{\"movieId\":\"3\",\"similarity\":[\"1\",\"2\"]}]}",
     "isBase64Encoded": false
 }

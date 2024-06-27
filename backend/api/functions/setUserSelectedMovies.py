@@ -82,6 +82,9 @@ def handler(event: APIGatewayProxyEvent, context: LambdaContext) -> dict[str, an
         id for movie in selectedMovies for id in movie["similarity"]
     ]
 
+    selected_movieid_list.sort()
+    recommended_movieid_list.sort()
+
     item: UserSelection = {
         "email": email,
         "recommendedMovies": recommended_movieid_list,
@@ -101,6 +104,14 @@ def handler(event: APIGatewayProxyEvent, context: LambdaContext) -> dict[str, an
     )
     selected_movies = get_movies_by_id_list(
         selected_movieid_list, movie_dynamodb_resource
+    )
+
+    print(
+        {
+            "email": email,
+            "recommendedMovies": recommended_movies,
+            "selectedMovies": selected_movies,
+        }
     )
 
     return ok(
