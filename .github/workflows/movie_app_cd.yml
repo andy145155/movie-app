@@ -180,10 +180,10 @@ jobs:
         run: |
           git fetch origin 'refs/tags/*:refs/tags/*'
           GIT_TAG=$(git tag --list --sort=-version:refname | head -n 1)
-          echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
+          echo "GIT_TAG=$GIT_TAG" >> $GITHUB_OUTPUT
 
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.env.GIT_TAG }}
+          tag_name: ${{ steps.get-git-tag.outputs.GIT_TAG }}
           token: ${{ secrets.GITHUB_TOKEN }}
           generate_release_notes: true
