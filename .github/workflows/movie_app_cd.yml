@@ -167,3 +167,20 @@ jobs:
           draft: false
           add-paths: |
             deployment
+
+  create-git-release:
+    needs: [create-pull-request]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get git tag
+        id: get-git-tag
+        run: |
+          git fetch origin 'refs/tags/*:refs/tags/*'
+          GIT_TAG=$(git tag --list --sort=-version:refname | head -n 1)
+          echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.env.GIT_TAG }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          generate_release_notes: true
