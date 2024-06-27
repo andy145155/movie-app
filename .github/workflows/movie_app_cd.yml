@@ -39,7 +39,7 @@ jobs:
         run: |
           CONFIG_FOLDER_APP=$(readlink -f "./deployment/resources")
           echo "BUCKET_NAME=$(jq -r '.movie_app_bucket_www_name' "$CONFIG_FOLDER_APP/terraform.resources.json")" >> $GITHUB_ENV
-          echo "DISTRIBUTION_ID=$(jq -r '.movie_app_www_distribution_id'"$CONFIG_FOLDER_APP/terraform.resources.json")" >> $GITHUB_ENV
+          echo "DISTRIBUTION_ID=$(jq -r '.movie_app_www_distribution_id' "$CONFIG_FOLDER_APP/terraform.resources.json")" >> $GITHUB_ENV
 
       - name: Download artifact
         id: download-artifact
