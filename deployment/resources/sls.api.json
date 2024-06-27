@@ -1,6 +1,6 @@
 {
-  "MovieAppApiLambdaLayerS3Key": "serverless/movie-app-api/dev/1718995144690-2024-06-21T18:39:04.690Z/MovieAppApi.zip",
-  "MovieAppApiLambdaLayerHash": "f0e111bc94206f728133cdcc6e093577f9de0954",
+  "MovieAppApiLambdaLayerS3Key": "serverless/movie-app-api/dev/1719475153015-2024-06-27T07:59:13.015Z/MovieAppApi.zip",
+  "MovieAppApiLambdaLayerHash": "2d75b53970568e4614e5e438f02931680e2b4430",
   "ApiId": "qemx37rhzk",
   "ServerlessDeploymentBucketName": "movie-app-serverless-bucket"
 }
