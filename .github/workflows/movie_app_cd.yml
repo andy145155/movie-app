@@ -25,6 +25,46 @@ env:
   AWS_CI_IAM_ROLE: arn:aws:iam::410370150231:role/movie-app-github-action-ci
 
 jobs:
+  deploy-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            app
+            deployment/resources
+
+      - name: Get bucket name and distribution id
+        run: |
+          CONFIG_FOLDER_APP=$(readlink -f "./deployment/resources")
+          echo "BUCKET_NAME=$(jq -r '.movie_app_bucket_www_name' "$CONFIG_FOLDER_APP/terraform.resources.json")" >> $GITHUB_ENV
+          echo "DISTRIBUTION_ID=$(jq -r '.movie_app_www_distribution_id'"$CONFIG_FOLDER_APP/terraform.resources.json")" >> $GITHUB_ENV
+
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: movie_app_ci.yml
+          workflow_conclusion: success
+          name: artifact-app
+          path: app/dist/
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_DEPLOY_IAM_ROLE }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Upload to S3
+        run: |
+          aws s3 cp app/dist s3://$BUCKET_NAME/ --include "*" --exclude "*.html" --exclude "*.js.map" --recursive --metadata-directive REPLACE --cache-control max-age=900
+          aws s3 cp app/dist s3://$BUCKET_NAME/ --exclude "*" --include "*.html" --recursive --metadata-directive REPLACE --cache-control "max-age=0, must-revalidate"
+
+      - name: Create cloudfront invalidation
+        run: |
+          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths="/*"
+
   deploy-fargate:
     runs-on: ubuntu-latest
     steps:
@@ -142,7 +182,7 @@ jobs:
           retention-days: 1
 
   create-pull-request:
-    needs: [deploy-api, deploy-triggered-tasks, deploy-fargate]
+    needs: [deploy-api, deploy-triggered-tasks, deploy-fargate, deploy-app]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

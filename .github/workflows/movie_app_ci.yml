@@ -45,7 +45,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: artifact-apps
+          name: artifact-app
           path: app/dist/
           if-no-files-found: error
           retention-days: 1
