@@ -69,16 +69,20 @@ jobs:
             backend
             deployment/resources
 
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: movie_app_ci.yml
+          workflow_conclusion: success
+          name: artifact-triggered-tasks
+          path: backend/triggered-tasks
+
       - name: Configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ env.AWS_CI_IAM_ROLE }}
           aws-region: ${{ env.AWS_DEFAULT_REGION }}
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: artifact-triggered-tasks
-          path: backend/triggered-tasks
 
       - name: Install serverless
         run: npm install --prefix=$HOME/.local --global serverless@^3.39.0
