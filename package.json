@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "uploadCsvToS3": "bash ./deployment/scripts/upload_csv_to_s3.sh",
+    "deployRemote": "gh workflow run movie_app_cd.yml",
     "deployLambda": "bash ./deployment/scripts/deploy_lambda.sh",
     "deployInfra": "bash ./deployment/scripts/deploy_infra.sh",
     "deployFargate": "COMPONENT=fargate yarn deployLambda",
