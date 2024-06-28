@@ -106,7 +106,7 @@ resource "aws_iam_policy" "github_actions_ci" {
           "s3:GetBucketLocation"
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:s3:::movie-app-serverless-bucket"
+        "Resource" : "${var.serverless_bucket_arn}"
       },
       {
         "Action" : [
@@ -114,7 +114,7 @@ resource "aws_iam_policy" "github_actions_ci" {
           "s3:PutObject",
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:s3:::movie-app-serverless-bucket/*"
+        "Resource" : ["${var.serverless_bucket_arn}/*", "${var.movie_app_www_bucket_arn}/*"]
       },
       {
         "Action" : [
@@ -150,6 +150,13 @@ resource "aws_iam_policy" "github_actions_ci" {
         ],
         "Effect" : "Allow",
         "Resource" : "arn:aws:events:${local.region}:${local.account_id}:rule/movie-app-*"
+      },
+      {
+        "Action" : [
+          "cloudfront:CreateInvalidation"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "${var.movie_app_cloudfront_arn}"
       },
 
     ]

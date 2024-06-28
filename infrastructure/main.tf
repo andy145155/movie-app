@@ -266,9 +266,12 @@ module "movie_user_selection_table" {
 }
 
 module "movie_app_github_action" {
-  source                = "./modules/github-action"
-  current_iam_caller    = data.aws_caller_identity.current
-  region                = var.region
-  fargate_task_role_arn = module.movie_app_fargate.fargate_task_role_arn
-  service               = var.service
+  source                   = "./modules/github-action"
+  current_iam_caller       = data.aws_caller_identity.current
+  region                   = var.region
+  fargate_task_role_arn    = module.movie_app_fargate.fargate_task_role_arn
+  service                  = var.service
+  serverless_bucket_arn    = module.movie_serverless_bucket.s3_bucket_arn
+  movie_app_www_bucket_arn = module.movie_app_www_bucket.s3_bucket_arn
+  movie_app_cloudfront_arn = module.movie_app_www_cloudfront.cloudfront_distribution_arn
 }
